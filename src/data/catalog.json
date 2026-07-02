@@ -1,0 +1,5146 @@
+{
+  "projectId": "gobang-bigquery",
+  "generatedAt": "2026-07-02T13:20:58.041Z",
+  "properties": {
+    "gobang": {
+      "datasetId": "analytics_274122040",
+      "label": "고방",
+      "events": [
+        {
+          "name": "page_view",
+          "label": "페이지뷰",
+          "cnt": 9462806,
+          "params": [
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 9462806
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 9462806
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 9462806
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 9462806
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 9462806
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 9462806
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 9462806
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 9462806
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 9462806
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 9462804
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 9461542
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 9369716
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 9063936
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 7514877
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 2332191
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 1342461
+            },
+            {
+              "key": "entrances",
+              "type": "int",
+              "cnt": 413085
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 252001
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 251044
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 250982
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 114262
+            },
+            {
+              "key": "gad_campaignid",
+              "type": "string",
+              "cnt": 15327
+            },
+            {
+              "key": "gad_source",
+              "type": "string",
+              "cnt": 14799
+            },
+            {
+              "key": "gclid",
+              "type": "string",
+              "cnt": 14644
+            },
+            {
+              "key": "content",
+              "type": "string",
+              "cnt": 6784
+            },
+            {
+              "key": "campaign_id",
+              "type": "string",
+              "cnt": 367
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 156
+            }
+          ],
+          "description": "모든 페이지 조회 (GA4 전역 태그, historyChange 포함)",
+          "funnel": "0. 일반"
+        },
+        {
+          "name": "branch_view",
+          "label": "지점 상세 조회",
+          "cnt": 1291789,
+          "params": [
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 1291789
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 1291789,
+              "description": "지점 ID"
+            },
+            {
+              "key": "ad_grade",
+              "type": "string",
+              "cnt": 1291789,
+              "description": "이용중인 광고상품 (free/basic/prime/signature)"
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 1291789
+            },
+            {
+              "key": "price_deposit_min",
+              "type": "numeric",
+              "cnt": 1291789,
+              "description": "보증금 최소"
+            },
+            {
+              "key": "review_count",
+              "type": "int",
+              "cnt": 1291789,
+              "description": "리뷰 갯수"
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 1291789
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 1291789,
+              "description": "광역시/도"
+            },
+            {
+              "key": "has_discount",
+              "type": "string",
+              "cnt": 1291789,
+              "description": "혜택 여부"
+            },
+            {
+              "key": "location_district",
+              "type": "string",
+              "cnt": 1291789,
+              "description": "구/시"
+            },
+            {
+              "key": "price_deposit_max",
+              "type": "numeric",
+              "cnt": 1291789,
+              "description": "보증금 최대"
+            },
+            {
+              "key": "is_favorited",
+              "type": "string",
+              "cnt": 1291789,
+              "description": "찜 여부"
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 1291789,
+              "description": "지점 타입"
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 1291789
+            },
+            {
+              "key": "is_guaranteez",
+              "type": "string",
+              "cnt": 1291789,
+              "description": "개런티즈 여부"
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 1291789
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 1291789
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 1291781,
+              "description": "지점명"
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 1291649
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 1291649
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 1291649
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 1291649
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 1291484
+            },
+            {
+              "key": "price_month_max",
+              "type": "numeric",
+              "cnt": 1291200,
+              "description": "월세 최대"
+            },
+            {
+              "key": "price_month_min",
+              "type": "numeric",
+              "cnt": 1291200,
+              "description": "월세 최소"
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 1284694
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 1231986
+            },
+            {
+              "key": "location_station",
+              "type": "string",
+              "cnt": 1114488,
+              "description": "근처 지하철역"
+            },
+            {
+              "key": "location_university",
+              "type": "string",
+              "cnt": 876361,
+              "description": "근처 대학교"
+            },
+            {
+              "key": "is_foreigner",
+              "type": "string",
+              "cnt": 730898,
+              "description": "외국인 고객 여부 (IP 기준)"
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 358208
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 306295
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 225179
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 28
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 28
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 28
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 19
+            },
+            {
+              "key": "ab_test_type",
+              "type": "string",
+              "cnt": 8
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 5
+            },
+            {
+              "key": "gclid",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "gad_source",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "gad_campaignid",
+              "type": "string",
+              "cnt": 1
+            }
+          ],
+          "description": "지점 상세(/place) 페이지 로드. 조회/문의가 발생하는 지점의 상세 데이터 파악",
+          "funnel": "1. 맞춤"
+        },
+        {
+          "name": "user_engagement",
+          "label": "체류",
+          "cnt": 607802,
+          "params": [
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 607802
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 607802
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 607802
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 607802
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 607802
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 607802
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 607802
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 607802
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 607802
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 607802
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 607749
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 596969
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 587860
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 553155
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 345341
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 198979
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 28
+            }
+          ],
+          "description": "GA4 자동수집 — 포그라운드 체류(engagement_time_msec 합산용)",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "session_start",
+          "label": "세션 시작",
+          "cnt": 420922,
+          "params": [
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 420922
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 420922
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 420922
+            },
+            {
+              "key": "session_engaged",
+              "type": "int",
+              "cnt": 420922
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 420922
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 420922
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 420885
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 420885
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 420885
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 420884
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 420049
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 396278
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 368864
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 187006
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 170839
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 170230
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 170185
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 74104
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 11543
+            },
+            {
+              "key": "gad_campaignid",
+              "type": "string",
+              "cnt": 9799
+            },
+            {
+              "key": "gad_source",
+              "type": "string",
+              "cnt": 9315
+            },
+            {
+              "key": "gclid",
+              "type": "string",
+              "cnt": 9160
+            },
+            {
+              "key": "content",
+              "type": "string",
+              "cnt": 5335
+            },
+            {
+              "key": "quicksearch_type",
+              "type": "string",
+              "cnt": 635
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 423
+            },
+            {
+              "key": "is_favorited",
+              "type": "string",
+              "cnt": 390
+            },
+            {
+              "key": "price_deposit_max",
+              "type": "int",
+              "cnt": 382
+            },
+            {
+              "key": "review_count",
+              "type": "int",
+              "cnt": 382
+            },
+            {
+              "key": "ad_grade",
+              "type": "string",
+              "cnt": 382
+            },
+            {
+              "key": "has_discount",
+              "type": "string",
+              "cnt": 382
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 382
+            },
+            {
+              "key": "price_deposit_min",
+              "type": "int",
+              "cnt": 382
+            },
+            {
+              "key": "price_month_max",
+              "type": "int",
+              "cnt": 382
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 382
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 382
+            },
+            {
+              "key": "location_district",
+              "type": "string",
+              "cnt": 382
+            },
+            {
+              "key": "is_guaranteez",
+              "type": "string",
+              "cnt": 382
+            },
+            {
+              "key": "price_month_min",
+              "type": "int",
+              "cnt": 382
+            },
+            {
+              "key": "campaign_id",
+              "type": "string",
+              "cnt": 337
+            },
+            {
+              "key": "location_station",
+              "type": "string",
+              "cnt": 302
+            },
+            {
+              "key": "inquiry_method",
+              "type": "string",
+              "cnt": 282
+            },
+            {
+              "key": "location_university",
+              "type": "string",
+              "cnt": 253
+            },
+            {
+              "key": "percent_scrolled",
+              "type": "int",
+              "cnt": 216
+            },
+            {
+              "key": "is_foreigner",
+              "type": "string",
+              "cnt": 192
+            },
+            {
+              "key": "search_source",
+              "type": "string",
+              "cnt": 45
+            },
+            {
+              "key": "search_query",
+              "type": "string",
+              "cnt": 45
+            },
+            {
+              "key": "notices_id",
+              "type": "int",
+              "cnt": 41
+            },
+            {
+              "key": "notices_type",
+              "type": "string",
+              "cnt": 41
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 9
+            },
+            {
+              "key": "ad_banner_type",
+              "type": "string",
+              "cnt": 8
+            },
+            {
+              "key": "ad_banner_position",
+              "type": "string",
+              "cnt": 8
+            },
+            {
+              "key": "ad_banner_service_area",
+              "type": "string",
+              "cnt": 8
+            },
+            {
+              "key": "ad_banner_id",
+              "type": "string",
+              "cnt": 8
+            },
+            {
+              "key": "schedule_action",
+              "type": "string",
+              "cnt": 7
+            },
+            {
+              "key": "prev_page",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "is_schedule",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "is_recommend",
+              "type": "string",
+              "cnt": 1
+            }
+          ],
+          "description": "GA4 자동수집 — 새 세션 시작",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "quicksearch",
+          "label": "홈 퀵서치",
+          "cnt": 262276,
+          "params": [
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 262276
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 262276
+            },
+            {
+              "key": "quicksearch_type",
+              "type": "string",
+              "cnt": 262276,
+              "description": "퀵메뉴 종류 (gosi, youth, mate 등)"
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 262276
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 262276
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 262276
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 262276
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 262276
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 262276
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 262276
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 262276
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 262273
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 261572
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 260969
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 254715
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 47742
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 18277
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 1322
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 1322
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 1322
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 906
+            },
+            {
+              "key": "content",
+              "type": "string",
+              "cnt": 143
+            },
+            {
+              "key": "gad_campaignid",
+              "type": "string",
+              "cnt": 12
+            },
+            {
+              "key": "gad_source",
+              "type": "string",
+              "cnt": 12
+            },
+            {
+              "key": "gclid",
+              "type": "string",
+              "cnt": 10
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 9
+            }
+          ],
+          "description": "홈(/home)에서 퀵서치 항목 클릭",
+          "funnel": "1. 맞춤"
+        },
+        {
+          "name": "first_visit",
+          "label": "첫 방문",
+          "cnt": 169578,
+          "params": [
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 169578
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 169578
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 169578
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 169578
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 169578
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 169578
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 169551
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 169551
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 169551
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 169550
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 168751
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 156046
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 146139
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 116341
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 116069
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 115831
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 115791
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 50748
+            },
+            {
+              "key": "gad_campaignid",
+              "type": "string",
+              "cnt": 6303
+            },
+            {
+              "key": "gad_source",
+              "type": "string",
+              "cnt": 5884
+            },
+            {
+              "key": "gclid",
+              "type": "string",
+              "cnt": 5775
+            },
+            {
+              "key": "content",
+              "type": "string",
+              "cnt": 3931
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 1454
+            },
+            {
+              "key": "campaign_id",
+              "type": "string",
+              "cnt": 270
+            },
+            {
+              "key": "is_favorited",
+              "type": "string",
+              "cnt": 27
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 27
+            },
+            {
+              "key": "price_month_min",
+              "type": "int",
+              "cnt": 26
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "price_deposit_max",
+              "type": "int",
+              "cnt": 26
+            },
+            {
+              "key": "price_deposit_min",
+              "type": "int",
+              "cnt": 26
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "location_district",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "is_guaranteez",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "price_month_max",
+              "type": "int",
+              "cnt": 26
+            },
+            {
+              "key": "review_count",
+              "type": "int",
+              "cnt": 26
+            },
+            {
+              "key": "ad_grade",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "has_discount",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 26
+            },
+            {
+              "key": "location_station",
+              "type": "string",
+              "cnt": 19
+            },
+            {
+              "key": "location_university",
+              "type": "string",
+              "cnt": 18
+            },
+            {
+              "key": "is_foreigner",
+              "type": "string",
+              "cnt": 10
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 4
+            },
+            {
+              "key": "notices_id",
+              "type": "int",
+              "cnt": 1
+            },
+            {
+              "key": "is_schedule",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "is_recommend",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "notices_type",
+              "type": "string",
+              "cnt": 1
+            }
+          ],
+          "description": "GA4 자동수집 — 사용자 최초 방문",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "churn_branchview_7d",
+          "label": "이탈 잠재고객 (7일)",
+          "cnt": 101135,
+          "params": [
+            {
+              "key": "synthetic_bundle",
+              "type": "int",
+              "cnt": 101135
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 101135
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 101135
+            },
+            {
+              "key": "firebase_conversion",
+              "type": "int",
+              "cnt": 101135
+            }
+          ],
+          "description": "GA4 잠재고객 트리거 — 지점조회 후 7일 미방문 이탈 감지 (synthetic)",
+          "funnel": "시스템 생성"
+        },
+        {
+          "name": "youth_notices",
+          "label": "공고 상세 조회",
+          "cnt": 69645,
+          "params": [
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 69645,
+              "description": "공급지역"
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 69645
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 69645
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 69645
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 69645
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 69645
+            },
+            {
+              "key": "notices_id",
+              "type": "int",
+              "cnt": 69645,
+              "description": "공고번호"
+            },
+            {
+              "key": "is_favorited",
+              "type": "string",
+              "cnt": 69645,
+              "description": "찜 여부"
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 69645
+            },
+            {
+              "key": "is_recommend",
+              "type": "string",
+              "cnt": 69645,
+              "description": "지점 추천 영역 노출 여부"
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 69645
+            },
+            {
+              "key": "is_schedule",
+              "type": "string",
+              "cnt": 69645,
+              "description": "일정 알림받기 여부"
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 69644
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 69644
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 69644
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 69644
+            },
+            {
+              "key": "notices_type",
+              "type": "string",
+              "cnt": 69569,
+              "description": "공급유형 (전세임대 등)"
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 67418
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 63172
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 28912
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 16639
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 10843
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 1001
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 1001
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 1001
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 69
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 10
+            },
+            {
+              "key": "content",
+              "type": "string",
+              "cnt": 1
+            }
+          ],
+          "description": "공고 상세(/notices) 페이지 로드",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "search",
+          "label": "검색",
+          "cnt": 68028,
+          "params": [
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 68028
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 68028
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 68028
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 68028
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 68028
+            },
+            {
+              "key": "search_source",
+              "type": "string",
+              "cnt": 68028,
+              "description": "검색바 위치 (map, feed, community 등)"
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 68028
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 68028
+            },
+            {
+              "key": "search_query",
+              "type": "string",
+              "cnt": 68028,
+              "description": "검색어"
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 68028
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 68028
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 68028
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 68028
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 67977
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 67700
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 65280
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 15146
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 6576
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 57
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 57
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 56
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 38
+            },
+            {
+              "key": "content",
+              "type": "string",
+              "cnt": 5
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 1
+            }
+          ],
+          "description": "고방 내 검색창에서 검색 시",
+          "funnel": "0. 일반"
+        },
+        {
+          "name": "inquiry",
+          "label": "문의",
+          "cnt": 67292,
+          "params": [
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 67292
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 67292
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 67292
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 67292
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 67292
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 67292
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 67292
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 67292
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 67292
+            },
+            {
+              "key": "inquiry_method",
+              "type": "string",
+              "cnt": 67292,
+              "description": "문의 수단 (전화, 문자, 카톡)"
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 67292
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 67290
+            },
+            {
+              "key": "has_discount",
+              "type": "string",
+              "cnt": 67255
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 67255
+            },
+            {
+              "key": "ad_grade",
+              "type": "string",
+              "cnt": 67255
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 67255
+            },
+            {
+              "key": "is_guaranteez",
+              "type": "string",
+              "cnt": 67255
+            },
+            {
+              "key": "price_deposit_min",
+              "type": "int",
+              "cnt": 67255
+            },
+            {
+              "key": "is_favorited",
+              "type": "string",
+              "cnt": 67255
+            },
+            {
+              "key": "review_count",
+              "type": "int",
+              "cnt": 67255
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 67255
+            },
+            {
+              "key": "location_district",
+              "type": "string",
+              "cnt": 67255
+            },
+            {
+              "key": "price_deposit_max",
+              "type": "int",
+              "cnt": 67255
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 67255
+            },
+            {
+              "key": "price_month_min",
+              "type": "numeric",
+              "cnt": 67243
+            },
+            {
+              "key": "price_month_max",
+              "type": "numeric",
+              "cnt": 67243
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 66911
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 66856
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 64510
+            },
+            {
+              "key": "location_station",
+              "type": "string",
+              "cnt": 58992
+            },
+            {
+              "key": "location_university",
+              "type": "string",
+              "cnt": 46958
+            },
+            {
+              "key": "is_foreigner",
+              "type": "string",
+              "cnt": 39017,
+              "description": "외국인 고객 여부 (IP 기준)"
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 21075
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 14593
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 2
+            }
+          ],
+          "description": "지점 상세(/place)에서 전화/문자/카톡 문의 버튼 클릭",
+          "funnel": "1. 맞춤"
+        },
+        {
+          "name": "zzim_branch",
+          "label": "찜 (지점 상세)",
+          "cnt": 42876,
+          "params": [
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 42876
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 42876
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 42876
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 42876
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 42876
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 42876
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 42876
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 42876
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 42876
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 42876
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 42876
+            },
+            {
+              "key": "is_guaranteez",
+              "type": "string",
+              "cnt": 42830
+            },
+            {
+              "key": "price_deposit_min",
+              "type": "int",
+              "cnt": 42830
+            },
+            {
+              "key": "price_deposit_max",
+              "type": "int",
+              "cnt": 42830
+            },
+            {
+              "key": "is_favorited",
+              "type": "string",
+              "cnt": 42830
+            },
+            {
+              "key": "has_discount",
+              "type": "string",
+              "cnt": 42830
+            },
+            {
+              "key": "location_district",
+              "type": "string",
+              "cnt": 42830
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 42830
+            },
+            {
+              "key": "review_count",
+              "type": "int",
+              "cnt": 42830
+            },
+            {
+              "key": "ad_grade",
+              "type": "string",
+              "cnt": 42830
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 42830
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 42830
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 42830
+            },
+            {
+              "key": "price_month_max",
+              "type": "numeric",
+              "cnt": 42818
+            },
+            {
+              "key": "price_month_min",
+              "type": "numeric",
+              "cnt": 42818
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 42801
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 42577
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 41499
+            },
+            {
+              "key": "location_station",
+              "type": "string",
+              "cnt": 38491
+            },
+            {
+              "key": "location_university",
+              "type": "string",
+              "cnt": 29626
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 7481
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 6836
+            }
+          ],
+          "description": "지점 상세에서 찜 버튼/배너 클릭(ON만). branch_view 파라미터 상속",
+          "funnel": "2. 회복(찜)"
+        },
+        {
+          "name": "read_complete",
+          "label": "콘텐츠 완독",
+          "cnt": 39385,
+          "params": [
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 39385
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 39385
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 39385
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 39385
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 39385
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 39385
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 39385
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 39385
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 39385
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 39385
+            },
+            {
+              "key": "percent_scrolled",
+              "type": "int",
+              "cnt": 39385,
+              "description": "스크롤 깊이(%)"
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 39247
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 39008
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 37256
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 26109
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 20093
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 2440
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 1
+            }
+          ],
+          "description": "콘텐츠(/contents) 스크롤 75% 이상 도달",
+          "funnel": "4. 피드"
+        },
+        {
+          "name": "read_complete_notices",
+          "label": "공고 완독",
+          "cnt": 30201,
+          "params": [
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 30201
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 30201
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 30201
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 30201
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 30201
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 30201
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 30201
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 30201
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 30201
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 30201
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 30195
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 28999
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 28719
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 20250
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 14782
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 5170
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 144
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 144
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 144
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 16
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 1
+            }
+          ],
+          "description": "공고 상세 스크롤 80% 이상('신청방법' 영역 도달)",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "appstream_new_join",
+          "label": "신규 가입 (시스템)",
+          "cnt": 29307,
+          "params": [
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 29307
+            },
+            {
+              "key": "firebase_conversion",
+              "type": "int",
+              "cnt": 29307
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 29307
+            },
+            {
+              "key": "synthetic_bundle",
+              "type": "int",
+              "cnt": 29307
+            }
+          ],
+          "description": "GA4 잠재고객 트리거 — 신규 가입 (synthetic)",
+          "funnel": "시스템 생성"
+        },
+        {
+          "name": "youth_document",
+          "label": "공고 원문보기",
+          "cnt": 24436,
+          "params": [
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 24436
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 24436
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 24436
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 24436
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 24436
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 24436
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 24436
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 24436
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 24436
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 24436
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 24436
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 24367
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 23626
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 23286
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 8481
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 3708
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 73
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 73
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 73
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 4
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 3
+            }
+          ],
+          "description": "공고 상세에서 '공고 원문보기' 버튼 클릭",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "zzim_list",
+          "label": "찜 (리스트)",
+          "cnt": 22987,
+          "params": [
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 22987
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 22987
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 22987
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 22987
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 22987
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 22987
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 22987
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 22987
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 22987
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 22987
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 22987
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 22958
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 22853
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 22580
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 4609
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 3986
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "gad_source",
+              "type": "string",
+              "cnt": 2
+            },
+            {
+              "key": "gclid",
+              "type": "string",
+              "cnt": 2
+            },
+            {
+              "key": "gad_campaignid",
+              "type": "string",
+              "cnt": 2
+            }
+          ],
+          "description": "리스트에서 찜 버튼 클릭(ON만). 지점 데이터 미수집(map·퀵서치 등 어디서든 발생)",
+          "funnel": "2. 회복(찜)"
+        },
+        {
+          "name": "youth_notices_recommend_view",
+          "label": "지점 추천 노출 (공고 상세)",
+          "cnt": 16896,
+          "params": [
+            {
+              "key": "notices_id",
+              "type": "int",
+              "cnt": 16896
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 16896
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 16896
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 16896
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 16896
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 16896
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 16896
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 16896
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 16896
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 16896
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 16896
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 16896
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 16896
+            },
+            {
+              "key": "notices_type",
+              "type": "string",
+              "cnt": 16861
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 16135
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 15846
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 13463
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 8170
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 2216
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 60
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 60
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 60
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 3
+            }
+          ],
+          "description": "공고 상세 내 '지점 추천' 영역에 스크롤 도달",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "youth_apply",
+          "label": "공고 신청 클릭",
+          "cnt": 10391,
+          "params": [
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 10391
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 10391
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 10391
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 10391
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 10391
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 10391
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 10391
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 10391
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 10391
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 10391
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 10391
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 10369
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 10281
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 9972
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 3876
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 1913
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 18
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 18
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 18
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 6
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "content",
+              "type": "string",
+              "cnt": 1
+            }
+          ],
+          "description": "공고 상세 '신청방법' 영역 내 링크 클릭",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "youth_schedule",
+          "label": "공고 일정 알림",
+          "cnt": 5108,
+          "params": [
+            {
+              "key": "is_favorited",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 5108
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "schedule_action",
+              "type": "string",
+              "cnt": 5108,
+              "description": "토글 켬/끔 (on, off)"
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "notices_id",
+              "type": "int",
+              "cnt": 5108
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 5108
+            },
+            {
+              "key": "notices_type",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 5108
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 5108
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 5108
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 5100
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 5076
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 5070
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 1817
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 1248
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 10
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 10
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 10
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 2
+            }
+          ],
+          "description": "접수중/대기중 공고·단지 상세에서 '일정 알림받기' 토글 ON/OFF",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "ad_banner_view",
+          "label": "광고 배너 조회",
+          "cnt": 4024,
+          "params": [
+            {
+              "key": "ad_banner_position",
+              "type": "string",
+              "cnt": 4024,
+              "description": "노출 위치 (main_top, notice_list, notice_top, community_list)"
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 4024
+            },
+            {
+              "key": "ad_banner_type",
+              "type": "string",
+              "cnt": 4024,
+              "description": "배너 형태 (banner_image, infeed_image, infeed_video, expandable_image)"
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 4024
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 4024
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 4024
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 4024
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 4024
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 4024
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 4024
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 4024
+            },
+            {
+              "key": "ad_banner_id",
+              "type": "string",
+              "cnt": 4024,
+              "description": "배너 고유 ID"
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 4024
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 4024
+            },
+            {
+              "key": "ad_banner_service_area",
+              "type": "string",
+              "cnt": 4024,
+              "description": "노출 영역 (youth 등)"
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 3910
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 3810
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 2175
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 1385
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 533
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 26
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 9
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 5
+            }
+          ],
+          "description": "배너 영역 50% 이상 노출 시 (중복 발송 허용)",
+          "funnel": "8. 광고"
+        },
+        {
+          "name": "zzim_memo_zzimlist",
+          "label": "찜 메모 (찜 목록)",
+          "cnt": 3200,
+          "params": [
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 3200
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 3200
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 3200
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 3200
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 3200
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 3200
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 3200
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 3200
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 3200
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 3200
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 3200
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 3193
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 3156
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 3056
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 577
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 524
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 1
+            }
+          ],
+          "description": "관심>찜한 목록에서 메모 '작성' 버튼 클릭",
+          "funnel": "2. 회복(찜)"
+        },
+        {
+          "name": "youth_notices_bridge_branch",
+          "label": "공고→지점 전환",
+          "cnt": 1841,
+          "params": [
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 1841
+            },
+            {
+              "key": "notices_id",
+              "type": "int",
+              "cnt": 1841
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 1841
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 1841
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 1841
+            },
+            {
+              "key": "prev_page",
+              "type": "string",
+              "cnt": 1841,
+              "description": "이전 페이지 (notices, recommend_all, recommendlist_all)"
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 1841
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 1841
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 1841
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 1841
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 1841
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 1841
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 1841
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 1841
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 1838
+            },
+            {
+              "key": "notices_type",
+              "type": "string",
+              "cnt": 1836
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 1835
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 1798
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 608
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 250
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 2
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 2
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 2
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 1
+            }
+          ],
+          "description": "공고 상세/청년주택에서 '지점 상세' 전환 요소 클릭",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "zzim_thumbnail",
+          "label": "찜 (썸네일)",
+          "cnt": 1159,
+          "params": [
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 1159
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 1159
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 1159
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 1159
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 1159
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 1159
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 1159
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 1159
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 1159
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 1159
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 1159
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 1158
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 1155
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 1134
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 189
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 162
+            }
+          ],
+          "description": "썸네일에서 찜 버튼 클릭(ON만). 지점 데이터 미수집(홈·근처 추천 방 등)",
+          "funnel": "2. 회복(찜)"
+        },
+        {
+          "name": "youth_noticeslist_empty",
+          "label": "공고 목록 빈화면",
+          "cnt": 1074,
+          "params": [
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 1074
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 1074
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 1074
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 1074
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 1074
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 1074
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 1074
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 1074
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 1074
+            },
+            {
+              "key": "is_city_alarm",
+              "type": "string",
+              "cnt": 1074,
+              "description": "알림받기 여부"
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 1074
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 1074
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 1074
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 1063
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 1049
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 1046
+            },
+            {
+              "key": "location_district",
+              "type": "string",
+              "cnt": 336
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 212
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 128
+            }
+          ],
+          "description": "공고 목록 데이터 로드 결과 0개",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "zzim_memo_place",
+          "label": "찜 메모 (토스트)",
+          "cnt": 627,
+          "params": [
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 627
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 627
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 627
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 627
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 627
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 627
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 627
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 627
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 627
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 627
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 627
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 627
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 626
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 591
+            },
+            {
+              "key": "is_favorited",
+              "type": "string",
+              "cnt": 516
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 516
+            },
+            {
+              "key": "price_deposit_max",
+              "type": "int",
+              "cnt": 509
+            },
+            {
+              "key": "price_deposit_min",
+              "type": "int",
+              "cnt": 509
+            },
+            {
+              "key": "location_district",
+              "type": "string",
+              "cnt": 509
+            },
+            {
+              "key": "price_month_min",
+              "type": "int",
+              "cnt": 509
+            },
+            {
+              "key": "review_count",
+              "type": "int",
+              "cnt": 509
+            },
+            {
+              "key": "ad_grade",
+              "type": "string",
+              "cnt": 509
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 509
+            },
+            {
+              "key": "is_guaranteez",
+              "type": "string",
+              "cnt": 509
+            },
+            {
+              "key": "price_month_max",
+              "type": "numeric",
+              "cnt": 509
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 509
+            },
+            {
+              "key": "has_discount",
+              "type": "string",
+              "cnt": 509
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 509
+            },
+            {
+              "key": "location_station",
+              "type": "string",
+              "cnt": 488
+            },
+            {
+              "key": "location_university",
+              "type": "string",
+              "cnt": 343
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 63
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 63
+            }
+          ],
+          "description": "찜 시 토스트에서 '메모 작성' 버튼 클릭",
+          "funnel": "2. 회복(찜)"
+        },
+        {
+          "name": "inquiry_submit_foreigner",
+          "label": "외국인 문의 제출",
+          "cnt": 567,
+          "params": [
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 567
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 567
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 567
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 567
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 567
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 567
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 567
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 567
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 567
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 567
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 567
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 566
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 564
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 490
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 214
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 168
+            }
+          ],
+          "description": "외국인 전용 문의하기 화면에서 '보내기' 버튼 클릭",
+          "funnel": "1. 맞춤"
+        },
+        {
+          "name": "youth_notices_guide",
+          "label": "youth_notices_guide",
+          "cnt": 402,
+          "params": [
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 402
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 402
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 402
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 402
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 402
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 402
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 402
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 402
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 402
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 402
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 402
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 402
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 397
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 393
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 86
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 38
+            }
+          ]
+        },
+        {
+          "name": "youth_noticeslist_empty_city_alarm",
+          "label": "빈화면 지역알림 토글",
+          "cnt": 71,
+          "params": [
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "city_alarm_action",
+              "type": "string",
+              "cnt": 71,
+              "description": "토글 켬/끔 (on, off)"
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 71
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 71
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 71
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 71
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 71
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 71
+            },
+            {
+              "key": "location_city",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 71
+            },
+            {
+              "key": "location_district",
+              "type": "string",
+              "cnt": 24
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 21
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 17
+            }
+          ],
+          "description": "공고 목록 빈화면에서 '알림받기' 토글 클릭",
+          "funnel": "3. 유사(청년주택)"
+        },
+        {
+          "name": "ad_banner_play",
+          "label": "광고 영상 재생",
+          "cnt": 52,
+          "params": [
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 52
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 52
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 52
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 52
+            },
+            {
+              "key": "ad_banner_position",
+              "type": "string",
+              "cnt": 52,
+              "description": "노출 위치"
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 52
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 52
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 52
+            },
+            {
+              "key": "ad_banner_id",
+              "type": "string",
+              "cnt": 52,
+              "description": "배너 고유 ID"
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 52
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 52
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 52
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 52
+            },
+            {
+              "key": "ad_banner_service_area",
+              "type": "string",
+              "cnt": 52,
+              "description": "노출 영역"
+            },
+            {
+              "key": "ad_banner_type",
+              "type": "string",
+              "cnt": 52,
+              "description": "배너 형태"
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 52
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 51
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 50
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 10
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 8
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 4
+            }
+          ],
+          "description": "광고/영상 배너 재생 시작 시",
+          "funnel": "8. 광고"
+        },
+        {
+          "name": "ad_banner_click",
+          "label": "광고 배너 클릭",
+          "cnt": 35,
+          "params": [
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 35
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 35
+            },
+            {
+              "key": "ad_banner_position",
+              "type": "string",
+              "cnt": 35,
+              "description": "노출 위치"
+            },
+            {
+              "key": "ad_banner_type",
+              "type": "string",
+              "cnt": 35,
+              "description": "배너 형태"
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 35
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 35
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 35
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 35
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 35
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 35
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 35
+            },
+            {
+              "key": "ad_banner_id",
+              "type": "string",
+              "cnt": 35,
+              "description": "배너 고유 ID"
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 35
+            },
+            {
+              "key": "ad_banner_service_area",
+              "type": "string",
+              "cnt": 35,
+              "description": "노출 영역"
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 35
+            },
+            {
+              "key": "ad_banner_link_url",
+              "type": "string",
+              "cnt": 35,
+              "description": "클릭 시 이동 URL"
+            },
+            {
+              "key": "ad_is_expanded",
+              "type": "string",
+              "cnt": 35,
+              "description": "익스펜더블 배너 확장 여부"
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 34
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 34
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 33
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 6
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 5
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 2
+            }
+          ],
+          "description": "배너 클릭 시",
+          "funnel": "8. 광고"
+        },
+        {
+          "name": "feed_subscribe",
+          "label": "아티클 구독",
+          "cnt": 13,
+          "params": [
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 13
+            },
+            {
+              "key": "region",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 13
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 13
+            },
+            {
+              "key": "is_login",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 13
+            },
+            {
+              "key": "page_path",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 13
+            },
+            {
+              "key": "browser",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "page_hostname",
+              "type": "string",
+              "cnt": 13
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 13
+            },
+            {
+              "key": "contents_type",
+              "type": "string",
+              "cnt": 13,
+              "description": "픽스 값 (시리즈, 서비스, 일반)"
+            },
+            {
+              "key": "contents_tag",
+              "type": "string",
+              "cnt": 13,
+              "description": "태그 (혼잘혜택, 혼잘주거 등)"
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 3
+            }
+          ],
+          "description": "아티클(/contents) 본문 하단 '구독하기' 버튼 클릭",
+          "funnel": "4. 피드"
+        }
+      ]
+    },
+    "uceo": {
+      "datasetId": "analytics_279311003",
+      "label": "U사장님",
+      "events": [
+        {
+          "name": "page_view",
+          "label": "페이지뷰",
+          "cnt": 53410,
+          "params": [
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 53410
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 53410
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 53410
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 53410
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 53410
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 53410
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 53410
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 51946
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 46777
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 45541
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 33690
+            },
+            {
+              "key": "entrances",
+              "type": "int",
+              "cnt": 6113
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 1150
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 1150
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 1150
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 335
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 21
+            }
+          ],
+          "description": "모든 페이지 조회 (GA4 전역 태그, historyChange 포함)",
+          "funnel": "0. 일반"
+        },
+        {
+          "name": "scroll",
+          "label": "스크롤 90%",
+          "cnt": 18659,
+          "params": [
+            {
+              "key": "percent_scrolled",
+              "type": "int",
+              "cnt": 18659,
+              "description": "스크롤 깊이(%)"
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 18659
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 18659
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 18659
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 18659
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 18659
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 18659
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 18659
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 17502
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 13495
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 13360
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 12641
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 7
+            }
+          ],
+          "description": "GA4 자동수집 — 페이지 90% 스크롤 도달",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "user_engagement",
+          "label": "체류",
+          "cnt": 13807,
+          "params": [
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 13807
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 13807
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 13807
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 13807
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 13807
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 13807
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 13807
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 13073
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 13059
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 10489
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 9957
+            },
+            {
+              "key": "debug_mode",
+              "type": "int",
+              "cnt": 7
+            }
+          ],
+          "description": "GA4 자동수집 — 포그라운드 체류(engagement_time_msec 합산용)",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "session_start",
+          "label": "세션 시작",
+          "cnt": 6598,
+          "params": [
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 6598
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 6598
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 6598
+            },
+            {
+              "key": "session_engaged",
+              "type": "int",
+              "cnt": 6598
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 6598
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 6598
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 6598
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 4878
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 3184
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 2488
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 855
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 855
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 855
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 281
+            },
+            {
+              "key": "select_ad_grade",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 3
+            },
+            {
+              "key": "select_ad_type",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "select_pay_type",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 3
+            },
+            {
+              "key": "outbound",
+              "type": "string",
+              "cnt": 2
+            },
+            {
+              "key": "link_url",
+              "type": "string",
+              "cnt": 2
+            },
+            {
+              "key": "link_domain",
+              "type": "string",
+              "cnt": 2
+            },
+            {
+              "key": "percent_scrolled",
+              "type": "int",
+              "cnt": 1
+            }
+          ],
+          "description": "GA4 자동수집 — 새 세션 시작",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "first_visit",
+          "label": "첫 방문",
+          "cnt": 1039,
+          "params": [
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 1039
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 1039
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 1039
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 1039
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 1039
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 1039
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 1039
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 756
+            },
+            {
+              "key": "campaign",
+              "type": "string",
+              "cnt": 355
+            },
+            {
+              "key": "medium",
+              "type": "string",
+              "cnt": 355
+            },
+            {
+              "key": "source",
+              "type": "string",
+              "cnt": 355
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 333
+            },
+            {
+              "key": "term",
+              "type": "string",
+              "cnt": 93
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 64
+            }
+          ],
+          "description": "GA4 자동수집 — 사용자 최초 방문",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "ad_enter",
+          "label": "광고 선택 진입",
+          "cnt": 661,
+          "params": [
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 661
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 661
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 661
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 661
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 661
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 661
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 661
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 660
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 657
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 656
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 654
+            }
+          ],
+          "description": "결제 전 광고 선택창 유입 (/house·지점정보 [+], /ads [+광고시작], ad-plus/join 접근)",
+          "funnel": "2. 광고"
+        },
+        {
+          "name": "ad_pay_complete",
+          "label": "결제 완료",
+          "cnt": 478,
+          "params": [
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 478
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 478
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 478
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 478
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 478
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 478
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 478
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 460
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 382,
+              "description": "지점 ID"
+            },
+            {
+              "key": "select_ad_type",
+              "type": "string",
+              "cnt": 382,
+              "description": "선택 기간"
+            },
+            {
+              "key": "select_pay_type",
+              "type": "string",
+              "cnt": 382,
+              "description": "결제 수단"
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 382,
+              "description": "지점명"
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 382,
+              "description": "지점 타입"
+            },
+            {
+              "key": "select_ad_grade",
+              "type": "string",
+              "cnt": 382,
+              "description": "선택 상품 (unlimited/basic/premium)"
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 346
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 345
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 341
+            },
+            {
+              "key": "product_price",
+              "type": "int",
+              "cnt": 96,
+              "description": "결제 금액"
+            }
+          ],
+          "description": "결제시작 후 결제완료한 상태",
+          "funnel": "2. 광고"
+        },
+        {
+          "name": "regist_start",
+          "label": "지점등록 시작",
+          "cnt": 293,
+          "params": [
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 293
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 293
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 293
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 293
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 293
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 293
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 293
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 293
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 293
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 293
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 291
+            }
+          ],
+          "description": "지점등록 클릭 후 /regist 유입",
+          "funnel": "1. 등록"
+        },
+        {
+          "name": "ad_pay_start",
+          "label": "결제 시작",
+          "cnt": 290,
+          "params": [
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 290
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 290
+            },
+            {
+              "key": "branch_type",
+              "type": "string",
+              "cnt": 290,
+              "description": "지점 타입 (gosi 등)"
+            },
+            {
+              "key": "branch_id",
+              "type": "int",
+              "cnt": 290,
+              "description": "지점 ID"
+            },
+            {
+              "key": "select_ad_grade",
+              "type": "string",
+              "cnt": 290,
+              "description": "선택 상품 (unlimited/basic/premium)"
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 290
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 290
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 290
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 290
+            },
+            {
+              "key": "select_pay_type",
+              "type": "string",
+              "cnt": 290,
+              "description": "결제 수단 (card, cash 등)"
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 290
+            },
+            {
+              "key": "select_ad_type",
+              "type": "string",
+              "cnt": 290,
+              "description": "선택 기간 (3개월, 6개월(5%할인) 등)"
+            },
+            {
+              "key": "branch_name",
+              "type": "string",
+              "cnt": 290,
+              "description": "지점명"
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 290
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 286
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 285
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 283
+            }
+          ],
+          "description": "상품 선택 후 [결제시작] 버튼 클릭. 어떤 상품·유형을 골랐는지 집계",
+          "funnel": "2. 광고"
+        },
+        {
+          "name": "regist_complete",
+          "label": "지점등록 완료",
+          "cnt": 85,
+          "params": [
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 85
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 85
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 85
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 85
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 85
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 85
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 85
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 85
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 85
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 84
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 67
+            }
+          ],
+          "description": "등록요청 → 팝업에서 [등록] 클릭 → 등록요청 완료 창 노출",
+          "funnel": "1. 등록"
+        },
+        {
+          "name": "click",
+          "label": "아웃바운드 클릭",
+          "cnt": 36,
+          "params": [
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 36
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 36
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 36
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 36
+            },
+            {
+              "key": "link_url",
+              "type": "string",
+              "cnt": 36,
+              "description": "클릭한 URL"
+            },
+            {
+              "key": "outbound",
+              "type": "string",
+              "cnt": 36,
+              "description": "아웃바운드 여부"
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 36
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 36
+            },
+            {
+              "key": "link_domain",
+              "type": "string",
+              "cnt": 36,
+              "description": "링크 도메인"
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 36
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 34
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 29
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 28
+            },
+            {
+              "key": "link_classes",
+              "type": "string",
+              "cnt": 9
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 3
+            }
+          ],
+          "description": "GA4 자동수집 — 외부 도메인 링크 클릭",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "form_start",
+          "label": "폼 시작",
+          "cnt": 22,
+          "params": [
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 22
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 22
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 22
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 22
+            },
+            {
+              "key": "form_length",
+              "type": "int",
+              "cnt": 22
+            },
+            {
+              "key": "engagement_time_msec",
+              "type": "int",
+              "cnt": 22
+            },
+            {
+              "key": "first_field_name",
+              "type": "string",
+              "cnt": 22,
+              "description": "첫 입력 필드명"
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 22
+            },
+            {
+              "key": "ignore_referrer",
+              "type": "string",
+              "cnt": 22
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 22
+            },
+            {
+              "key": "first_field_position",
+              "type": "int",
+              "cnt": 22
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 22
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 22
+            },
+            {
+              "key": "page_referrer",
+              "type": "string",
+              "cnt": 22
+            },
+            {
+              "key": "form_destination",
+              "type": "string",
+              "cnt": 22,
+              "description": "폼 제출 대상"
+            },
+            {
+              "key": "first_field_type",
+              "type": "string",
+              "cnt": 21
+            }
+          ],
+          "description": "GA4 자동수집 — 폼 첫 입력 시작",
+          "funnel": "GA4 자동"
+        },
+        {
+          "name": "view_search_results",
+          "label": "검색결과 조회",
+          "cnt": 1,
+          "params": [
+            {
+              "key": "search_term",
+              "type": "string",
+              "cnt": 1,
+              "description": "검색어"
+            },
+            {
+              "key": "ga_session_number",
+              "type": "int",
+              "cnt": 1
+            },
+            {
+              "key": "session_engaged",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "unique_search_term",
+              "type": "int",
+              "cnt": 1
+            },
+            {
+              "key": "page_location",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "engaged_session_event",
+              "type": "int",
+              "cnt": 1
+            },
+            {
+              "key": "ga_session_id",
+              "type": "int",
+              "cnt": 1
+            },
+            {
+              "key": "page_title",
+              "type": "string",
+              "cnt": 1
+            },
+            {
+              "key": "batch_page_id",
+              "type": "int",
+              "cnt": 1
+            },
+            {
+              "key": "batch_ordering_id",
+              "type": "int",
+              "cnt": 1
+            }
+          ],
+          "description": "GA4 자동수집 — 검색결과 페이지 조회",
+          "funnel": "GA4 자동"
+        }
+      ]
+    }
+  }
+}
