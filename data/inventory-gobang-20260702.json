@@ -1,0 +1,5209 @@
+[{
+  "event_name": "ad_banner_click",
+  "param_key": "session_engaged",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "page_path",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ad_banner_position",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ad_banner_type",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ga_session_id",
+  "cnt": "35",
+  "string_cnt": "0",
+  "int_cnt": "35",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "page_hostname",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ga_session_number",
+  "cnt": "35",
+  "string_cnt": "0",
+  "int_cnt": "35",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "page_location",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "batch_ordering_id",
+  "cnt": "35",
+  "string_cnt": "0",
+  "int_cnt": "35",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "page_title",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "batch_page_id",
+  "cnt": "35",
+  "string_cnt": "0",
+  "int_cnt": "35",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ad_banner_id",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "browser",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ad_banner_service_area",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "is_login",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ad_banner_link_url",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ad_is_expanded",
+  "cnt": "35",
+  "string_cnt": "35",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "engaged_session_event",
+  "cnt": "34",
+  "string_cnt": "0",
+  "int_cnt": "34",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "engagement_time_msec",
+  "cnt": "34",
+  "string_cnt": "0",
+  "int_cnt": "34",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "region",
+  "cnt": "33",
+  "string_cnt": "33",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "page_referrer",
+  "cnt": "6",
+  "string_cnt": "6",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "debug_mode",
+  "cnt": "5",
+  "string_cnt": "0",
+  "int_cnt": "5",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_click",
+  "param_key": "ignore_referrer",
+  "cnt": "2",
+  "string_cnt": "2",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "ga_session_id",
+  "cnt": "52",
+  "string_cnt": "0",
+  "int_cnt": "52",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "browser",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "page_hostname",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "engaged_session_event",
+  "cnt": "52",
+  "string_cnt": "0",
+  "int_cnt": "52",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "ad_banner_position",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "is_login",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "batch_page_id",
+  "cnt": "52",
+  "string_cnt": "0",
+  "int_cnt": "52",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "session_engaged",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "ad_banner_id",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "ga_session_number",
+  "cnt": "52",
+  "string_cnt": "0",
+  "int_cnt": "52",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "page_location",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "page_title",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "page_path",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "ad_banner_service_area",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "ad_banner_type",
+  "cnt": "52",
+  "string_cnt": "52",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "batch_ordering_id",
+  "cnt": "52",
+  "string_cnt": "0",
+  "int_cnt": "52",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "region",
+  "cnt": "51",
+  "string_cnt": "51",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "engagement_time_msec",
+  "cnt": "50",
+  "string_cnt": "0",
+  "int_cnt": "50",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "page_referrer",
+  "cnt": "10",
+  "string_cnt": "10",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "ignore_referrer",
+  "cnt": "8",
+  "string_cnt": "8",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_play",
+  "param_key": "debug_mode",
+  "cnt": "4",
+  "string_cnt": "0",
+  "int_cnt": "4",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "ad_banner_position",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "page_hostname",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "ad_banner_type",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "page_title",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "session_engaged",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "ga_session_number",
+  "cnt": "4024",
+  "string_cnt": "0",
+  "int_cnt": "4024",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "page_location",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "is_login",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "batch_ordering_id",
+  "cnt": "4024",
+  "string_cnt": "0",
+  "int_cnt": "4024",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "batch_page_id",
+  "cnt": "4024",
+  "string_cnt": "0",
+  "int_cnt": "4024",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "page_path",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "ad_banner_id",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "ga_session_id",
+  "cnt": "4024",
+  "string_cnt": "0",
+  "int_cnt": "4024",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "browser",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "ad_banner_service_area",
+  "cnt": "4024",
+  "string_cnt": "4024",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "region",
+  "cnt": "3910",
+  "string_cnt": "3910",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "engaged_session_event",
+  "cnt": "3810",
+  "string_cnt": "0",
+  "int_cnt": "3810",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "engagement_time_msec",
+  "cnt": "2175",
+  "string_cnt": "0",
+  "int_cnt": "2175",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "page_referrer",
+  "cnt": "1385",
+  "string_cnt": "1385",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "ignore_referrer",
+  "cnt": "533",
+  "string_cnt": "533",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "medium",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "campaign",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "source",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "debug_mode",
+  "cnt": "9",
+  "string_cnt": "0",
+  "int_cnt": "9",
+  "double_cnt": "0"
+}, {
+  "event_name": "ad_banner_view",
+  "param_key": "term",
+  "cnt": "5",
+  "string_cnt": "5",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "appstream_new_join",
+  "param_key": "ga_session_number",
+  "cnt": "29307",
+  "string_cnt": "0",
+  "int_cnt": "29307",
+  "double_cnt": "0"
+}, {
+  "event_name": "appstream_new_join",
+  "param_key": "firebase_conversion",
+  "cnt": "29307",
+  "string_cnt": "0",
+  "int_cnt": "29307",
+  "double_cnt": "0"
+}, {
+  "event_name": "appstream_new_join",
+  "param_key": "ga_session_id",
+  "cnt": "29307",
+  "string_cnt": "0",
+  "int_cnt": "29307",
+  "double_cnt": "0"
+}, {
+  "event_name": "appstream_new_join",
+  "param_key": "synthetic_bundle",
+  "cnt": "29307",
+  "string_cnt": "0",
+  "int_cnt": "29307",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "ga_session_number",
+  "cnt": "1291789",
+  "string_cnt": "0",
+  "int_cnt": "1291789",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "branch_id",
+  "cnt": "1291789",
+  "string_cnt": "0",
+  "int_cnt": "1291789",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "ad_grade",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "page_location",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "price_deposit_min",
+  "cnt": "1291789",
+  "string_cnt": "0",
+  "int_cnt": "1291788",
+  "double_cnt": "1"
+}, {
+  "event_name": "branch_view",
+  "param_key": "review_count",
+  "cnt": "1291789",
+  "string_cnt": "0",
+  "int_cnt": "1291789",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "batch_page_id",
+  "cnt": "1291789",
+  "string_cnt": "0",
+  "int_cnt": "1291789",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "location_city",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "has_discount",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "location_district",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "price_deposit_max",
+  "cnt": "1291789",
+  "string_cnt": "0",
+  "int_cnt": "1291788",
+  "double_cnt": "1"
+}, {
+  "event_name": "branch_view",
+  "param_key": "is_favorited",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "branch_type",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "ga_session_id",
+  "cnt": "1291789",
+  "string_cnt": "0",
+  "int_cnt": "1291789",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "is_guaranteez",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "session_engaged",
+  "cnt": "1291789",
+  "string_cnt": "1291789",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "batch_ordering_id",
+  "cnt": "1291789",
+  "string_cnt": "0",
+  "int_cnt": "1291789",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "branch_name",
+  "cnt": "1291781",
+  "string_cnt": "1291781",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "page_path",
+  "cnt": "1291649",
+  "string_cnt": "1291649",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "is_login",
+  "cnt": "1291649",
+  "string_cnt": "1291649",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "browser",
+  "cnt": "1291649",
+  "string_cnt": "1291649",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "page_hostname",
+  "cnt": "1291649",
+  "string_cnt": "1291649",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "page_title",
+  "cnt": "1291484",
+  "string_cnt": "1291484",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "price_month_max",
+  "cnt": "1291200",
+  "string_cnt": "0",
+  "int_cnt": "1288844",
+  "double_cnt": "2356"
+}, {
+  "event_name": "branch_view",
+  "param_key": "price_month_min",
+  "cnt": "1291200",
+  "string_cnt": "0",
+  "int_cnt": "1289299",
+  "double_cnt": "1901"
+}, {
+  "event_name": "branch_view",
+  "param_key": "engaged_session_event",
+  "cnt": "1284694",
+  "string_cnt": "0",
+  "int_cnt": "1284694",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "region",
+  "cnt": "1231986",
+  "string_cnt": "1231944",
+  "int_cnt": "42",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "location_station",
+  "cnt": "1114488",
+  "string_cnt": "1114488",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "location_university",
+  "cnt": "876361",
+  "string_cnt": "876361",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "is_foreigner",
+  "cnt": "730898",
+  "string_cnt": "730898",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "page_referrer",
+  "cnt": "358208",
+  "string_cnt": "358208",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "engagement_time_msec",
+  "cnt": "306295",
+  "string_cnt": "0",
+  "int_cnt": "306295",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "ignore_referrer",
+  "cnt": "225179",
+  "string_cnt": "225179",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "medium",
+  "cnt": "28",
+  "string_cnt": "28",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "source",
+  "cnt": "28",
+  "string_cnt": "28",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "campaign",
+  "cnt": "28",
+  "string_cnt": "28",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "term",
+  "cnt": "19",
+  "string_cnt": "19",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "ab_test_type",
+  "cnt": "8",
+  "string_cnt": "8",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "debug_mode",
+  "cnt": "5",
+  "string_cnt": "0",
+  "int_cnt": "5",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "gclid",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "gad_source",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "branch_view",
+  "param_key": "gad_campaignid",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "churn_branchview_7d",
+  "param_key": "synthetic_bundle",
+  "cnt": "101135",
+  "string_cnt": "0",
+  "int_cnt": "101135",
+  "double_cnt": "0"
+}, {
+  "event_name": "churn_branchview_7d",
+  "param_key": "ga_session_number",
+  "cnt": "101135",
+  "string_cnt": "0",
+  "int_cnt": "101135",
+  "double_cnt": "0"
+}, {
+  "event_name": "churn_branchview_7d",
+  "param_key": "ga_session_id",
+  "cnt": "101135",
+  "string_cnt": "0",
+  "int_cnt": "101135",
+  "double_cnt": "0"
+}, {
+  "event_name": "churn_branchview_7d",
+  "param_key": "firebase_conversion",
+  "cnt": "101135",
+  "string_cnt": "0",
+  "int_cnt": "101135",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "session_engaged",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "page_location",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "page_title",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "engaged_session_event",
+  "cnt": "13",
+  "string_cnt": "0",
+  "int_cnt": "13",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "region",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "ga_session_id",
+  "cnt": "13",
+  "string_cnt": "0",
+  "int_cnt": "13",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "batch_page_id",
+  "cnt": "13",
+  "string_cnt": "0",
+  "int_cnt": "13",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "is_login",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "batch_ordering_id",
+  "cnt": "13",
+  "string_cnt": "0",
+  "int_cnt": "13",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "page_path",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "engagement_time_msec",
+  "cnt": "13",
+  "string_cnt": "0",
+  "int_cnt": "13",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "browser",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "page_hostname",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "ga_session_number",
+  "cnt": "13",
+  "string_cnt": "0",
+  "int_cnt": "13",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "contents_type",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "contents_tag",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "feed_subscribe",
+  "param_key": "page_referrer",
+  "cnt": "3",
+  "string_cnt": "3",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "ga_session_id",
+  "cnt": "169578",
+  "string_cnt": "0",
+  "int_cnt": "169578",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "batch_page_id",
+  "cnt": "169578",
+  "string_cnt": "0",
+  "int_cnt": "169578",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "page_location",
+  "cnt": "169578",
+  "string_cnt": "169578",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "session_engaged",
+  "cnt": "169578",
+  "string_cnt": "169578",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "ga_session_number",
+  "cnt": "169578",
+  "string_cnt": "0",
+  "int_cnt": "169578",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "batch_ordering_id",
+  "cnt": "169578",
+  "string_cnt": "0",
+  "int_cnt": "169578",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "page_path",
+  "cnt": "169551",
+  "string_cnt": "169551",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "browser",
+  "cnt": "169551",
+  "string_cnt": "169551",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "page_hostname",
+  "cnt": "169551",
+  "string_cnt": "169551",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "is_login",
+  "cnt": "169550",
+  "string_cnt": "169550",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "page_title",
+  "cnt": "168751",
+  "string_cnt": "168751",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "region",
+  "cnt": "156046",
+  "string_cnt": "156039",
+  "int_cnt": "7",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "engaged_session_event",
+  "cnt": "146139",
+  "string_cnt": "0",
+  "int_cnt": "146139",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "source",
+  "cnt": "116341",
+  "string_cnt": "116341",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "page_referrer",
+  "cnt": "116069",
+  "string_cnt": "116069",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "medium",
+  "cnt": "115831",
+  "string_cnt": "115831",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "campaign",
+  "cnt": "115791",
+  "string_cnt": "115791",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "term",
+  "cnt": "50748",
+  "string_cnt": "50748",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "gad_campaignid",
+  "cnt": "6303",
+  "string_cnt": "6303",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "gad_source",
+  "cnt": "5884",
+  "string_cnt": "5884",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "gclid",
+  "cnt": "5775",
+  "string_cnt": "5775",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "content",
+  "cnt": "3931",
+  "string_cnt": "3931",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "ignore_referrer",
+  "cnt": "1454",
+  "string_cnt": "1454",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "campaign_id",
+  "cnt": "270",
+  "string_cnt": "270",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "is_favorited",
+  "cnt": "27",
+  "string_cnt": "27",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "location_city",
+  "cnt": "27",
+  "string_cnt": "27",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "price_month_min",
+  "cnt": "26",
+  "string_cnt": "0",
+  "int_cnt": "26",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "branch_name",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "price_deposit_max",
+  "cnt": "26",
+  "string_cnt": "0",
+  "int_cnt": "26",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "price_deposit_min",
+  "cnt": "26",
+  "string_cnt": "0",
+  "int_cnt": "26",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "branch_type",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "location_district",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "is_guaranteez",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "price_month_max",
+  "cnt": "26",
+  "string_cnt": "0",
+  "int_cnt": "26",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "review_count",
+  "cnt": "26",
+  "string_cnt": "0",
+  "int_cnt": "26",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "ad_grade",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "has_discount",
+  "cnt": "26",
+  "string_cnt": "26",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "branch_id",
+  "cnt": "26",
+  "string_cnt": "0",
+  "int_cnt": "26",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "location_station",
+  "cnt": "19",
+  "string_cnt": "19",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "location_university",
+  "cnt": "18",
+  "string_cnt": "18",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "is_foreigner",
+  "cnt": "10",
+  "string_cnt": "10",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "debug_mode",
+  "cnt": "4",
+  "string_cnt": "0",
+  "int_cnt": "4",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "notices_id",
+  "cnt": "1",
+  "string_cnt": "0",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "is_schedule",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "is_recommend",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "first_visit",
+  "param_key": "notices_type",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "page_path",
+  "cnt": "67292",
+  "string_cnt": "67292",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "ga_session_id",
+  "cnt": "67292",
+  "string_cnt": "0",
+  "int_cnt": "67292",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "page_location",
+  "cnt": "67292",
+  "string_cnt": "67292",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "ga_session_number",
+  "cnt": "67292",
+  "string_cnt": "0",
+  "int_cnt": "67292",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "batch_page_id",
+  "cnt": "67292",
+  "string_cnt": "0",
+  "int_cnt": "67292",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "is_login",
+  "cnt": "67292",
+  "string_cnt": "67292",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "batch_ordering_id",
+  "cnt": "67292",
+  "string_cnt": "0",
+  "int_cnt": "67292",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "browser",
+  "cnt": "67292",
+  "string_cnt": "67292",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "page_hostname",
+  "cnt": "67292",
+  "string_cnt": "67292",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "inquiry_method",
+  "cnt": "67292",
+  "string_cnt": "67292",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "session_engaged",
+  "cnt": "67292",
+  "string_cnt": "67292",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "page_title",
+  "cnt": "67290",
+  "string_cnt": "67290",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "has_discount",
+  "cnt": "67255",
+  "string_cnt": "67255",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "branch_id",
+  "cnt": "67255",
+  "string_cnt": "0",
+  "int_cnt": "67255",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "ad_grade",
+  "cnt": "67255",
+  "string_cnt": "67255",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "branch_type",
+  "cnt": "67255",
+  "string_cnt": "67255",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "is_guaranteez",
+  "cnt": "67255",
+  "string_cnt": "67255",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "price_deposit_min",
+  "cnt": "67255",
+  "string_cnt": "0",
+  "int_cnt": "67255",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "is_favorited",
+  "cnt": "67255",
+  "string_cnt": "67255",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "review_count",
+  "cnt": "67255",
+  "string_cnt": "0",
+  "int_cnt": "67255",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "branch_name",
+  "cnt": "67255",
+  "string_cnt": "67255",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "location_district",
+  "cnt": "67255",
+  "string_cnt": "67255",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "price_deposit_max",
+  "cnt": "67255",
+  "string_cnt": "0",
+  "int_cnt": "67255",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "location_city",
+  "cnt": "67255",
+  "string_cnt": "67255",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "price_month_min",
+  "cnt": "67243",
+  "string_cnt": "0",
+  "int_cnt": "67170",
+  "double_cnt": "73"
+}, {
+  "event_name": "inquiry",
+  "param_key": "price_month_max",
+  "cnt": "67243",
+  "string_cnt": "0",
+  "int_cnt": "67162",
+  "double_cnt": "81"
+}, {
+  "event_name": "inquiry",
+  "param_key": "engaged_session_event",
+  "cnt": "66911",
+  "string_cnt": "0",
+  "int_cnt": "66911",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "engagement_time_msec",
+  "cnt": "66856",
+  "string_cnt": "0",
+  "int_cnt": "66856",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "region",
+  "cnt": "64510",
+  "string_cnt": "64506",
+  "int_cnt": "4",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "location_station",
+  "cnt": "58992",
+  "string_cnt": "58992",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "location_university",
+  "cnt": "46958",
+  "string_cnt": "46958",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "is_foreigner",
+  "cnt": "39017",
+  "string_cnt": "39017",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "page_referrer",
+  "cnt": "21075",
+  "string_cnt": "21075",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "ignore_referrer",
+  "cnt": "14593",
+  "string_cnt": "14593",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry",
+  "param_key": "debug_mode",
+  "cnt": "2",
+  "string_cnt": "0",
+  "int_cnt": "2",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "ga_session_id",
+  "cnt": "567",
+  "string_cnt": "0",
+  "int_cnt": "567",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "session_engaged",
+  "cnt": "567",
+  "string_cnt": "567",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "page_hostname",
+  "cnt": "567",
+  "string_cnt": "567",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "browser",
+  "cnt": "567",
+  "string_cnt": "567",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "ga_session_number",
+  "cnt": "567",
+  "string_cnt": "0",
+  "int_cnt": "567",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "page_title",
+  "cnt": "567",
+  "string_cnt": "567",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "page_location",
+  "cnt": "567",
+  "string_cnt": "567",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "page_path",
+  "cnt": "567",
+  "string_cnt": "567",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "batch_page_id",
+  "cnt": "567",
+  "string_cnt": "0",
+  "int_cnt": "567",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "is_login",
+  "cnt": "567",
+  "string_cnt": "567",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "batch_ordering_id",
+  "cnt": "567",
+  "string_cnt": "0",
+  "int_cnt": "567",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "engagement_time_msec",
+  "cnt": "566",
+  "string_cnt": "0",
+  "int_cnt": "566",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "engaged_session_event",
+  "cnt": "564",
+  "string_cnt": "0",
+  "int_cnt": "564",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "region",
+  "cnt": "490",
+  "string_cnt": "489",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "page_referrer",
+  "cnt": "214",
+  "string_cnt": "214",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "inquiry_submit_foreigner",
+  "param_key": "ignore_referrer",
+  "cnt": "168",
+  "string_cnt": "168",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "ga_session_number",
+  "cnt": "9462806",
+  "string_cnt": "0",
+  "int_cnt": "9462806",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "page_hostname",
+  "cnt": "9462806",
+  "string_cnt": "9462806",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "batch_ordering_id",
+  "cnt": "9462806",
+  "string_cnt": "0",
+  "int_cnt": "9462806",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "ga_session_id",
+  "cnt": "9462806",
+  "string_cnt": "0",
+  "int_cnt": "9462806",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "page_location",
+  "cnt": "9462806",
+  "string_cnt": "9462806",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "session_engaged",
+  "cnt": "9462806",
+  "string_cnt": "9462806",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "batch_page_id",
+  "cnt": "9462806",
+  "string_cnt": "0",
+  "int_cnt": "9462806",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "browser",
+  "cnt": "9462806",
+  "string_cnt": "9462806",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "page_path",
+  "cnt": "9462806",
+  "string_cnt": "9462806",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "is_login",
+  "cnt": "9462804",
+  "string_cnt": "9462804",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "page_title",
+  "cnt": "9461542",
+  "string_cnt": "9461542",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "engaged_session_event",
+  "cnt": "9369716",
+  "string_cnt": "0",
+  "int_cnt": "9369716",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "region",
+  "cnt": "9063936",
+  "string_cnt": "9063648",
+  "int_cnt": "288",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "engagement_time_msec",
+  "cnt": "7514877",
+  "string_cnt": "0",
+  "int_cnt": "7514877",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "page_referrer",
+  "cnt": "2332191",
+  "string_cnt": "2332191",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "ignore_referrer",
+  "cnt": "1342461",
+  "string_cnt": "1342461",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "entrances",
+  "cnt": "413085",
+  "string_cnt": "0",
+  "int_cnt": "413085",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "source",
+  "cnt": "252001",
+  "string_cnt": "252001",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "medium",
+  "cnt": "251044",
+  "string_cnt": "251044",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "campaign",
+  "cnt": "250982",
+  "string_cnt": "250982",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "term",
+  "cnt": "114262",
+  "string_cnt": "114262",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "gad_campaignid",
+  "cnt": "15327",
+  "string_cnt": "15327",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "gad_source",
+  "cnt": "14799",
+  "string_cnt": "14799",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "gclid",
+  "cnt": "14644",
+  "string_cnt": "14644",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "content",
+  "cnt": "6784",
+  "string_cnt": "6784",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "campaign_id",
+  "cnt": "367",
+  "string_cnt": "367",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "page_view",
+  "param_key": "debug_mode",
+  "cnt": "156",
+  "string_cnt": "0",
+  "int_cnt": "156",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "ga_session_number",
+  "cnt": "262276",
+  "string_cnt": "0",
+  "int_cnt": "262276",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "ga_session_id",
+  "cnt": "262276",
+  "string_cnt": "0",
+  "int_cnt": "262276",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "quicksearch_type",
+  "cnt": "262276",
+  "string_cnt": "262276",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "batch_page_id",
+  "cnt": "262276",
+  "string_cnt": "0",
+  "int_cnt": "262276",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "page_hostname",
+  "cnt": "262276",
+  "string_cnt": "262276",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "page_location",
+  "cnt": "262276",
+  "string_cnt": "262276",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "session_engaged",
+  "cnt": "262276",
+  "string_cnt": "262276",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "browser",
+  "cnt": "262276",
+  "string_cnt": "262276",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "is_login",
+  "cnt": "262276",
+  "string_cnt": "262276",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "batch_ordering_id",
+  "cnt": "262276",
+  "string_cnt": "0",
+  "int_cnt": "262276",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "page_path",
+  "cnt": "262276",
+  "string_cnt": "262276",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "page_title",
+  "cnt": "262273",
+  "string_cnt": "262273",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "engagement_time_msec",
+  "cnt": "261572",
+  "string_cnt": "0",
+  "int_cnt": "261572",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "engaged_session_event",
+  "cnt": "260969",
+  "string_cnt": "0",
+  "int_cnt": "260969",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "region",
+  "cnt": "254715",
+  "string_cnt": "254707",
+  "int_cnt": "8",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "page_referrer",
+  "cnt": "47742",
+  "string_cnt": "47742",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "ignore_referrer",
+  "cnt": "18277",
+  "string_cnt": "18277",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "campaign",
+  "cnt": "1322",
+  "string_cnt": "1322",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "medium",
+  "cnt": "1322",
+  "string_cnt": "1322",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "source",
+  "cnt": "1322",
+  "string_cnt": "1322",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "term",
+  "cnt": "906",
+  "string_cnt": "906",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "content",
+  "cnt": "143",
+  "string_cnt": "143",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "gad_campaignid",
+  "cnt": "12",
+  "string_cnt": "12",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "gad_source",
+  "cnt": "12",
+  "string_cnt": "12",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "gclid",
+  "cnt": "10",
+  "string_cnt": "10",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "quicksearch",
+  "param_key": "debug_mode",
+  "cnt": "9",
+  "string_cnt": "0",
+  "int_cnt": "9",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "batch_ordering_id",
+  "cnt": "39385",
+  "string_cnt": "0",
+  "int_cnt": "39385",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "ga_session_number",
+  "cnt": "39385",
+  "string_cnt": "0",
+  "int_cnt": "39385",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "is_login",
+  "cnt": "39385",
+  "string_cnt": "39385",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "ga_session_id",
+  "cnt": "39385",
+  "string_cnt": "0",
+  "int_cnt": "39385",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "session_engaged",
+  "cnt": "39385",
+  "string_cnt": "39385",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "batch_page_id",
+  "cnt": "39385",
+  "string_cnt": "0",
+  "int_cnt": "39385",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "page_path",
+  "cnt": "39385",
+  "string_cnt": "39385",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "page_hostname",
+  "cnt": "39385",
+  "string_cnt": "39385",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "page_location",
+  "cnt": "39385",
+  "string_cnt": "39385",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "browser",
+  "cnt": "39385",
+  "string_cnt": "39385",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "percent_scrolled",
+  "cnt": "39385",
+  "string_cnt": "0",
+  "int_cnt": "39385",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "engaged_session_event",
+  "cnt": "39247",
+  "string_cnt": "0",
+  "int_cnt": "39247",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "page_title",
+  "cnt": "39008",
+  "string_cnt": "39008",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "region",
+  "cnt": "37256",
+  "string_cnt": "37254",
+  "int_cnt": "2",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "engagement_time_msec",
+  "cnt": "26109",
+  "string_cnt": "0",
+  "int_cnt": "26109",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "page_referrer",
+  "cnt": "20093",
+  "string_cnt": "20093",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "ignore_referrer",
+  "cnt": "2440",
+  "string_cnt": "2440",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete",
+  "param_key": "debug_mode",
+  "cnt": "1",
+  "string_cnt": "0",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "page_path",
+  "cnt": "30201",
+  "string_cnt": "30201",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "browser",
+  "cnt": "30201",
+  "string_cnt": "30201",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "page_hostname",
+  "cnt": "30201",
+  "string_cnt": "30201",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "ga_session_id",
+  "cnt": "30201",
+  "string_cnt": "0",
+  "int_cnt": "30201",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "session_engaged",
+  "cnt": "30201",
+  "string_cnt": "30201",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "batch_ordering_id",
+  "cnt": "30201",
+  "string_cnt": "0",
+  "int_cnt": "30201",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "batch_page_id",
+  "cnt": "30201",
+  "string_cnt": "0",
+  "int_cnt": "30201",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "is_login",
+  "cnt": "30201",
+  "string_cnt": "30201",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "ga_session_number",
+  "cnt": "30201",
+  "string_cnt": "0",
+  "int_cnt": "30201",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "page_location",
+  "cnt": "30201",
+  "string_cnt": "30201",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "page_title",
+  "cnt": "30195",
+  "string_cnt": "30195",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "region",
+  "cnt": "28999",
+  "string_cnt": "28996",
+  "int_cnt": "3",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "engaged_session_event",
+  "cnt": "28719",
+  "string_cnt": "0",
+  "int_cnt": "28719",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "engagement_time_msec",
+  "cnt": "20250",
+  "string_cnt": "0",
+  "int_cnt": "20250",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "page_referrer",
+  "cnt": "14782",
+  "string_cnt": "14782",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "ignore_referrer",
+  "cnt": "5170",
+  "string_cnt": "5170",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "campaign",
+  "cnt": "144",
+  "string_cnt": "144",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "medium",
+  "cnt": "144",
+  "string_cnt": "144",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "source",
+  "cnt": "144",
+  "string_cnt": "144",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "term",
+  "cnt": "16",
+  "string_cnt": "16",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "read_complete_notices",
+  "param_key": "debug_mode",
+  "cnt": "1",
+  "string_cnt": "0",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "page_location",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "session_engaged",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "browser",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "batch_ordering_id",
+  "cnt": "68028",
+  "string_cnt": "0",
+  "int_cnt": "68028",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "page_path",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "search_source",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "batch_page_id",
+  "cnt": "68028",
+  "string_cnt": "0",
+  "int_cnt": "68028",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "page_hostname",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "search_query",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "page_title",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "ga_session_number",
+  "cnt": "68028",
+  "string_cnt": "0",
+  "int_cnt": "68028",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "is_login",
+  "cnt": "68028",
+  "string_cnt": "68028",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "ga_session_id",
+  "cnt": "68028",
+  "string_cnt": "0",
+  "int_cnt": "68028",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "engagement_time_msec",
+  "cnt": "67977",
+  "string_cnt": "0",
+  "int_cnt": "67977",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "engaged_session_event",
+  "cnt": "67700",
+  "string_cnt": "0",
+  "int_cnt": "67700",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "region",
+  "cnt": "65280",
+  "string_cnt": "65278",
+  "int_cnt": "2",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "page_referrer",
+  "cnt": "15146",
+  "string_cnt": "15146",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "ignore_referrer",
+  "cnt": "6576",
+  "string_cnt": "6576",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "source",
+  "cnt": "57",
+  "string_cnt": "57",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "medium",
+  "cnt": "57",
+  "string_cnt": "57",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "campaign",
+  "cnt": "56",
+  "string_cnt": "56",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "term",
+  "cnt": "38",
+  "string_cnt": "38",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "content",
+  "cnt": "5",
+  "string_cnt": "5",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "search",
+  "param_key": "debug_mode",
+  "cnt": "1",
+  "string_cnt": "0",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "page_location",
+  "cnt": "420922",
+  "string_cnt": "420922",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "ga_session_number",
+  "cnt": "420922",
+  "string_cnt": "0",
+  "int_cnt": "420922",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "batch_ordering_id",
+  "cnt": "420922",
+  "string_cnt": "0",
+  "int_cnt": "420922",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "session_engaged",
+  "cnt": "420922",
+  "string_cnt": "52927",
+  "int_cnt": "367995",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "batch_page_id",
+  "cnt": "420922",
+  "string_cnt": "0",
+  "int_cnt": "420922",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "ga_session_id",
+  "cnt": "420922",
+  "string_cnt": "0",
+  "int_cnt": "420922",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "page_path",
+  "cnt": "420885",
+  "string_cnt": "420885",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "page_hostname",
+  "cnt": "420885",
+  "string_cnt": "420885",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "browser",
+  "cnt": "420885",
+  "string_cnt": "420885",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "is_login",
+  "cnt": "420884",
+  "string_cnt": "420884",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "page_title",
+  "cnt": "420049",
+  "string_cnt": "420049",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "region",
+  "cnt": "396278",
+  "string_cnt": "396254",
+  "int_cnt": "24",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "engaged_session_event",
+  "cnt": "368864",
+  "string_cnt": "0",
+  "int_cnt": "368864",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "page_referrer",
+  "cnt": "187006",
+  "string_cnt": "187006",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "source",
+  "cnt": "170839",
+  "string_cnt": "170839",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "medium",
+  "cnt": "170230",
+  "string_cnt": "170230",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "campaign",
+  "cnt": "170185",
+  "string_cnt": "170185",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "term",
+  "cnt": "74104",
+  "string_cnt": "74104",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "ignore_referrer",
+  "cnt": "11543",
+  "string_cnt": "11543",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "gad_campaignid",
+  "cnt": "9799",
+  "string_cnt": "9799",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "gad_source",
+  "cnt": "9315",
+  "string_cnt": "9315",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "gclid",
+  "cnt": "9160",
+  "string_cnt": "9160",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "content",
+  "cnt": "5335",
+  "string_cnt": "5335",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "quicksearch_type",
+  "cnt": "635",
+  "string_cnt": "635",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "location_city",
+  "cnt": "423",
+  "string_cnt": "423",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "is_favorited",
+  "cnt": "390",
+  "string_cnt": "390",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "price_deposit_max",
+  "cnt": "382",
+  "string_cnt": "0",
+  "int_cnt": "382",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "review_count",
+  "cnt": "382",
+  "string_cnt": "0",
+  "int_cnt": "382",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "ad_grade",
+  "cnt": "382",
+  "string_cnt": "382",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "has_discount",
+  "cnt": "382",
+  "string_cnt": "382",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "branch_name",
+  "cnt": "382",
+  "string_cnt": "382",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "price_deposit_min",
+  "cnt": "382",
+  "string_cnt": "0",
+  "int_cnt": "382",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "price_month_max",
+  "cnt": "382",
+  "string_cnt": "0",
+  "int_cnt": "382",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "branch_id",
+  "cnt": "382",
+  "string_cnt": "0",
+  "int_cnt": "382",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "branch_type",
+  "cnt": "382",
+  "string_cnt": "382",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "location_district",
+  "cnt": "382",
+  "string_cnt": "382",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "is_guaranteez",
+  "cnt": "382",
+  "string_cnt": "382",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "price_month_min",
+  "cnt": "382",
+  "string_cnt": "0",
+  "int_cnt": "382",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "campaign_id",
+  "cnt": "337",
+  "string_cnt": "337",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "location_station",
+  "cnt": "302",
+  "string_cnt": "302",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "inquiry_method",
+  "cnt": "282",
+  "string_cnt": "282",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "location_university",
+  "cnt": "253",
+  "string_cnt": "253",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "percent_scrolled",
+  "cnt": "216",
+  "string_cnt": "0",
+  "int_cnt": "216",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "is_foreigner",
+  "cnt": "192",
+  "string_cnt": "192",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "search_source",
+  "cnt": "45",
+  "string_cnt": "45",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "search_query",
+  "cnt": "45",
+  "string_cnt": "45",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "notices_id",
+  "cnt": "41",
+  "string_cnt": "0",
+  "int_cnt": "41",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "notices_type",
+  "cnt": "41",
+  "string_cnt": "41",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "debug_mode",
+  "cnt": "9",
+  "string_cnt": "0",
+  "int_cnt": "9",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "ad_banner_type",
+  "cnt": "8",
+  "string_cnt": "8",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "ad_banner_position",
+  "cnt": "8",
+  "string_cnt": "8",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "ad_banner_service_area",
+  "cnt": "8",
+  "string_cnt": "8",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "ad_banner_id",
+  "cnt": "8",
+  "string_cnt": "8",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "schedule_action",
+  "cnt": "7",
+  "string_cnt": "7",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "prev_page",
+  "cnt": "3",
+  "string_cnt": "3",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "is_schedule",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "session_start",
+  "param_key": "is_recommend",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "page_hostname",
+  "cnt": "607802",
+  "string_cnt": "607802",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "page_path",
+  "cnt": "607802",
+  "string_cnt": "607802",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "session_engaged",
+  "cnt": "607802",
+  "string_cnt": "607802",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "batch_ordering_id",
+  "cnt": "607802",
+  "string_cnt": "0",
+  "int_cnt": "607802",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "ga_session_number",
+  "cnt": "607802",
+  "string_cnt": "0",
+  "int_cnt": "607802",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "browser",
+  "cnt": "607802",
+  "string_cnt": "607802",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "page_location",
+  "cnt": "607802",
+  "string_cnt": "607802",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "ga_session_id",
+  "cnt": "607802",
+  "string_cnt": "0",
+  "int_cnt": "607802",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "batch_page_id",
+  "cnt": "607802",
+  "string_cnt": "0",
+  "int_cnt": "607802",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "is_login",
+  "cnt": "607802",
+  "string_cnt": "607802",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "page_title",
+  "cnt": "607749",
+  "string_cnt": "607749",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "engagement_time_msec",
+  "cnt": "596969",
+  "string_cnt": "0",
+  "int_cnt": "596969",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "engaged_session_event",
+  "cnt": "587860",
+  "string_cnt": "0",
+  "int_cnt": "587860",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "region",
+  "cnt": "553155",
+  "string_cnt": "553147",
+  "int_cnt": "8",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "page_referrer",
+  "cnt": "345341",
+  "string_cnt": "345341",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "ignore_referrer",
+  "cnt": "198979",
+  "string_cnt": "198979",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "user_engagement",
+  "param_key": "debug_mode",
+  "cnt": "28",
+  "string_cnt": "0",
+  "int_cnt": "28",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "ga_session_id",
+  "cnt": "10391",
+  "string_cnt": "0",
+  "int_cnt": "10391",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "page_location",
+  "cnt": "10391",
+  "string_cnt": "10391",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "ga_session_number",
+  "cnt": "10391",
+  "string_cnt": "0",
+  "int_cnt": "10391",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "batch_ordering_id",
+  "cnt": "10391",
+  "string_cnt": "0",
+  "int_cnt": "10391",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "batch_page_id",
+  "cnt": "10391",
+  "string_cnt": "0",
+  "int_cnt": "10391",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "is_login",
+  "cnt": "10391",
+  "string_cnt": "10391",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "page_title",
+  "cnt": "10391",
+  "string_cnt": "10391",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "browser",
+  "cnt": "10391",
+  "string_cnt": "10391",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "session_engaged",
+  "cnt": "10391",
+  "string_cnt": "10391",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "page_path",
+  "cnt": "10391",
+  "string_cnt": "10391",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "page_hostname",
+  "cnt": "10391",
+  "string_cnt": "10391",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "engagement_time_msec",
+  "cnt": "10369",
+  "string_cnt": "0",
+  "int_cnt": "10369",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "engaged_session_event",
+  "cnt": "10281",
+  "string_cnt": "0",
+  "int_cnt": "10281",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "region",
+  "cnt": "9972",
+  "string_cnt": "9972",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "page_referrer",
+  "cnt": "3876",
+  "string_cnt": "3876",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "ignore_referrer",
+  "cnt": "1913",
+  "string_cnt": "1913",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "source",
+  "cnt": "18",
+  "string_cnt": "18",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "campaign",
+  "cnt": "18",
+  "string_cnt": "18",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "medium",
+  "cnt": "18",
+  "string_cnt": "18",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "debug_mode",
+  "cnt": "6",
+  "string_cnt": "0",
+  "int_cnt": "6",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "term",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_apply",
+  "param_key": "content",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "page_hostname",
+  "cnt": "24436",
+  "string_cnt": "24436",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "page_title",
+  "cnt": "24436",
+  "string_cnt": "24436",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "ga_session_number",
+  "cnt": "24436",
+  "string_cnt": "0",
+  "int_cnt": "24436",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "browser",
+  "cnt": "24436",
+  "string_cnt": "24436",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "page_path",
+  "cnt": "24436",
+  "string_cnt": "24436",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "ga_session_id",
+  "cnt": "24436",
+  "string_cnt": "0",
+  "int_cnt": "24436",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "session_engaged",
+  "cnt": "24436",
+  "string_cnt": "24436",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "is_login",
+  "cnt": "24436",
+  "string_cnt": "24436",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "batch_page_id",
+  "cnt": "24436",
+  "string_cnt": "0",
+  "int_cnt": "24436",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "batch_ordering_id",
+  "cnt": "24436",
+  "string_cnt": "0",
+  "int_cnt": "24436",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "page_location",
+  "cnt": "24436",
+  "string_cnt": "24436",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "engagement_time_msec",
+  "cnt": "24367",
+  "string_cnt": "0",
+  "int_cnt": "24367",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "region",
+  "cnt": "23626",
+  "string_cnt": "23625",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "engaged_session_event",
+  "cnt": "23286",
+  "string_cnt": "0",
+  "int_cnt": "23286",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "page_referrer",
+  "cnt": "8481",
+  "string_cnt": "8481",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "ignore_referrer",
+  "cnt": "3708",
+  "string_cnt": "3708",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "campaign",
+  "cnt": "73",
+  "string_cnt": "73",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "medium",
+  "cnt": "73",
+  "string_cnt": "73",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "source",
+  "cnt": "73",
+  "string_cnt": "73",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "term",
+  "cnt": "4",
+  "string_cnt": "4",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_document",
+  "param_key": "debug_mode",
+  "cnt": "3",
+  "string_cnt": "0",
+  "int_cnt": "3",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "location_city",
+  "cnt": "69645",
+  "string_cnt": "69645",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "session_engaged",
+  "cnt": "69645",
+  "string_cnt": "69645",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "page_title",
+  "cnt": "69645",
+  "string_cnt": "69645",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "ga_session_number",
+  "cnt": "69645",
+  "string_cnt": "0",
+  "int_cnt": "69645",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "batch_page_id",
+  "cnt": "69645",
+  "string_cnt": "0",
+  "int_cnt": "69645",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "ga_session_id",
+  "cnt": "69645",
+  "string_cnt": "0",
+  "int_cnt": "69645",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "notices_id",
+  "cnt": "69645",
+  "string_cnt": "0",
+  "int_cnt": "69645",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "is_favorited",
+  "cnt": "69645",
+  "string_cnt": "69645",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "batch_ordering_id",
+  "cnt": "69645",
+  "string_cnt": "0",
+  "int_cnt": "69645",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "is_recommend",
+  "cnt": "69645",
+  "string_cnt": "69645",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "page_location",
+  "cnt": "69645",
+  "string_cnt": "69645",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "is_schedule",
+  "cnt": "69645",
+  "string_cnt": "69645",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "page_path",
+  "cnt": "69644",
+  "string_cnt": "69644",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "browser",
+  "cnt": "69644",
+  "string_cnt": "69644",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "is_login",
+  "cnt": "69644",
+  "string_cnt": "69644",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "page_hostname",
+  "cnt": "69644",
+  "string_cnt": "69644",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "notices_type",
+  "cnt": "69569",
+  "string_cnt": "69569",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "region",
+  "cnt": "67418",
+  "string_cnt": "67415",
+  "int_cnt": "3",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "engaged_session_event",
+  "cnt": "63172",
+  "string_cnt": "0",
+  "int_cnt": "63172",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "page_referrer",
+  "cnt": "28912",
+  "string_cnt": "28912",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "engagement_time_msec",
+  "cnt": "16639",
+  "string_cnt": "0",
+  "int_cnt": "16639",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "ignore_referrer",
+  "cnt": "10843",
+  "string_cnt": "10843",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "campaign",
+  "cnt": "1001",
+  "string_cnt": "1001",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "source",
+  "cnt": "1001",
+  "string_cnt": "1001",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "medium",
+  "cnt": "1001",
+  "string_cnt": "1001",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "term",
+  "cnt": "69",
+  "string_cnt": "69",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "debug_mode",
+  "cnt": "10",
+  "string_cnt": "0",
+  "int_cnt": "10",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices",
+  "param_key": "content",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "location_city",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "notices_id",
+  "cnt": "1841",
+  "string_cnt": "0",
+  "int_cnt": "1841",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "batch_page_id",
+  "cnt": "1841",
+  "string_cnt": "0",
+  "int_cnt": "1841",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "batch_ordering_id",
+  "cnt": "1841",
+  "string_cnt": "0",
+  "int_cnt": "1841",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "page_path",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "prev_page",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "ga_session_id",
+  "cnt": "1841",
+  "string_cnt": "0",
+  "int_cnt": "1841",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "page_location",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "page_hostname",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "session_engaged",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "is_login",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "page_title",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "browser",
+  "cnt": "1841",
+  "string_cnt": "1841",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "ga_session_number",
+  "cnt": "1841",
+  "string_cnt": "0",
+  "int_cnt": "1841",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "engagement_time_msec",
+  "cnt": "1838",
+  "string_cnt": "0",
+  "int_cnt": "1838",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "notices_type",
+  "cnt": "1836",
+  "string_cnt": "1836",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "engaged_session_event",
+  "cnt": "1835",
+  "string_cnt": "0",
+  "int_cnt": "1835",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "region",
+  "cnt": "1798",
+  "string_cnt": "1798",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "page_referrer",
+  "cnt": "608",
+  "string_cnt": "608",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "ignore_referrer",
+  "cnt": "250",
+  "string_cnt": "250",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "source",
+  "cnt": "2",
+  "string_cnt": "2",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "medium",
+  "cnt": "2",
+  "string_cnt": "2",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "campaign",
+  "cnt": "2",
+  "string_cnt": "2",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_bridge_branch",
+  "param_key": "term",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "is_login",
+  "cnt": "402",
+  "string_cnt": "402",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "ga_session_number",
+  "cnt": "402",
+  "string_cnt": "0",
+  "int_cnt": "402",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "page_path",
+  "cnt": "402",
+  "string_cnt": "402",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "engagement_time_msec",
+  "cnt": "402",
+  "string_cnt": "0",
+  "int_cnt": "402",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "batch_ordering_id",
+  "cnt": "402",
+  "string_cnt": "0",
+  "int_cnt": "402",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "page_location",
+  "cnt": "402",
+  "string_cnt": "402",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "page_hostname",
+  "cnt": "402",
+  "string_cnt": "402",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "batch_page_id",
+  "cnt": "402",
+  "string_cnt": "0",
+  "int_cnt": "402",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "browser",
+  "cnt": "402",
+  "string_cnt": "402",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "session_engaged",
+  "cnt": "402",
+  "string_cnt": "402",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "page_title",
+  "cnt": "402",
+  "string_cnt": "402",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "ga_session_id",
+  "cnt": "402",
+  "string_cnt": "0",
+  "int_cnt": "402",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "engaged_session_event",
+  "cnt": "397",
+  "string_cnt": "0",
+  "int_cnt": "397",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "region",
+  "cnt": "393",
+  "string_cnt": "393",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "page_referrer",
+  "cnt": "86",
+  "string_cnt": "86",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_guide",
+  "param_key": "ignore_referrer",
+  "cnt": "38",
+  "string_cnt": "38",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "notices_id",
+  "cnt": "16896",
+  "string_cnt": "0",
+  "int_cnt": "16896",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "page_title",
+  "cnt": "16896",
+  "string_cnt": "16896",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "ga_session_number",
+  "cnt": "16896",
+  "string_cnt": "0",
+  "int_cnt": "16896",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "page_path",
+  "cnt": "16896",
+  "string_cnt": "16896",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "ga_session_id",
+  "cnt": "16896",
+  "string_cnt": "0",
+  "int_cnt": "16896",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "page_hostname",
+  "cnt": "16896",
+  "string_cnt": "16896",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "is_login",
+  "cnt": "16896",
+  "string_cnt": "16896",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "batch_ordering_id",
+  "cnt": "16896",
+  "string_cnt": "0",
+  "int_cnt": "16896",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "session_engaged",
+  "cnt": "16896",
+  "string_cnt": "16896",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "browser",
+  "cnt": "16896",
+  "string_cnt": "16896",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "batch_page_id",
+  "cnt": "16896",
+  "string_cnt": "0",
+  "int_cnt": "16896",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "location_city",
+  "cnt": "16896",
+  "string_cnt": "16896",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "page_location",
+  "cnt": "16896",
+  "string_cnt": "16896",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "notices_type",
+  "cnt": "16861",
+  "string_cnt": "16861",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "region",
+  "cnt": "16135",
+  "string_cnt": "16134",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "engaged_session_event",
+  "cnt": "15846",
+  "string_cnt": "0",
+  "int_cnt": "15846",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "engagement_time_msec",
+  "cnt": "13463",
+  "string_cnt": "0",
+  "int_cnt": "13463",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "page_referrer",
+  "cnt": "8170",
+  "string_cnt": "8170",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "ignore_referrer",
+  "cnt": "2216",
+  "string_cnt": "2216",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "campaign",
+  "cnt": "60",
+  "string_cnt": "60",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "medium",
+  "cnt": "60",
+  "string_cnt": "60",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "source",
+  "cnt": "60",
+  "string_cnt": "60",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "term",
+  "cnt": "13",
+  "string_cnt": "13",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_notices_recommend_view",
+  "param_key": "debug_mode",
+  "cnt": "3",
+  "string_cnt": "0",
+  "int_cnt": "3",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "page_location",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "browser",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "page_hostname",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "page_path",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "ga_session_id",
+  "cnt": "1074",
+  "string_cnt": "0",
+  "int_cnt": "1074",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "session_engaged",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "batch_page_id",
+  "cnt": "1074",
+  "string_cnt": "0",
+  "int_cnt": "1074",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "is_login",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "batch_ordering_id",
+  "cnt": "1074",
+  "string_cnt": "0",
+  "int_cnt": "1074",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "is_city_alarm",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "location_city",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "page_title",
+  "cnt": "1074",
+  "string_cnt": "1074",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "ga_session_number",
+  "cnt": "1074",
+  "string_cnt": "0",
+  "int_cnt": "1074",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "engaged_session_event",
+  "cnt": "1063",
+  "string_cnt": "0",
+  "int_cnt": "1063",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "engagement_time_msec",
+  "cnt": "1049",
+  "string_cnt": "0",
+  "int_cnt": "1049",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "region",
+  "cnt": "1046",
+  "string_cnt": "1046",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "location_district",
+  "cnt": "336",
+  "string_cnt": "336",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "page_referrer",
+  "cnt": "212",
+  "string_cnt": "212",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty",
+  "param_key": "ignore_referrer",
+  "cnt": "128",
+  "string_cnt": "128",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "page_location",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "page_hostname",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "city_alarm_action",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "region",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "engagement_time_msec",
+  "cnt": "71",
+  "string_cnt": "0",
+  "int_cnt": "71",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "batch_page_id",
+  "cnt": "71",
+  "string_cnt": "0",
+  "int_cnt": "71",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "ga_session_number",
+  "cnt": "71",
+  "string_cnt": "0",
+  "int_cnt": "71",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "session_engaged",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "page_title",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "ga_session_id",
+  "cnt": "71",
+  "string_cnt": "0",
+  "int_cnt": "71",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "batch_ordering_id",
+  "cnt": "71",
+  "string_cnt": "0",
+  "int_cnt": "71",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "browser",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "page_path",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "engaged_session_event",
+  "cnt": "71",
+  "string_cnt": "0",
+  "int_cnt": "71",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "location_city",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "is_login",
+  "cnt": "71",
+  "string_cnt": "71",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "location_district",
+  "cnt": "24",
+  "string_cnt": "24",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "page_referrer",
+  "cnt": "21",
+  "string_cnt": "21",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_noticeslist_empty_city_alarm",
+  "param_key": "ignore_referrer",
+  "cnt": "17",
+  "string_cnt": "17",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "is_favorited",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "batch_page_id",
+  "cnt": "5108",
+  "string_cnt": "0",
+  "int_cnt": "5108",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "location_city",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "schedule_action",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "page_hostname",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "notices_id",
+  "cnt": "5108",
+  "string_cnt": "0",
+  "int_cnt": "5108",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "page_title",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "session_engaged",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "browser",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "ga_session_number",
+  "cnt": "5108",
+  "string_cnt": "0",
+  "int_cnt": "5108",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "notices_type",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "is_login",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "page_path",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "page_location",
+  "cnt": "5108",
+  "string_cnt": "5108",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "batch_ordering_id",
+  "cnt": "5108",
+  "string_cnt": "0",
+  "int_cnt": "5108",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "ga_session_id",
+  "cnt": "5108",
+  "string_cnt": "0",
+  "int_cnt": "5108",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "engagement_time_msec",
+  "cnt": "5100",
+  "string_cnt": "0",
+  "int_cnt": "5100",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "engaged_session_event",
+  "cnt": "5076",
+  "string_cnt": "0",
+  "int_cnt": "5076",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "region",
+  "cnt": "5070",
+  "string_cnt": "5070",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "page_referrer",
+  "cnt": "1817",
+  "string_cnt": "1817",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "ignore_referrer",
+  "cnt": "1248",
+  "string_cnt": "1248",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "source",
+  "cnt": "10",
+  "string_cnt": "10",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "medium",
+  "cnt": "10",
+  "string_cnt": "10",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "campaign",
+  "cnt": "10",
+  "string_cnt": "10",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "youth_schedule",
+  "param_key": "debug_mode",
+  "cnt": "2",
+  "string_cnt": "0",
+  "int_cnt": "2",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "ga_session_id",
+  "cnt": "42876",
+  "string_cnt": "0",
+  "int_cnt": "42876",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "batch_page_id",
+  "cnt": "42876",
+  "string_cnt": "0",
+  "int_cnt": "42876",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "batch_ordering_id",
+  "cnt": "42876",
+  "string_cnt": "0",
+  "int_cnt": "42876",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "page_path",
+  "cnt": "42876",
+  "string_cnt": "42876",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "session_engaged",
+  "cnt": "42876",
+  "string_cnt": "42876",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "is_login",
+  "cnt": "42876",
+  "string_cnt": "42876",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "page_hostname",
+  "cnt": "42876",
+  "string_cnt": "42876",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "page_title",
+  "cnt": "42876",
+  "string_cnt": "42876",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "ga_session_number",
+  "cnt": "42876",
+  "string_cnt": "0",
+  "int_cnt": "42876",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "browser",
+  "cnt": "42876",
+  "string_cnt": "42876",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "page_location",
+  "cnt": "42876",
+  "string_cnt": "42876",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "is_guaranteez",
+  "cnt": "42830",
+  "string_cnt": "42830",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "price_deposit_min",
+  "cnt": "42830",
+  "string_cnt": "0",
+  "int_cnt": "42830",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "price_deposit_max",
+  "cnt": "42830",
+  "string_cnt": "0",
+  "int_cnt": "42830",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "is_favorited",
+  "cnt": "42830",
+  "string_cnt": "42830",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "has_discount",
+  "cnt": "42830",
+  "string_cnt": "42830",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "location_district",
+  "cnt": "42830",
+  "string_cnt": "42830",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "branch_type",
+  "cnt": "42830",
+  "string_cnt": "42830",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "review_count",
+  "cnt": "42830",
+  "string_cnt": "0",
+  "int_cnt": "42830",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "ad_grade",
+  "cnt": "42830",
+  "string_cnt": "42830",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "branch_name",
+  "cnt": "42830",
+  "string_cnt": "42830",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "location_city",
+  "cnt": "42830",
+  "string_cnt": "42830",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "branch_id",
+  "cnt": "42830",
+  "string_cnt": "0",
+  "int_cnt": "42830",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "price_month_max",
+  "cnt": "42818",
+  "string_cnt": "0",
+  "int_cnt": "42734",
+  "double_cnt": "84"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "price_month_min",
+  "cnt": "42818",
+  "string_cnt": "0",
+  "int_cnt": "42758",
+  "double_cnt": "60"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "engagement_time_msec",
+  "cnt": "42801",
+  "string_cnt": "0",
+  "int_cnt": "42801",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "engaged_session_event",
+  "cnt": "42577",
+  "string_cnt": "0",
+  "int_cnt": "42577",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "region",
+  "cnt": "41499",
+  "string_cnt": "41497",
+  "int_cnt": "2",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "location_station",
+  "cnt": "38491",
+  "string_cnt": "38491",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "location_university",
+  "cnt": "29626",
+  "string_cnt": "29626",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "page_referrer",
+  "cnt": "7481",
+  "string_cnt": "7481",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_branch",
+  "param_key": "ignore_referrer",
+  "cnt": "6836",
+  "string_cnt": "6836",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "session_engaged",
+  "cnt": "22987",
+  "string_cnt": "22987",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "batch_ordering_id",
+  "cnt": "22987",
+  "string_cnt": "0",
+  "int_cnt": "22987",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "ga_session_number",
+  "cnt": "22987",
+  "string_cnt": "0",
+  "int_cnt": "22987",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "page_path",
+  "cnt": "22987",
+  "string_cnt": "22987",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "ga_session_id",
+  "cnt": "22987",
+  "string_cnt": "0",
+  "int_cnt": "22987",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "batch_page_id",
+  "cnt": "22987",
+  "string_cnt": "0",
+  "int_cnt": "22987",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "is_login",
+  "cnt": "22987",
+  "string_cnt": "22987",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "browser",
+  "cnt": "22987",
+  "string_cnt": "22987",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "page_location",
+  "cnt": "22987",
+  "string_cnt": "22987",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "page_title",
+  "cnt": "22987",
+  "string_cnt": "22987",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "page_hostname",
+  "cnt": "22987",
+  "string_cnt": "22987",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "engagement_time_msec",
+  "cnt": "22958",
+  "string_cnt": "0",
+  "int_cnt": "22958",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "engaged_session_event",
+  "cnt": "22853",
+  "string_cnt": "0",
+  "int_cnt": "22853",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "region",
+  "cnt": "22580",
+  "string_cnt": "22579",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "page_referrer",
+  "cnt": "4609",
+  "string_cnt": "4609",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "ignore_referrer",
+  "cnt": "3986",
+  "string_cnt": "3986",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "medium",
+  "cnt": "3",
+  "string_cnt": "3",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "source",
+  "cnt": "3",
+  "string_cnt": "3",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "campaign",
+  "cnt": "3",
+  "string_cnt": "3",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "term",
+  "cnt": "3",
+  "string_cnt": "3",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "gad_source",
+  "cnt": "2",
+  "string_cnt": "2",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "gclid",
+  "cnt": "2",
+  "string_cnt": "2",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_list",
+  "param_key": "gad_campaignid",
+  "cnt": "2",
+  "string_cnt": "2",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "session_engaged",
+  "cnt": "627",
+  "string_cnt": "627",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "page_hostname",
+  "cnt": "627",
+  "string_cnt": "627",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "browser",
+  "cnt": "627",
+  "string_cnt": "627",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "ga_session_number",
+  "cnt": "627",
+  "string_cnt": "0",
+  "int_cnt": "627",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "is_login",
+  "cnt": "627",
+  "string_cnt": "627",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "page_title",
+  "cnt": "627",
+  "string_cnt": "627",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "ga_session_id",
+  "cnt": "627",
+  "string_cnt": "0",
+  "int_cnt": "627",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "engagement_time_msec",
+  "cnt": "627",
+  "string_cnt": "0",
+  "int_cnt": "627",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "page_path",
+  "cnt": "627",
+  "string_cnt": "627",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "batch_page_id",
+  "cnt": "627",
+  "string_cnt": "0",
+  "int_cnt": "627",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "batch_ordering_id",
+  "cnt": "627",
+  "string_cnt": "0",
+  "int_cnt": "627",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "page_location",
+  "cnt": "627",
+  "string_cnt": "627",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "engaged_session_event",
+  "cnt": "626",
+  "string_cnt": "0",
+  "int_cnt": "626",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "region",
+  "cnt": "591",
+  "string_cnt": "590",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "is_favorited",
+  "cnt": "516",
+  "string_cnt": "516",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "location_city",
+  "cnt": "516",
+  "string_cnt": "516",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "price_deposit_max",
+  "cnt": "509",
+  "string_cnt": "0",
+  "int_cnt": "509",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "price_deposit_min",
+  "cnt": "509",
+  "string_cnt": "0",
+  "int_cnt": "509",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "location_district",
+  "cnt": "509",
+  "string_cnt": "509",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "price_month_min",
+  "cnt": "509",
+  "string_cnt": "0",
+  "int_cnt": "509",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "review_count",
+  "cnt": "509",
+  "string_cnt": "0",
+  "int_cnt": "509",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "ad_grade",
+  "cnt": "509",
+  "string_cnt": "509",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "branch_type",
+  "cnt": "509",
+  "string_cnt": "509",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "is_guaranteez",
+  "cnt": "509",
+  "string_cnt": "509",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "price_month_max",
+  "cnt": "509",
+  "string_cnt": "0",
+  "int_cnt": "508",
+  "double_cnt": "1"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "branch_id",
+  "cnt": "509",
+  "string_cnt": "0",
+  "int_cnt": "509",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "has_discount",
+  "cnt": "509",
+  "string_cnt": "509",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "branch_name",
+  "cnt": "509",
+  "string_cnt": "509",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "location_station",
+  "cnt": "488",
+  "string_cnt": "488",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "location_university",
+  "cnt": "343",
+  "string_cnt": "343",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "page_referrer",
+  "cnt": "63",
+  "string_cnt": "63",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_place",
+  "param_key": "ignore_referrer",
+  "cnt": "63",
+  "string_cnt": "63",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "ga_session_number",
+  "cnt": "3200",
+  "string_cnt": "0",
+  "int_cnt": "3200",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "browser",
+  "cnt": "3200",
+  "string_cnt": "3200",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "session_engaged",
+  "cnt": "3200",
+  "string_cnt": "3200",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "ga_session_id",
+  "cnt": "3200",
+  "string_cnt": "0",
+  "int_cnt": "3200",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "page_path",
+  "cnt": "3200",
+  "string_cnt": "3200",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "batch_page_id",
+  "cnt": "3200",
+  "string_cnt": "0",
+  "int_cnt": "3200",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "page_location",
+  "cnt": "3200",
+  "string_cnt": "3200",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "page_hostname",
+  "cnt": "3200",
+  "string_cnt": "3200",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "batch_ordering_id",
+  "cnt": "3200",
+  "string_cnt": "0",
+  "int_cnt": "3200",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "is_login",
+  "cnt": "3200",
+  "string_cnt": "3200",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "page_title",
+  "cnt": "3200",
+  "string_cnt": "3200",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "engagement_time_msec",
+  "cnt": "3193",
+  "string_cnt": "0",
+  "int_cnt": "3193",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "engaged_session_event",
+  "cnt": "3156",
+  "string_cnt": "0",
+  "int_cnt": "3156",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "region",
+  "cnt": "3056",
+  "string_cnt": "3056",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "page_referrer",
+  "cnt": "577",
+  "string_cnt": "577",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "ignore_referrer",
+  "cnt": "524",
+  "string_cnt": "524",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "campaign",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "source",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "medium",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_memo_zzimlist",
+  "param_key": "term",
+  "cnt": "1",
+  "string_cnt": "1",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "page_hostname",
+  "cnt": "1159",
+  "string_cnt": "1159",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "ga_session_id",
+  "cnt": "1159",
+  "string_cnt": "0",
+  "int_cnt": "1159",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "page_title",
+  "cnt": "1159",
+  "string_cnt": "1159",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "browser",
+  "cnt": "1159",
+  "string_cnt": "1159",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "page_location",
+  "cnt": "1159",
+  "string_cnt": "1159",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "page_path",
+  "cnt": "1159",
+  "string_cnt": "1159",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "is_login",
+  "cnt": "1159",
+  "string_cnt": "1159",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "batch_page_id",
+  "cnt": "1159",
+  "string_cnt": "0",
+  "int_cnt": "1159",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "session_engaged",
+  "cnt": "1159",
+  "string_cnt": "1159",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "batch_ordering_id",
+  "cnt": "1159",
+  "string_cnt": "0",
+  "int_cnt": "1159",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "ga_session_number",
+  "cnt": "1159",
+  "string_cnt": "0",
+  "int_cnt": "1159",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "engagement_time_msec",
+  "cnt": "1158",
+  "string_cnt": "0",
+  "int_cnt": "1158",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "engaged_session_event",
+  "cnt": "1155",
+  "string_cnt": "0",
+  "int_cnt": "1155",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "region",
+  "cnt": "1134",
+  "string_cnt": "1133",
+  "int_cnt": "1",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "page_referrer",
+  "cnt": "189",
+  "string_cnt": "189",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}, {
+  "event_name": "zzim_thumbnail",
+  "param_key": "ignore_referrer",
+  "cnt": "162",
+  "string_cnt": "162",
+  "int_cnt": "0",
+  "double_cnt": "0"
+}]
