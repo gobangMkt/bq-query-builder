@@ -58,6 +58,14 @@ describe('determineType', () => {
   it('double_cnt만 유의미하면 numeric', () => {
     expect(determineType({ string_cnt: 0, int_cnt: 0, double_cnt: 100 })).toBe('numeric');
   });
+
+  it('string_cnt가 더 크면 int/double과 관계없이 string', () => {
+    expect(determineType({ string_cnt: 100, int_cnt: 1, double_cnt: 1 })).toBe('string');
+  });
+
+  it('int_cnt + double_cnt가 더 크고 모두 유의미하면 numeric', () => {
+    expect(determineType({ string_cnt: 1, int_cnt: 50, double_cnt: 50 })).toBe('numeric');
+  });
 });
 
 describe('buildCatalog — 실측 데이터 병합', () => {

@@ -45,17 +45,22 @@ export function parseInventory(raw) {
 }
 
 /**
- * string_cnt/int_cnt/double_cnt 중 최다 타입을 채택.
- * int_cnt와 double_cnt가 모두 유의미(>0)하면 혼재로 보고 numeric.
+ * string_cnt vs (int_cnt + double_cnt) 다수결로 타입 결정.
+ * string_cnt가 크거나 같으면 string.
+ * numeric이 더 크면: int/double 모두 유의미 → 'numeric', double만 유의미 → 'numeric', int만 유의미 → 'int'.
  */
 export function determineType(row) {
   const { string_cnt, int_cnt, double_cnt } = row;
 
-  if (int_cnt > 0 && double_cnt > 0) return 'numeric';
+  const numeric_cnt = int_cnt + double_cnt;
 
-  if (string_cnt >= int_cnt && string_cnt >= double_cnt) return 'string';
-  if (int_cnt >= double_cnt) return 'int';
-  return 'numeric';
+  // string_cnt 쪽이 크거나 같으면 string (동률 포함)
+  if (string_cnt >= numeric_cnt) return 'string';
+
+  // numeric_cnt 쪽이 더 크면
+  if (int_cnt > 0 && double_cnt > 0) return 'numeric';
+  if (double_cnt > 0) return 'numeric';
+  return 'int';
 }
 
 function byCntDesc(a, b) {
