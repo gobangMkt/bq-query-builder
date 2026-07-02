@@ -1,0 +1,18 @@
+{
+  "source": "노션 'U사장님 GTM 텍소노미' v2.0(3월 안) collection://ec738269-9543-8396-85c1-070d574bcc2c, 2026-07-02 추출",
+  "events": {
+    "page_view": { "label": "페이지뷰", "funnel": "0. 일반", "description": "모든 페이지 조회 (GA4 전역 태그, historyChange 포함)" },
+    "regist_start": { "label": "지점등록 시작", "funnel": "1. 등록", "description": "지점등록 클릭 후 /regist 유입" },
+    "regist_complete": { "label": "지점등록 완료", "funnel": "1. 등록", "description": "등록요청 → 팝업에서 [등록] 클릭 → 등록요청 완료 창 노출" },
+    "ad_enter": { "label": "광고 선택 진입", "funnel": "2. 광고", "description": "결제 전 광고 선택창 유입 (/house·지점정보 [+], /ads [+광고시작], ad-plus/join 접근)" },
+    "ad_pay_start": { "label": "결제 시작", "funnel": "2. 광고", "description": "상품 선택 후 [결제시작] 버튼 클릭. 어떤 상품·유형을 골랐는지 집계", "params": { "branch_id": "지점 ID", "branch_type": "지점 타입 (gosi 등)", "branch_name": "지점명", "select_ad_grade": "선택 상품 (unlimited/basic/premium)", "select_ad_type": "선택 기간 (3개월, 6개월(5%할인) 등)", "select_pay_type": "결제 수단 (card, cash 등)" } },
+    "ad_pay_complete": { "label": "결제 완료", "funnel": "2. 광고", "description": "결제시작 후 결제완료한 상태", "params": { "product_price": "결제 금액", "branch_id": "지점 ID", "branch_type": "지점 타입", "branch_name": "지점명", "select_ad_grade": "선택 상품 (unlimited/basic/premium)", "select_ad_type": "선택 기간", "select_pay_type": "결제 수단" } },
+    "session_start": { "label": "세션 시작", "funnel": "GA4 자동", "description": "GA4 자동수집 — 새 세션 시작" },
+    "first_visit": { "label": "첫 방문", "funnel": "GA4 자동", "description": "GA4 자동수집 — 사용자 최초 방문" },
+    "user_engagement": { "label": "체류", "funnel": "GA4 자동", "description": "GA4 자동수집 — 포그라운드 체류(engagement_time_msec 합산용)" },
+    "scroll": { "label": "스크롤 90%", "funnel": "GA4 자동", "description": "GA4 자동수집 — 페이지 90% 스크롤 도달", "params": { "percent_scrolled": "스크롤 깊이(%)" } },
+    "click": { "label": "아웃바운드 클릭", "funnel": "GA4 자동", "description": "GA4 자동수집 — 외부 도메인 링크 클릭", "params": { "link_url": "클릭한 URL", "link_domain": "링크 도메인", "outbound": "아웃바운드 여부" } },
+    "form_start": { "label": "폼 시작", "funnel": "GA4 자동", "description": "GA4 자동수집 — 폼 첫 입력 시작", "params": { "form_destination": "폼 제출 대상", "first_field_name": "첫 입력 필드명" } },
+    "view_search_results": { "label": "검색결과 조회", "funnel": "GA4 자동", "description": "GA4 자동수집 — 검색결과 페이지 조회", "params": { "search_term": "검색어" } }
+  }
+}
