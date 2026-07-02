@@ -7,6 +7,11 @@ import type { DimensionSelection, FilterCondition, MetricType } from './sql/type
 export type PropertyKey = keyof Catalog['properties'];
 export type DatePreset = 7 | 14 | 30 | null;
 
+// S5: 생성된 SQL 표시 상태. 선택이 바뀌면 stale=true로 표시(재생성 유도), 엔진 예외는 error로 담는다.
+export type SqlOutputState =
+  | { status: 'ok'; code: string; stale: boolean }
+  | { status: 'error'; message: string };
+
 export interface AppState {
   property: PropertyKey;
   datePreset: DatePreset;
@@ -17,6 +22,7 @@ export interface AppState {
   dimensions: Record<PropertyKey, DimensionSelection[]>;
   metrics: Record<PropertyKey, Set<MetricType>>;
   filters: Record<PropertyKey, FilterCondition[]>;
+  sql: Record<PropertyKey, SqlOutputState | null>;
 }
 
 const initialRange = presetRange(7);
@@ -42,5 +48,9 @@ export const state: AppState = {
   filters: {
     gobang: [],
     uceo: [],
+  },
+  sql: {
+    gobang: null,
+    uceo: null,
   },
 };

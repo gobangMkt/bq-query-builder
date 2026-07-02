@@ -5,7 +5,7 @@ import type { CatalogProperty } from '../data/catalog-types';
 import type { FilterCondition, FilterOperator } from '../sql/types';
 import { escapeHtml } from '../utils/html';
 import { unionParamsForEvents } from '../utils/params';
-import { plusIcon, trashIcon } from './icons';
+import { alertCircleIcon, plusIcon, trashIcon } from './icons';
 
 export type FilterFieldKind = 'date' | 'string' | 'numeric';
 
@@ -61,7 +61,12 @@ function filterValueToInputString(value: FilterCondition['value']): string {
   return Array.isArray(value) ? value.join(', ') : String(value);
 }
 
-function filterRowHtml(filter: FilterCondition, index: number, options: FilterFieldOption[]): string {
+function filterRowHtml(
+  filter: FilterCondition,
+  index: number,
+  options: FilterFieldOption[],
+  errorMessage: string | undefined,
+): string {
   const kind = fieldKind(filter.field, options);
   const operators = operatorsForKind(kind);
 
@@ -81,22 +86,61 @@ function filterRowHtml(filter: FilterCondition, index: number, options: FilterFi
   const placeholder = filter.operator === 'IN' ? '콤마로 구분해 입력' : '값 입력';
 
   return `
-    <div class="filter-row" data-filter-index="${index}">
-      <select class="filter-field" data-role="field" aria-label="필터 대상 필드">${fieldSelectHtml}</select>
-      <select class="filter-operator" data-role="operator" aria-label="필터 연산자">${operatorSelectHtml}</select>
-      <input type="text" class="filter-value" data-role="value" aria-label="필터 값"
-        value="${escapeHtml(valueStr)}" placeholder="${escapeHtml(placeholder)}" />
-      <button type="button" class="filter-remove" data-role="remove" aria-label="필터 삭제">${trashIcon}</button>
+    <div class="filter-item">
+      <div class="filter-row" data-filter-index="${index}">
+        <select class="filter-field" data-role="field" aria-label="필터 대상 필드">${fieldSelectHtml}</select>
+        <select class="filter-operator" data-role="operator" aria-label="필터 연산자">${operatorSelectHtml}</select>
+        <input type="text" class="filter-value${errorMessage ? ' has-error' : ''}" data-role="value" aria-label="필터 값"
+          value="${escapeHtml(valueStr)}" placeholder="${escapeHtml(placeholder)}" />
+        <button type="button" class="filter-remove" data-role="remove" aria-label="필터 삭제">${trashIcon}</button>
+      </div>
+      ${errorMessage ? `<p class="filter-error">${alertCircleIcon}<span>${escapeHtml(errorMessage)}</span></p>` : ''}
     </div>
   `;
 }
 
-export function renderFiltersHtml(filters: FilterCondition[], options: FilterFieldOption[]): string {
-  const rows = filters.map((f, i) => filterRowHtml(f, i, options)).join('');
+export function renderFiltersHtml(
+  filters: FilterCondition[],
+  options: FilterFieldOption[],
+  errorsByIndex?: Map<number, string>,
+): string {
+  const rows = filters.map((f, i) => filterRowHtml(f, i, options, errorsByIndex?.get(i))).join('');
   return `
     <div class="filter-rows">${rows}</div>
     <button type="button" class="filter-add">${plusIcon}<span>필터 추가</span></button>
   `;
+}
+
+/**
+ * SQL 생성 전 필터를 방어적으로 정리한다.
+ * - 값이 비어있는 필터는 조용히 제외(엔진에 넘기지 않음)
+ * - 숫자 필드인데 숫자가 아닌 값이 남아있으면 제외 + 해당 행 인덱스에 에러 메시지 기록
+ */
+export function validateFilters(
+  filters: FilterCondition[],
+  options: FilterFieldOption[],
+): { usableFilters: FilterCondition[]; errorsByIndex: Map<number, string> } {
+  const errorsByIndex = new Map<number, string>();
+  const usableFilters: FilterCondition[] = [];
+
+  filters.forEach((filter, index) => {
+    const isEmpty = Array.isArray(filter.value) ? filter.value.length === 0 : filter.value === '';
+    if (isEmpty) return;
+
+    const kind = fieldKind(filter.field, options);
+    if (kind === 'numeric') {
+      const values = Array.isArray(filter.value) ? filter.value : [filter.value];
+      const hasNonNumeric = values.some((v) => typeof v !== 'number');
+      if (hasNonNumeric) {
+        errorsByIndex.set(index, '숫자만 입력하세요.');
+        return;
+      }
+    }
+
+    usableFilters.push(filter);
+  });
+
+  return { usableFilters, errorsByIndex };
 }
 
 export function defaultFilterFor(options: FilterFieldOption[]): FilterCondition {

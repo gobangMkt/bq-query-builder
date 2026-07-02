@@ -418,6 +418,26 @@ button {
   background: var(--surface);
 }
 
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-value.has-error {
+  border-color: var(--danger);
+}
+
+.filter-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding-left: 2px;
+  color: var(--danger);
+  font-size: 13px;
+}
+
 .filter-remove {
   display: inline-flex;
   align-items: center;
@@ -507,5 +527,126 @@ button {
 
 .preview-empty {
   margin: 0;
+  color: var(--text-muted);
+}
+
+/* SQL 출력 섹션 */
+.sql-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sql-range-warning,
+.sql-stale-note,
+.sql-error-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--danger);
+}
+
+.sql-stale-note {
+  color: var(--text-muted);
+}
+
+.sql-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sql-generate-btn {
+  height: 44px;
+  padding: 0 20px;
+  background: var(--primary);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.sql-generate-btn:hover:not(:disabled) {
+  background: #0a4bb8;
+}
+
+.sql-generate-btn:disabled {
+  background: var(--border-input);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.sql-disabled-reason {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.sql-output {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sql-output.is-stale .sql-code-wrap {
+  opacity: 0.5;
+}
+
+.sql-code-wrap {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sql-code {
+  margin: 0;
+  max-height: 480px;
+  overflow: auto;
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 20px;
+  padding-top: 56px;
+  white-space: pre;
+}
+
+.sql-kw {
+  color: var(--code-kw);
+  font-weight: 600;
+}
+
+.sql-copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  color: var(--code-text);
+  font-size: 13px;
+}
+
+.sql-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sql-copy-btn.is-copied {
+  color: #7fe0a8;
+  border-color: #7fe0a8;
+}
+
+.sql-copy-hint {
+  margin: 0;
+  font-size: 13px;
   color: var(--text-muted);
 }

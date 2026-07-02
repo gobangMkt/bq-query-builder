@@ -24,3 +24,15 @@ export const trashIcon = base(
     '<path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>' +
     '<path d="M10 11v6"/><path d="M14 11v6"/>',
 );
+
+export const alertTriangleIcon = base(
+  '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/>' +
+    '<path d="M12 9v4"/><path d="M12 17h.01"/>',
+);
+
+export const copyIcon = base(
+  '<rect x="9" y="9" width="13" height="13" rx="2"/>' +
+    '<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+);
+
+export const checkIcon = base('<path d="M20 6 9 17l-5-5"/>');

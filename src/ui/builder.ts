@@ -1,4 +1,5 @@
 import type { Catalog } from '../data/catalog-types';
+import { generateAggregateSql } from '../sql/generate';
 import type { FilterOperator, MetricType } from '../sql/types';
 import { state } from '../state';
 import type { PropertyKey } from '../state';
@@ -14,9 +15,13 @@ import {
   operatorsForKind,
   parseFilterValue,
   renderFiltersHtml,
+  validateFilters,
 } from './filters';
+import type { FilterFieldOption } from './filters';
+import { alertCircleIcon, checkIcon } from './icons';
 import { renderMetricsHtml } from './metrics';
 import { renderPreviewHtml } from './preview';
+import { buildSelectionFromState, renderSqlSectionHtml } from './sql-output';
 
 const PRESETS: Array<{ days: 7 | 14 | 30; label: string }> = [
   { days: 7, label: '최근 7일' },
@@ -37,6 +42,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const metricGroupEl = root.querySelector<HTMLElement>('.metric-group')!;
   const filterSlotEl = root.querySelector<HTMLElement>('.filter-slot')!;
   const previewSlotEl = root.querySelector<HTMLElement>('.preview-slot')!;
+  const sqlSlotEl = root.querySelector<HTMLElement>('.sql-slot')!;
 
   function currentProperty() {
     return catalog.properties[state.property];
@@ -76,7 +82,9 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   }
 
   function renderFilters(): void {
-    filterSlotEl.innerHTML = renderFiltersHtml(state.filters[state.property], currentFilterFieldOptions());
+    const options = currentFilterFieldOptions();
+    const { errorsByIndex } = validateFilters(state.filters[state.property], options);
+    filterSlotEl.innerHTML = renderFiltersHtml(state.filters[state.property], options, errorsByIndex);
   }
 
   function renderPreview(): void {
@@ -85,6 +93,59 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       state.dimensions[state.property],
       [...state.metrics[state.property]],
     );
+  }
+
+  function renderSql(): void {
+    sqlSlotEl.innerHTML = renderSqlSectionHtml(state.property);
+  }
+
+  // 선택(이벤트/기간/차원/지표/필터)이 바뀌면 이미 생성된 SQL은 stale로 표시해 재생성을 유도한다.
+  function invalidateGeneratedSql(): void {
+    const current = state.sql[state.property];
+    if (current && current.status === 'ok' && !current.stale) {
+      state.sql[state.property] = { ...current, stale: true };
+    }
+  }
+
+  function onSelectionChanged(): void {
+    invalidateGeneratedSql();
+    renderSql();
+  }
+
+  function handleGenerateSql(): void {
+    const options = currentFilterFieldOptions();
+    const { selection } = buildSelectionFromState(state.property, options);
+    try {
+      const sql = generateAggregateSql(catalog, selection);
+      state.sql[state.property] = { status: 'ok', code: sql, stale: false };
+    } catch (err) {
+      state.sql[state.property] = {
+        status: 'error',
+        message: err instanceof Error ? err.message : String(err),
+      };
+    }
+    renderFilters();
+    renderSql();
+  }
+
+  function handleCopySql(btn: HTMLButtonElement): void {
+    const saved = state.sql[state.property];
+    if (!saved || saved.status !== 'ok') return;
+    if (!navigator.clipboard) return;
+    navigator.clipboard
+      .writeText(saved.code)
+      .then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = `${checkIcon}<span>복사됨</span>`;
+        btn.classList.add('is-copied');
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.classList.remove('is-copied');
+        }, 2000);
+      })
+      .catch(() => {
+        // 클립보드 접근 실패는 조용히 무시(콘솔 에러로 새지 않게)
+      });
   }
 
   // 선택된 이벤트가 바뀌면, 더 이상 어떤 선택 이벤트도 갖지 않는 파라미터 차원/필터를 제거한다
@@ -137,6 +198,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     renderList();
     renderMetrics();
     refreshAfterSelectionChange();
+    renderSql();
   });
 
   chipsEl.addEventListener('click', (e) => {
@@ -150,18 +212,21 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     dateFromInput.value = range.from;
     dateToInput.value = range.to;
     syncPresetChips();
+    onSelectionChanged();
   });
 
   dateFromInput.addEventListener('change', () => {
     state.dateFrom = dateFromInput.value;
     state.datePreset = null;
     syncPresetChips();
+    onSelectionChanged();
   });
 
   dateToInput.addEventListener('change', () => {
     state.dateTo = dateToInput.value;
     state.datePreset = null;
     syncPresetChips();
+    onSelectionChanged();
   });
 
   listEl.addEventListener('click', (e) => {
@@ -174,6 +239,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     else selected.add(name);
     renderList();
     refreshAfterSelectionChange();
+    onSelectionChanged();
   });
 
   dimGroupsEl.addEventListener('click', (e) => {
@@ -187,6 +253,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     else list.push(parseDimensionKey(key));
     renderDims();
     renderPreview();
+    onSelectionChanged();
   });
 
   metricGroupEl.addEventListener('click', (e) => {
@@ -198,6 +265,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     else set.add(key);
     renderMetrics();
     renderPreview();
+    onSelectionChanged();
   });
 
   filterSlotEl.addEventListener('click', (e) => {
@@ -206,6 +274,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       state.filters[state.property].push(defaultFilterFor(currentFilterFieldOptions()));
       renderFilters();
       renderPreview();
+      onSelectionChanged();
       return;
     }
     const removeBtn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-role="remove"]');
@@ -216,6 +285,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     state.filters[state.property].splice(idx, 1);
     renderFilters();
     renderPreview();
+    onSelectionChanged();
   });
 
   function handleFilterFieldChange(e: Event): void {
@@ -236,18 +306,44 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       filter.value = '';
       renderFilters();
       renderPreview();
+      onSelectionChanged();
       return;
     }
     if (role === 'operator') {
       filter.operator = (target as HTMLSelectElement).value as FilterOperator;
       renderFilters();
       renderPreview();
+      onSelectionChanged();
       return;
     }
     if (role === 'value') {
       const kind = options.find((o) => o.field === filter.field)?.kind ?? 'string';
       filter.value = parseFilterValue((target as HTMLInputElement).value, filter.operator, kind);
+      // 값 입력창은 매 키입력마다 renderFilters()를 호출하지 않는다(포커스 유실 방지).
+      // 대신 이 필터 행 하나만 에러 표시를 갱신한다.
+      syncFilterRowError(idx, options);
       renderPreview();
+      onSelectionChanged();
+    }
+  }
+
+  function syncFilterRowError(idx: number, options: FilterFieldOption[]): void {
+    const { errorsByIndex } = validateFilters(state.filters[state.property], options);
+    const item = filterSlotEl.querySelectorAll<HTMLElement>('.filter-item')[idx];
+    if (!item) return;
+    const input = item.querySelector<HTMLInputElement>('.filter-value');
+    const message = errorsByIndex.get(idx);
+    input?.classList.toggle('has-error', Boolean(message));
+    let errEl = item.querySelector<HTMLElement>('.filter-error');
+    if (message) {
+      if (!errEl) {
+        errEl = document.createElement('p');
+        errEl.className = 'filter-error';
+        item.appendChild(errEl);
+      }
+      errEl.innerHTML = `${alertCircleIcon}<span>${escapeHtml(message)}</span>`;
+    } else if (errEl) {
+      errEl.remove();
     }
   }
 
@@ -257,12 +353,26 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     if ((e.target as HTMLElement).dataset.role === 'value') handleFilterFieldChange(e);
   });
 
+  sqlSlotEl.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const generateBtn = target.closest<HTMLButtonElement>('.sql-generate-btn');
+    if (generateBtn && !generateBtn.disabled) {
+      handleGenerateSql();
+      return;
+    }
+    const copyBtn = target.closest<HTMLButtonElement>('.sql-copy-btn');
+    if (copyBtn) {
+      handleCopySql(copyBtn);
+    }
+  });
+
   renderSearch();
   renderList();
   renderDims();
   renderMetrics();
   renderFilters();
   renderPreview();
+  renderSql();
 }
 
 function shellHtml(catalog: Catalog): string {
@@ -331,6 +441,11 @@ function shellHtml(catalog: Catalog): string {
       <section class="panel preview-section">
         <h2 class="panel-title">구조 미리보기</h2>
         <div class="preview-slot"></div>
+      </section>
+
+      <section class="panel sql-section">
+        <h2 class="panel-title">SQL 생성</h2>
+        <div class="sql-slot"></div>
       </section>
     </div>
   `;
