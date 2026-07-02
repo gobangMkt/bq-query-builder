@@ -5,6 +5,7 @@ import type { Catalog, CatalogProperty, ParamType } from '../data/catalog-types'
 import type { AggregateSelection, DimensionSelection, FilterCondition, MetricType } from './types';
 
 const FIXED_STRING_FIELDS = new Set([
+  'event_date',
   'event_name',
   'user_pseudo_id',
   'user_id',

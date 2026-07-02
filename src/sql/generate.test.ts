@@ -265,6 +265,12 @@ describe('generateAggregateSql — 필터 연산자', () => {
     const sql = generateAggregateSql(fixtureCatalog, selection);
     expect(sql).toContain("WHERE page_path = 'O''Brien'");
   });
+
+  it('event_date 필터는 = 연산자에서 싱글쿼트로 감싼 날짜 문자열로 변환된다', () => {
+    const selection = baseSelection({ filters: [{ field: 'event_date', operator: '=', value: '2026-06-25' }] });
+    const sql = generateAggregateSql(fixtureCatalog, selection);
+    expect(sql).toContain("WHERE event_date = '2026-06-25'");
+  });
 });
 
 describe('generateAggregateSql — 프로퍼티/테이블 참조', () => {
