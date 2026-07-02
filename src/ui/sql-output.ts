@@ -83,6 +83,7 @@ export function buildSelectionFromState(
     dimensions: state.dimensions[property],
     metrics: [...state.metrics[property]],
     filters: usableFilters,
+    segments: state.segments[property],
   };
 
   return { selection, filterErrorsByIndex: errorsByIndex };
@@ -108,6 +109,7 @@ export function buildWideSelectionFromState(
     columns: [...state.detailColumns[property]],
     filters: usableFilters,
     limit: state.detailLimitEnabled[property] ? DETAIL_LIMIT_VALUE : null,
+    segments: state.segments[property],
   };
 
   return { selection, filterErrorsByIndex: errorsByIndex };

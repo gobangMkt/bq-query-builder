@@ -2,7 +2,7 @@ import type { Catalog } from '../data/catalog-types';
 import { generateAggregateSql, generateWideSql } from '../sql/generate';
 import type { AppMode, FilterOperator, MetricType } from '../sql/types';
 import { state } from '../state';
-import type { PropertyKey } from '../state';
+import type { InputMode, PropertyKey } from '../state';
 import { renderColumnsHtml } from './columns';
 import { dimensionKey, parseDimensionKey } from '../utils/dimension-key';
 import { presetRange } from '../utils/format';
@@ -19,9 +19,10 @@ import {
   validateFilters,
 } from './filters';
 import type { FilterFieldOption } from './filters';
-import { alertCircleIcon, checkIcon } from './icons';
+import { alertCircleIcon, checkIcon, messageIcon, slidersIcon } from './icons';
 import { renderMetricsHtml } from './metrics';
 import { renderPreviewHtml, renderWidePreviewHtml } from './preview';
+import { defaultSegmentFor, renderSegmentsHtml } from './segments';
 import { buildSelectionFromState, buildWideSelectionFromState, renderSqlSectionHtml } from './sql-output';
 
 const PRESETS: Array<{ days: 7 | 14 | 30; label: string }> = [
@@ -38,8 +39,12 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const dateFromInput = root.querySelector<HTMLInputElement>('.date-from')!;
   const dateToInput = root.querySelector<HTMLInputElement>('.date-to')!;
   const tabsEl = root.querySelector<HTMLElement>('.property-tabs')!;
+  const inputModeEl = root.querySelector<HTMLElement>('.input-mode-seg')!;
+  const selectPanelEl = root.querySelector<HTMLElement>('.input-panel-select')!;
+  const chatPanelEl = root.querySelector<HTMLElement>('.input-panel-chat')!;
   const modeToggleEl = root.querySelector<HTMLElement>('.mode-toggle')!;
   const chipsEl = root.querySelector<HTMLElement>('.date-chips')!;
+  const segSlotEl = root.querySelector<HTMLElement>('.segment-slot')!;
   const dimGroupsEl = root.querySelector<HTMLElement>('.dim-groups')!;
   const metricGroupEl = root.querySelector<HTMLElement>('.metric-group')!;
   const columnGroupsEl = root.querySelector<HTMLElement>('.column-groups')!;
@@ -99,6 +104,21 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     const options = currentFilterFieldOptions();
     const { errorsByIndex } = validateFilters(state.filters[state.property], options);
     filterSlotEl.innerHTML = renderFiltersHtml(state.filters[state.property], options, errorsByIndex);
+  }
+
+  function renderSegments(): void {
+    segSlotEl.innerHTML = renderSegmentsHtml(currentProperty(), state.segments[state.property]);
+  }
+
+  function syncInputMode(): void {
+    const isChat = state.inputMode === 'chat';
+    chatPanelEl.classList.toggle('is-hidden', !isChat);
+    selectPanelEl.classList.toggle('is-hidden', isChat);
+    inputModeEl.querySelectorAll<HTMLButtonElement>('.input-mode-btn').forEach((btn) => {
+      const active = btn.dataset.inputMode === state.inputMode;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-selected', String(active));
+    });
   }
 
   function renderPreview(): void {
@@ -229,8 +249,18 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     renderSearch();
     renderList();
     renderMetrics();
+    renderSegments();
     refreshAfterSelectionChange();
     renderSql();
+  });
+
+  inputModeEl.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.input-mode-btn');
+    if (!btn) return;
+    const inputMode = btn.dataset.inputMode as InputMode;
+    if (inputMode === state.inputMode) return;
+    state.inputMode = inputMode;
+    syncInputMode();
   });
 
   modeToggleEl.addEventListener('click', (e) => {
@@ -244,6 +274,48 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     syncModeVisibility();
     renderPreview();
     renderSql();
+  });
+
+  segSlotEl.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const addBtn = target.closest<HTMLButtonElement>('.segment-add');
+    if (addBtn) {
+      state.segments[state.property].push(defaultSegmentFor(currentProperty()));
+      renderSegments();
+      onSelectionChanged();
+      return;
+    }
+    const removeBtn = target.closest<HTMLButtonElement>('.segment-remove');
+    if (removeBtn) {
+      const row = removeBtn.closest<HTMLElement>('.segment-row');
+      const idx = Number(row?.dataset.segmentIndex);
+      if (Number.isNaN(idx)) return;
+      state.segments[state.property].splice(idx, 1);
+      renderSegments();
+      onSelectionChanged();
+      return;
+    }
+    const didBtn = target.closest<HTMLButtonElement>('.segment-did-btn');
+    if (didBtn) {
+      const row = didBtn.closest<HTMLElement>('.segment-row');
+      const idx = Number(row?.dataset.segmentIndex);
+      const seg = state.segments[state.property][idx];
+      if (!seg) return;
+      seg.did = didBtn.dataset.did === 'true';
+      renderSegments();
+      onSelectionChanged();
+    }
+  });
+
+  segSlotEl.addEventListener('change', (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.classList.contains('segment-event')) return;
+    const row = target.closest<HTMLElement>('.segment-row');
+    const idx = Number(row?.dataset.segmentIndex);
+    const seg = state.segments[state.property][idx];
+    if (!seg) return;
+    seg.event = (target as HTMLSelectElement).value;
+    onSelectionChanged();
   });
 
   columnGroupsEl.addEventListener('click', (e) => {
@@ -433,6 +505,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   renderSearch();
   renderList();
+  renderSegments();
   renderDims();
   renderColumns();
   renderMetrics();
@@ -440,6 +513,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   renderPreview();
   renderSql();
   syncModeVisibility();
+  syncInputMode();
 }
 
 function shellHtml(catalog: Catalog): string {
@@ -447,12 +521,9 @@ function shellHtml(catalog: Catalog): string {
   const propertyKeys = Object.keys(properties) as PropertyKey[];
 
   return `
-    <div class="builder">
-      <div class="builder-topcard">
-        <header class="builder-header">
-          <h1 class="builder-title">BQ 쿼리 빌더</h1>
-        </header>
-
+    <div class="workbench">
+      <header class="wb-header">
+        <h1 class="wb-title">BQ 쿼리 빌더</h1>
         <nav class="property-tabs" role="tablist" aria-label="프로퍼티">
           ${propertyKeys
             .map(
@@ -465,67 +536,92 @@ function shellHtml(catalog: Catalog): string {
             )
             .join('')}
         </nav>
+        <div class="input-mode-seg" role="tablist" aria-label="입력 방식">
+          <button type="button" class="input-mode-btn${state.inputMode === 'chat' ? ' is-active' : ''}"
+            role="tab" aria-selected="${state.inputMode === 'chat'}" data-input-mode="chat">${messageIcon}<span>대화형</span></button>
+          <button type="button" class="input-mode-btn${state.inputMode === 'select' ? ' is-active' : ''}"
+            role="tab" aria-selected="${state.inputMode === 'select'}" data-input-mode="select">${slidersIcon}<span>셀렉형</span></button>
+        </div>
+      </header>
 
-        <div class="mode-toggle" role="tablist" aria-label="모드">
-          <button type="button" class="mode-btn${state.mode === 'aggregate' ? ' is-active' : ''}"
-            role="tab" aria-selected="${state.mode === 'aggregate'}" data-mode="aggregate">집계</button>
-          <button type="button" class="mode-btn${state.mode === 'detail' ? ' is-active' : ''}"
-            role="tab" aria-selected="${state.mode === 'detail'}" data-mode="detail">상세</button>
+      <div class="wb-body">
+        <div class="wb-left">
+          <div class="input-panel-chat is-hidden">
+            <div class="chat-slot">
+              <p class="chat-placeholder">대화형 입력은 곧 제공됩니다. 지금은 셀렉형으로 조립하세요.</p>
+            </div>
+          </div>
+
+          <div class="input-panel-select">
+            <div class="mode-toggle" role="tablist" aria-label="모드">
+              <button type="button" class="mode-btn${state.mode === 'aggregate' ? ' is-active' : ''}"
+                role="tab" aria-selected="${state.mode === 'aggregate'}" data-mode="aggregate">집계</button>
+              <button type="button" class="mode-btn${state.mode === 'detail' ? ' is-active' : ''}"
+                role="tab" aria-selected="${state.mode === 'detail'}" data-mode="detail">상세</button>
+            </div>
+
+            <section class="panel date-range">
+              <h2 class="panel-title">기간</h2>
+              <div class="date-chips">
+                ${PRESETS.map(
+                  (p) => `
+                    <button type="button" class="date-chip${state.datePreset === p.days ? ' is-selected' : ''}"
+                      data-days="${p.days}">${p.label}</button>
+                  `,
+                ).join('')}
+              </div>
+              <div class="date-inputs">
+                <input type="date" class="date-from" value="${state.dateFrom}" aria-label="시작일" />
+                <span class="date-sep">~</span>
+                <input type="date" class="date-to" value="${state.dateTo}" aria-label="종료일" />
+              </div>
+            </section>
+
+            <section class="panel event-section">
+              <h2 class="panel-title">이벤트</h2>
+              <div class="event-search-slot"></div>
+              <div class="event-list"></div>
+            </section>
+
+            <section class="panel segment-section">
+              <h2 class="panel-title">사람 조건 <span class="panel-sub">(선택)</span></h2>
+              <div class="segment-slot"></div>
+            </section>
+
+            <section class="panel dim-section${state.mode === 'detail' ? ' is-hidden' : ''}">
+              <h2 class="panel-title">차원 (행)</h2>
+              <div class="dim-groups"></div>
+            </section>
+
+            <section class="panel metric-section${state.mode === 'detail' ? ' is-hidden' : ''}">
+              <h2 class="panel-title">지표 (열)</h2>
+              <div class="chip-group metric-group"></div>
+            </section>
+
+            <section class="panel column-section${state.mode === 'aggregate' ? ' is-hidden' : ''}">
+              <h2 class="panel-title">포함할 컬럼</h2>
+              <div class="column-groups"></div>
+            </section>
+
+            <section class="panel filter-section">
+              <h2 class="panel-title">필터</h2>
+              <div class="filter-slot"></div>
+            </section>
+          </div>
+        </div>
+
+        <div class="wb-right">
+          <section class="panel preview-section">
+            <h2 class="panel-title">구조 미리보기</h2>
+            <div class="preview-slot"></div>
+          </section>
+
+          <section class="panel sql-section">
+            <h2 class="panel-title">SQL</h2>
+            <div class="sql-slot"></div>
+          </section>
         </div>
       </div>
-
-      <section class="panel date-range">
-        <h2 class="panel-title">기간</h2>
-        <div class="date-chips">
-          ${PRESETS.map(
-            (p) => `
-              <button type="button" class="date-chip${state.datePreset === p.days ? ' is-selected' : ''}"
-                data-days="${p.days}">${p.label}</button>
-            `,
-          ).join('')}
-        </div>
-        <div class="date-inputs">
-          <input type="date" class="date-from" value="${state.dateFrom}" aria-label="시작일" />
-          <span class="date-sep">~</span>
-          <input type="date" class="date-to" value="${state.dateTo}" aria-label="종료일" />
-        </div>
-      </section>
-
-      <section class="panel event-section">
-        <h2 class="panel-title">이벤트</h2>
-        <div class="event-search-slot"></div>
-        <div class="event-list"></div>
-      </section>
-
-      <section class="panel dim-section${state.mode === 'detail' ? ' is-hidden' : ''}">
-        <h2 class="panel-title">차원 (행)</h2>
-        <div class="dim-groups"></div>
-      </section>
-
-      <section class="panel metric-section${state.mode === 'detail' ? ' is-hidden' : ''}">
-        <h2 class="panel-title">지표 (열)</h2>
-        <div class="chip-group metric-group"></div>
-      </section>
-
-      <section class="panel column-section${state.mode === 'aggregate' ? ' is-hidden' : ''}">
-        <h2 class="panel-title">포함할 컬럼</h2>
-        <div class="column-groups"></div>
-      </section>
-
-      <section class="panel filter-section">
-        <h2 class="panel-title">필터</h2>
-        <div class="filter-slot"></div>
-      </section>
-
-      <section class="panel preview-section">
-        <h2 class="panel-title">구조 미리보기</h2>
-        <div class="preview-slot"></div>
-      </section>
-
-      <section class="panel sql-section">
-        <h2 class="panel-title">SQL 생성</h2>
-        <div class="sql-slot"></div>
-      </section>
     </div>
   `;
 }

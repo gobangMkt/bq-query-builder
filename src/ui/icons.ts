@@ -36,3 +36,28 @@ export const copyIcon = base(
 );
 
 export const checkIcon = base('<path d="M20 6 9 17l-5-5"/>');
+
+// v2: 대화형/셀렉형 세그먼트 + 사람 조건
+export const messageIcon = base(
+  '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+);
+
+export const slidersIcon = base(
+  '<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>' +
+    '<line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>' +
+    '<line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>' +
+    '<line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/>' +
+    '<line x1="17" y1="16" x2="23" y2="16"/>',
+);
+
+export const userCheckIcon = base(
+  '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>' +
+    '<path d="m16 11 2 2 4-4"/>',
+);
+
+export const userXIcon = base(
+  '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>' +
+    '<line x1="17" y1="8" x2="22" y2="13"/><line x1="22" y1="8" x2="17" y2="13"/>',
+);
+
+export const arrowRightIcon = base('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>');
