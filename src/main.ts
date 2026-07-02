@@ -1,10 +1,22 @@
-// S1 플레이스홀더 — 빌더 UI는 S3에서 구현.
-// catalog.json이 올바르게 빌드되어 로드되는지만 콘솔로 확인.
-import catalog from './data/catalog.json';
+import catalogJson from './data/catalog.json';
+import type { Catalog } from './data/catalog-types';
+import { AUTH_STORAGE_KEY } from './config';
+import { renderGate } from './ui/gate';
+import { renderBuilder } from './ui/builder';
 
-const app = document.querySelector<HTMLDivElement>('#app');
-if (app) {
-  const gobangCount = catalog.properties.gobang.events.length;
-  const uceoCount = catalog.properties.uceo.events.length;
-  app.textContent = `BQ 쿼리 빌더 스캐폴드 — 카탈로그 로드됨 (고방 ${gobangCount}개 · U사장님 ${uceoCount}개 이벤트). UI는 S3에서 구현됩니다.`;
+// JSON 리터럴 타입 추론(ParamType 등 유니온)이 정적 import와 완전히 맞지 않아 단언한다.
+// 실제 값 검증은 scripts/build-catalog.test.ts(S1 소유)에서 담당.
+const catalog = catalogJson as unknown as Catalog;
+
+const root = document.querySelector<HTMLDivElement>('#app');
+
+function start(): void {
+  if (!root) return;
+  if (sessionStorage.getItem(AUTH_STORAGE_KEY) === '1') {
+    renderBuilder(root, catalog);
+  } else {
+    renderGate(root, () => renderBuilder(root, catalog));
+  }
 }
+
+start();
