@@ -1,19 +1,20 @@
 // 숫자·날짜 축약 유틸. 프레임워크 없는 순수 함수만 둔다.
 
+function formatUnit(value: number, suffix: string): string {
+  const rounded = value.toFixed(1);
+  const trimmed = rounded.endsWith('.0') ? rounded.slice(0, -2) : rounded;
+  return `${trimmed}${suffix}`;
+}
+
 export function formatCount(n: number): string {
   if (n < 1000) return String(n);
-  const units: Array<[number, string]> = [
-    [1_000_000, 'M'],
-    [1_000, 'K'],
-  ];
-  for (const [threshold, suffix] of units) {
-    if (n >= threshold) {
-      const value = (n / threshold).toFixed(1);
-      const trimmed = value.endsWith('.0') ? value.slice(0, -2) : value;
-      return `${trimmed}${suffix}`;
-    }
+  // K 단위로 표시하면 소수 1자리 반올림에서 1000.0K가 되는 경계값(예: 999,950)이 있다.
+  // 그 경우엔 M 단위로 승격해서 표시한다.
+  if (n < 1_000_000) {
+    const kRounded = Number((n / 1_000).toFixed(1));
+    if (kRounded < 1000) return formatUnit(n / 1_000, 'K');
   }
-  return String(n);
+  return formatUnit(n / 1_000_000, 'M');
 }
 
 function pad2(n: number): string {
