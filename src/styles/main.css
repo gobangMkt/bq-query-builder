@@ -157,6 +157,41 @@ button {
   font-weight: 600;
 }
 
+/* 모드 토글(집계/상세) */
+.mode-toggle {
+  display: inline-flex;
+  align-self: flex-start;
+  gap: 4px;
+  padding: 8px 0 12px;
+}
+
+.mode-btn {
+  height: 36px;
+  padding: 0 16px;
+  background: var(--surface);
+  border: 1px solid var(--border-input);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.mode-btn:hover {
+  background: var(--bg);
+}
+
+.mode-btn.is-active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.dim-section.is-hidden,
+.metric-section.is-hidden,
+.column-section.is-hidden {
+  display: none;
+}
+
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -367,6 +402,16 @@ button {
 .chip-mono {
   font-family: 'JetBrains Mono', Consolas, monospace;
   font-size: 13px;
+}
+
+/* 상세 모드 — 항상 포함되는 기본 컬럼 칩(토글 불가) */
+.chip-fixed {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.chip-fixed:hover {
+  background: var(--primary-soft);
 }
 
 /* 차원 섹션 */
@@ -583,6 +628,24 @@ button {
 .sql-disabled-reason {
   font-size: 13px;
   color: var(--text-muted);
+}
+
+/* 상세 모드 LIMIT 컨트롤 */
+.sql-limit-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.sql-limit-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--danger);
 }
 
 .sql-output {

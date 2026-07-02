@@ -1,8 +1,9 @@
 import type { Catalog } from '../data/catalog-types';
-import { generateAggregateSql } from '../sql/generate';
-import type { FilterOperator, MetricType } from '../sql/types';
+import { generateAggregateSql, generateWideSql } from '../sql/generate';
+import type { AppMode, FilterOperator, MetricType } from '../sql/types';
 import { state } from '../state';
 import type { PropertyKey } from '../state';
+import { renderColumnsHtml } from './columns';
 import { dimensionKey, parseDimensionKey } from '../utils/dimension-key';
 import { presetRange } from '../utils/format';
 import { escapeHtml } from '../utils/html';
@@ -20,8 +21,8 @@ import {
 import type { FilterFieldOption } from './filters';
 import { alertCircleIcon, checkIcon } from './icons';
 import { renderMetricsHtml } from './metrics';
-import { renderPreviewHtml } from './preview';
-import { buildSelectionFromState, renderSqlSectionHtml } from './sql-output';
+import { renderPreviewHtml, renderWidePreviewHtml } from './preview';
+import { buildSelectionFromState, buildWideSelectionFromState, renderSqlSectionHtml } from './sql-output';
 
 const PRESETS: Array<{ days: 7 | 14 | 30; label: string }> = [
   { days: 7, label: '최근 7일' },
@@ -37,9 +38,14 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const dateFromInput = root.querySelector<HTMLInputElement>('.date-from')!;
   const dateToInput = root.querySelector<HTMLInputElement>('.date-to')!;
   const tabsEl = root.querySelector<HTMLElement>('.property-tabs')!;
+  const modeToggleEl = root.querySelector<HTMLElement>('.mode-toggle')!;
   const chipsEl = root.querySelector<HTMLElement>('.date-chips')!;
   const dimGroupsEl = root.querySelector<HTMLElement>('.dim-groups')!;
   const metricGroupEl = root.querySelector<HTMLElement>('.metric-group')!;
+  const columnGroupsEl = root.querySelector<HTMLElement>('.column-groups')!;
+  const dimSectionEl = root.querySelector<HTMLElement>('.dim-section')!;
+  const metricSectionEl = root.querySelector<HTMLElement>('.metric-section')!;
+  const columnSectionEl = root.querySelector<HTMLElement>('.column-section')!;
   const filterSlotEl = root.querySelector<HTMLElement>('.filter-slot')!;
   const previewSlotEl = root.querySelector<HTMLElement>('.preview-slot')!;
   const sqlSlotEl = root.querySelector<HTMLElement>('.sql-slot')!;
@@ -81,6 +87,14 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     metricGroupEl.innerHTML = renderMetricsHtml(state.metrics[state.property]);
   }
 
+  function renderColumns(): void {
+    columnGroupsEl.innerHTML = renderColumnsHtml(
+      currentProperty(),
+      currentEventNames(),
+      state.detailColumns[state.property],
+    );
+  }
+
   function renderFilters(): void {
     const options = currentFilterFieldOptions();
     const { errorsByIndex } = validateFilters(state.filters[state.property], options);
@@ -88,15 +102,26 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   }
 
   function renderPreview(): void {
-    previewSlotEl.innerHTML = renderPreviewHtml(
-      currentProperty(),
-      state.dimensions[state.property],
-      [...state.metrics[state.property]],
-    );
+    previewSlotEl.innerHTML =
+      state.mode === 'detail'
+        ? renderWidePreviewHtml(currentProperty(), [...state.detailColumns[state.property]])
+        : renderPreviewHtml(currentProperty(), state.dimensions[state.property], [...state.metrics[state.property]]);
   }
 
   function renderSql(): void {
     sqlSlotEl.innerHTML = renderSqlSectionHtml(state.property);
+  }
+
+  function syncModeVisibility(): void {
+    const isDetail = state.mode === 'detail';
+    dimSectionEl.classList.toggle('is-hidden', isDetail);
+    metricSectionEl.classList.toggle('is-hidden', isDetail);
+    columnSectionEl.classList.toggle('is-hidden', !isDetail);
+    modeToggleEl.querySelectorAll<HTMLButtonElement>('.mode-btn').forEach((btn) => {
+      const isActive = btn.dataset.mode === state.mode;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-selected', String(isActive));
+    });
   }
 
   // 선택(이벤트/기간/차원/지표/필터)이 바뀌면 이미 생성된 SQL은 stale로 표시해 재생성을 유도한다.
@@ -114,9 +139,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   function handleGenerateSql(): void {
     const options = currentFilterFieldOptions();
-    const { selection } = buildSelectionFromState(state.property, options);
     try {
-      const sql = generateAggregateSql(catalog, selection);
+      const sql =
+        state.mode === 'detail'
+          ? generateWideSql(catalog, buildWideSelectionFromState(state.property, options).selection)
+          : generateAggregateSql(catalog, buildSelectionFromState(state.property, options).selection);
       state.sql[state.property] = { status: 'ok', code: sql, stale: false };
     } catch (err) {
       state.sql[state.property] = {
@@ -161,6 +188,10 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       return true;
     });
 
+    state.detailColumns[state.property] = new Set(
+      [...state.detailColumns[state.property]].filter((key) => validParamKeys.has(key)),
+    );
+
     const validFields = new Set(currentFilterFieldOptions().map((o) => o.field));
     state.filters[state.property] = state.filters[state.property].filter((f) => validFields.has(f.field));
   }
@@ -168,6 +199,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   function refreshAfterSelectionChange(): void {
     pruneStaleSelections();
     renderDims();
+    renderColumns();
     renderFilters();
     renderPreview();
   }
@@ -199,6 +231,32 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     renderMetrics();
     refreshAfterSelectionChange();
     renderSql();
+  });
+
+  modeToggleEl.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.mode-btn');
+    if (!btn) return;
+    const mode = btn.dataset.mode as AppMode;
+    if (mode === state.mode) return;
+    state.mode = mode;
+    // 모드가 완전히 다른 SQL을 만들어내므로, 이전 모드에서 생성된 결과는 폐기한다(stale 표시가 아니라 제거).
+    state.sql[state.property] = null;
+    syncModeVisibility();
+    renderPreview();
+    renderSql();
+  });
+
+  columnGroupsEl.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.chip[data-column-key]');
+    if (!btn) return;
+    const key = btn.dataset.columnKey;
+    if (!key) return;
+    const set = state.detailColumns[state.property];
+    if (set.has(key)) set.delete(key);
+    else set.add(key);
+    renderColumns();
+    renderPreview();
+    onSelectionChanged();
   });
 
   chipsEl.addEventListener('click', (e) => {
@@ -366,13 +424,22 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     }
   });
 
+  sqlSlotEl.addEventListener('change', (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.classList.contains('sql-limit-checkbox')) return;
+    state.detailLimitEnabled[state.property] = (target as HTMLInputElement).checked;
+    onSelectionChanged();
+  });
+
   renderSearch();
   renderList();
   renderDims();
+  renderColumns();
   renderMetrics();
   renderFilters();
   renderPreview();
   renderSql();
+  syncModeVisibility();
 }
 
 function shellHtml(catalog: Catalog): string {
@@ -398,6 +465,13 @@ function shellHtml(catalog: Catalog): string {
             )
             .join('')}
         </nav>
+
+        <div class="mode-toggle" role="tablist" aria-label="모드">
+          <button type="button" class="mode-btn${state.mode === 'aggregate' ? ' is-active' : ''}"
+            role="tab" aria-selected="${state.mode === 'aggregate'}" data-mode="aggregate">집계</button>
+          <button type="button" class="mode-btn${state.mode === 'detail' ? ' is-active' : ''}"
+            role="tab" aria-selected="${state.mode === 'detail'}" data-mode="detail">상세</button>
+        </div>
       </div>
 
       <section class="panel date-range">
@@ -423,14 +497,19 @@ function shellHtml(catalog: Catalog): string {
         <div class="event-list"></div>
       </section>
 
-      <section class="panel dim-section">
+      <section class="panel dim-section${state.mode === 'detail' ? ' is-hidden' : ''}">
         <h2 class="panel-title">차원 (행)</h2>
         <div class="dim-groups"></div>
       </section>
 
-      <section class="panel metric-section">
+      <section class="panel metric-section${state.mode === 'detail' ? ' is-hidden' : ''}">
         <h2 class="panel-title">지표 (열)</h2>
         <div class="chip-group metric-group"></div>
+      </section>
+
+      <section class="panel column-section${state.mode === 'aggregate' ? ' is-hidden' : ''}">
+        <h2 class="panel-title">포함할 컬럼</h2>
+        <div class="column-groups"></div>
       </section>
 
       <section class="panel filter-section">

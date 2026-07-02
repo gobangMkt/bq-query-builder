@@ -36,3 +36,18 @@ export interface AggregateSelection {
   metrics: MetricType[];
   filters: FilterCondition[];
 }
+
+// S6: 모드 토글(집계/상세). 상세 모드는 지표·차원 대신 "포함할 컬럼"(event_params 개별 키) 선택.
+export type AppMode = 'aggregate' | 'detail';
+
+export interface WideSelection {
+  propertyKey: PropertyKey;
+  dateRange: DateRange | null;
+  events: string[];
+  // 기본 컬럼(event_date/event_time/event_name/user_pseudo_id/user_id/traffic_source 계열)은
+  // 항상 포함되므로 여기 담지 않는다. 여기엔 선택된 event_params 키만 순서대로 담는다.
+  columns: string[];
+  filters: FilterCondition[];
+  // null이면 LIMIT 미적용(전체 반환).
+  limit: number | null;
+}

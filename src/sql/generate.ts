@@ -2,7 +2,13 @@
 // DOM/브라우저 API 사용 금지.
 
 import type { Catalog, CatalogProperty, ParamType } from '../data/catalog-types';
-import type { AggregateSelection, DimensionSelection, FilterCondition, MetricType } from './types';
+import type {
+  AggregateSelection,
+  DimensionSelection,
+  FilterCondition,
+  MetricType,
+  WideSelection,
+} from './types';
 
 const FIXED_STRING_FIELDS = new Set([
   'event_date',
@@ -229,6 +235,141 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
     baseCte,
     '',
     '/* ===== Aggregate ===== */',
+    outerLines.join('\n'),
+  ].join('\n');
+}
+
+// ===== S6: 상세(Wide) 모드 =====
+// 이벤트 1행씩, GROUP BY 없이 기본 컬럼 + 선택한 event_params 개별 컬럼을 그대로 뽑는다.
+
+const WIDE_FIXED_OUTPUT_COLUMNS = [
+  'event_date',
+  'event_time',
+  'event_name',
+  'user_pseudo_id',
+  'user_id',
+  'traffic_source_source',
+  'traffic_source_medium',
+  'traffic_source_campaign',
+];
+
+/** wide 모드 base CTE가 UNNEST로 뽑아야 할 event_params 키 목록(순서 보존, 중복 제거) */
+function collectWideParamKeys(selection: WideSelection): string[] {
+  const keys: string[] = [];
+  const add = (key: string) => {
+    if (!keys.includes(key)) keys.push(key);
+  };
+
+  for (const key of selection.columns) add(key);
+  for (const filter of selection.filters) {
+    if (!FIXED_STRING_FIELDS.has(filter.field)) add(filter.field);
+  }
+
+  return keys;
+}
+
+function buildWideAssumptionsComment(selection: WideSelection): string {
+  const { start, end } = selection.dateRange as { start: string; end: string };
+  const eventSummary = selection.events.length > 0 ? selection.events.join(', ') : '전체';
+  const filterSummary =
+    selection.filters.length > 0
+      ? selection.filters.map((f) => buildFilterExpr(f, isNumericFilterForDisplay(f))).join(', ')
+      : '없음';
+  const limitSummary =
+    selection.limit !== null ? `${selection.limit}행` : '해제됨 — 전체 반환, 대량 스캔 주의';
+
+  return [
+    '/* ===== Assumptions ===== */',
+    '/* 모드: 상세(Wide) */',
+    `/* 기간: ${start} ~ ${end} */`,
+    `/* 이벤트: ${eventSummary} */`,
+    `/* 필터: ${filterSummary} */`,
+    `/* LIMIT: ${limitSummary} */`,
+    '/* 실행 전 BQ 에디터에서 예상 스캔량을 확인하세요. */',
+  ].join('\n');
+}
+
+/** base CTE 조립 — 집계 모드와 동일한 컬럼 세트(파라미터 키만 다름)를 뽑는다. */
+function buildBaseCte(
+  catalog: Catalog,
+  property: CatalogProperty,
+  events: string[],
+  dateRange: { start: string; end: string },
+  paramKeys: string[],
+  paramTypes: Map<string, ParamType>,
+): string {
+  const baseColumns = [
+    "PARSE_DATE('%Y%m%d', event_date) AS event_date",
+    'event_timestamp',
+    'TIMESTAMP_MICROS(event_timestamp) AS event_time',
+    'event_name',
+    'user_pseudo_id',
+    'user_id',
+    'traffic_source.source AS traffic_source_source',
+    'traffic_source.medium AS traffic_source_medium',
+    'traffic_source.name AS traffic_source_campaign',
+    ...paramKeys.map((key) => paramColumnExpr(key, paramTypes.get(key) as ParamType)),
+  ];
+
+  const baseWhereLines = [
+    `_TABLE_SUFFIX BETWEEN '${toTableSuffix(dateRange.start)}' AND '${toTableSuffix(dateRange.end)}'`,
+  ];
+  if (events.length > 0) {
+    const eventList = events.map((e) => `'${escapeSql(e)}'`).join(', ');
+    baseWhereLines.push(`event_name IN (${eventList})`);
+  }
+  const baseWhereClause = baseWhereLines
+    .map((line, i) => (i === 0 ? `  WHERE ${line}` : `    AND ${line}`))
+    .join('\n');
+
+  return [
+    'WITH base AS (',
+    '  SELECT',
+    baseColumns.map((c) => `    ${c}`).join(',\n'),
+    `  FROM \`${catalog.projectId}.${property.datasetId}.events_*\``,
+    baseWhereClause,
+    ')',
+  ].join('\n');
+}
+
+export function generateWideSql(catalog: Catalog, selection: WideSelection): string {
+  if (!selection.dateRange || !selection.dateRange.start || !selection.dateRange.end) {
+    throw new Error('기간을 먼저 선택하세요. 기간 없이는 SQL을 생성할 수 없습니다.');
+  }
+
+  const property = catalog.properties[selection.propertyKey];
+  const { start, end } = selection.dateRange;
+
+  const paramKeys = collectWideParamKeys(selection);
+  const paramTypes = new Map<string, ParamType>();
+  for (const key of paramKeys) {
+    paramTypes.set(key, findParamType(property, selection.events, key));
+  }
+
+  const baseCte = buildBaseCte(catalog, property, selection.events, { start, end }, paramKeys, paramTypes);
+
+  const outerColumns = [...WIDE_FIXED_OUTPUT_COLUMNS, ...selection.columns];
+
+  const filterExprs = selection.filters.map((f) => {
+    const numeric = !FIXED_STRING_FIELDS.has(f.field) && isNumericType(paramTypes.get(f.field));
+    return buildFilterExpr(f, numeric);
+  });
+
+  const outerLines = ['SELECT', outerColumns.map((c) => `  ${c}`).join(',\n'), 'FROM base'];
+  if (filterExprs.length > 0) {
+    outerLines.push(filterExprs.map((f, i) => (i === 0 ? `WHERE ${f}` : `  AND ${f}`)).join('\n'));
+  }
+  if (selection.limit !== null) {
+    outerLines.push(`LIMIT ${selection.limit}`);
+  }
+
+  return [
+    buildWideAssumptionsComment(selection),
+    '',
+    '/* ===== base ===== */',
+    baseCte,
+    '',
+    '/* ===== Wide ===== */',
     outerLines.join('\n'),
   ].join('\n');
 }

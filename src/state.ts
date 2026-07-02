@@ -2,7 +2,7 @@ import type { Catalog } from './data/catalog-types';
 import { presetRange } from './utils/format';
 // sql/types.ts는 S2 엔진의 선택상태 타입 정의(읽기 전용 참조). S4 상태를 이 타입에 맞춰
 // 이름 짓고 구조화해두면 S5에서 AggregateSelection으로 옮기는 변환이 단순해진다.
-import type { DimensionSelection, FilterCondition, MetricType } from './sql/types';
+import type { AppMode, DimensionSelection, FilterCondition, MetricType } from './sql/types';
 
 export type PropertyKey = keyof Catalog['properties'];
 export type DatePreset = 7 | 14 | 30 | null;
@@ -12,8 +12,12 @@ export type SqlOutputState =
   | { status: 'ok'; code: string; stale: boolean }
   | { status: 'error'; message: string };
 
+// S6: 상세(Wide) 모드 LIMIT 기본값. 켜져 있으면 이 값을, 꺼져 있으면 LIMIT 없이 생성한다.
+export const DETAIL_LIMIT_VALUE = 1000;
+
 export interface AppState {
   property: PropertyKey;
+  mode: AppMode;
   datePreset: DatePreset;
   dateFrom: string;
   dateTo: string;
@@ -21,6 +25,9 @@ export interface AppState {
   selectedEvents: Record<PropertyKey, Set<string>>;
   dimensions: Record<PropertyKey, DimensionSelection[]>;
   metrics: Record<PropertyKey, Set<MetricType>>;
+  // 상세 모드에서 "포함할 컬럼"으로 고른 event_params 키(기본 컬럼은 항상 포함되므로 담지 않는다).
+  detailColumns: Record<PropertyKey, Set<string>>;
+  detailLimitEnabled: Record<PropertyKey, boolean>;
   filters: Record<PropertyKey, FilterCondition[]>;
   sql: Record<PropertyKey, SqlOutputState | null>;
 }
@@ -29,6 +36,7 @@ const initialRange = presetRange(7);
 
 export const state: AppState = {
   property: 'gobang',
+  mode: 'aggregate',
   datePreset: 7,
   dateFrom: initialRange.from,
   dateTo: initialRange.to,
@@ -44,6 +52,14 @@ export const state: AppState = {
   metrics: {
     gobang: new Set(['event_count']),
     uceo: new Set(['event_count']),
+  },
+  detailColumns: {
+    gobang: new Set(),
+    uceo: new Set(),
+  },
+  detailLimitEnabled: {
+    gobang: true,
+    uceo: true,
   },
   filters: {
     gobang: [],

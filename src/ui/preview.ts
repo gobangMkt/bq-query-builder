@@ -2,20 +2,15 @@
 
 import type { CatalogProperty } from '../data/catalog-types';
 import type { DimensionSelection, MetricType } from '../sql/types';
-import { computePreviewColumns, computePreviewRows } from '../utils/dummy';
+import {
+  computePreviewColumns,
+  computePreviewRows,
+  computeWidePreviewColumns,
+  type PreviewColumn,
+} from '../utils/dummy';
 import { escapeHtml } from '../utils/html';
 
-export function renderPreviewHtml(
-  property: CatalogProperty,
-  dimensions: DimensionSelection[],
-  metrics: MetricType[],
-): string {
-  const columns = computePreviewColumns(property, dimensions, metrics);
-
-  if (columns.length === 0) {
-    return `<p class="preview-empty">차원 또는 지표를 선택하면 미리보기가 표시됩니다.</p>`;
-  }
-
+function renderPreviewTableHtml(columns: PreviewColumn[]): string {
   const rows = computePreviewRows(columns);
 
   const theadHtml = `
@@ -38,4 +33,24 @@ export function renderPreviewHtml(
     </div>
     <p class="preview-caption">구조 확인용 더미값 — 실데이터 아님</p>
   `;
+}
+
+export function renderPreviewHtml(
+  property: CatalogProperty,
+  dimensions: DimensionSelection[],
+  metrics: MetricType[],
+): string {
+  const columns = computePreviewColumns(property, dimensions, metrics);
+
+  if (columns.length === 0) {
+    return `<p class="preview-empty">차원 또는 지표를 선택하면 미리보기가 표시됩니다.</p>`;
+  }
+
+  return renderPreviewTableHtml(columns);
+}
+
+// S6: 상세(Wide) 모드 — 기본 컬럼이 항상 있으므로 "비어있음" 상태가 없다.
+export function renderWidePreviewHtml(property: CatalogProperty, columns: string[]): string {
+  const previewColumns = computeWidePreviewColumns(property, columns);
+  return renderPreviewTableHtml(previewColumns);
 }

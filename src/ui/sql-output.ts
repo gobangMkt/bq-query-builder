@@ -1,8 +1,8 @@
 // S5: SQL 출력 섹션 — S2 엔진 연결 + 비용 가드(기간 필수/90일 경고) + stale 표시.
 // 렌더링만 담당한다. 상태 변경·이벤트 배선은 builder.ts가 담당(다른 슬롯과 동일한 패턴).
 
-import type { AggregateSelection, DateRange } from '../sql/types';
-import { state } from '../state';
+import type { AggregateSelection, DateRange, WideSelection } from '../sql/types';
+import { DETAIL_LIMIT_VALUE, state } from '../state';
 import type { PropertyKey } from '../state';
 import { escapeHtml } from '../utils/html';
 import type { FilterFieldOption } from './filters';
@@ -88,6 +88,46 @@ export function buildSelectionFromState(
   return { selection, filterErrorsByIndex: errorsByIndex };
 }
 
+/**
+ * 현재 state를 상세(Wide) 모드 엔진이 받는 WideSelection으로 변환한다.
+ * buildSelectionFromState와 동일한 방어적 필터 정리를 공유한다.
+ */
+export function buildWideSelectionFromState(
+  property: PropertyKey,
+  filterOptions: FilterFieldOption[],
+): { selection: WideSelection; filterErrorsByIndex: Map<number, string> } {
+  const dateRange: DateRange | null =
+    state.dateFrom && state.dateTo ? { start: state.dateFrom, end: state.dateTo } : null;
+
+  const { usableFilters, errorsByIndex } = validateFilters(state.filters[property], filterOptions);
+
+  const selection: WideSelection = {
+    propertyKey: property,
+    dateRange,
+    events: [...state.selectedEvents[property]],
+    columns: [...state.detailColumns[property]],
+    filters: usableFilters,
+    limit: state.detailLimitEnabled[property] ? DETAIL_LIMIT_VALUE : null,
+  };
+
+  return { selection, filterErrorsByIndex: errorsByIndex };
+}
+
+function renderLimitControlHtml(property: PropertyKey): string {
+  const enabled = state.detailLimitEnabled[property];
+  const warningHtml = !enabled
+    ? `<p class="sql-limit-warning">${alertTriangleIcon}<span>LIMIT 해제 — 상세 모드는 행 수가 많을 수 있습니다. 전체 반환 시 대량 스캔에 주의하세요.</span></p>`
+    : '';
+
+  return `
+    <label class="sql-limit-toggle">
+      <input type="checkbox" class="sql-limit-checkbox"${enabled ? ' checked' : ''} />
+      <span>LIMIT ${DETAIL_LIMIT_VALUE}행 적용</span>
+    </label>
+    ${warningHtml}
+  `;
+}
+
 export function renderSqlSectionHtml(property: PropertyKey): string {
   const eventCount = state.selectedEvents[property].size;
   const hasRange = Boolean(state.dateFrom && state.dateTo);
@@ -98,6 +138,8 @@ export function renderSqlSectionHtml(property: PropertyKey): string {
     ? `<p class="sql-range-warning">${alertTriangleIcon}<span>선택한 기간이 90일을 초과했습니다 — 스캔량이 커질 수 있습니다.</span></p>`
     : '';
 
+  const limitControlHtml = state.mode === 'detail' ? renderLimitControlHtml(property) : '';
+
   const actionsHtml = `
     <div class="sql-actions">
       <button type="button" class="sql-generate-btn"${guard.canGenerate ? '' : ' disabled'}>SQL 생성</button>
@@ -105,7 +147,7 @@ export function renderSqlSectionHtml(property: PropertyKey): string {
     </div>
   `;
 
-  return `${warningHtml}${actionsHtml}${renderOutputHtml(property)}`;
+  return `${warningHtml}${limitControlHtml}${actionsHtml}${renderOutputHtml(property)}`;
 }
 
 function renderOutputHtml(property: PropertyKey): string {

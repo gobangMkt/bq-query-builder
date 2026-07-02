@@ -50,6 +50,30 @@ export function computePreviewColumns(
   ];
 }
 
+// S6: 상세(Wide) 모드 미리보기 컬럼 — 항상 포함되는 기본 컬럼 + 선택한 event_params 컬럼.
+const WIDE_FIXED_PREVIEW_COLUMNS: PreviewColumn[] = [
+  { name: 'event_date', kind: 'date' },
+  { name: 'event_time', kind: 'string' },
+  { name: 'event_name', kind: 'string' },
+  { name: 'user_pseudo_id', kind: 'string' },
+  { name: 'user_id', kind: 'string' },
+  { name: 'traffic_source_source', kind: 'string' },
+  { name: 'traffic_source_medium', kind: 'string' },
+  { name: 'traffic_source_campaign', kind: 'string' },
+];
+
+export function computeWidePreviewColumns(
+  property: CatalogProperty,
+  columns: string[],
+): PreviewColumn[] {
+  const paramColumns = columns.map((key) => {
+    const type = findParamType(property, key);
+    const kind: PreviewValueKind = type === 'int' || type === 'numeric' ? 'numeric' : 'string';
+    return { name: key, kind };
+  });
+  return [...WIDE_FIXED_PREVIEW_COLUMNS, ...paramColumns];
+}
+
 function recentDateStrings(count: number): string[] {
   const out: string[] = [];
   const today = new Date();

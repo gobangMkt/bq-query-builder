@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { generateAggregateSql } from './generate';
+import { generateAggregateSql, generateWideSql } from './generate';
 import type { Catalog } from '../data/catalog-types';
-import type { AggregateSelection } from './types';
+import type { AggregateSelection, WideSelection } from './types';
 import realCatalog from '../data/catalog.json';
 
 const catalog = realCatalog as Catalog;
@@ -292,5 +292,196 @@ describe('generateAggregateSql — 알 수 없는 파라미터', () => {
   it('카탈로그에 없는 파라미터 키를 차원으로 선택하면 throw', () => {
     const selection = baseSelection({ dimensions: [{ kind: 'param', key: 'not_exist_key' }] });
     expect(() => generateAggregateSql(fixtureCatalog, selection)).toThrow();
+  });
+});
+
+function baseWideSelection(overrides: Partial<WideSelection> = {}): WideSelection {
+  return {
+    propertyKey: 'gobang',
+    dateRange: { start: '2026-06-25', end: '2026-07-01' },
+    events: ['branch_view'],
+    columns: [],
+    filters: [],
+    limit: 1000,
+    ...overrides,
+  };
+}
+
+describe('generateWideSql — 수용 기준 스냅샷 (실제 catalog.json)', () => {
+  it('고방/최근7일/inquiry/컬럼=inquiry_method/LIMIT 1000', () => {
+    const selection: WideSelection = {
+      propertyKey: 'gobang',
+      dateRange: { start: '2026-06-25', end: '2026-07-01' },
+      events: ['inquiry'],
+      columns: ['inquiry_method'],
+      filters: [],
+      limit: 1000,
+    };
+
+    const sql = generateWideSql(catalog, selection);
+
+    expect(sql).toBe(`/* ===== Assumptions ===== */
+/* 모드: 상세(Wide) */
+/* 기간: 2026-06-25 ~ 2026-07-01 */
+/* 이벤트: inquiry */
+/* 필터: 없음 */
+/* LIMIT: 1000행 */
+/* 실행 전 BQ 에디터에서 예상 스캔량을 확인하세요. */
+
+/* ===== base ===== */
+WITH base AS (
+  SELECT
+    PARSE_DATE('%Y%m%d', event_date) AS event_date,
+    event_timestamp,
+    TIMESTAMP_MICROS(event_timestamp) AS event_time,
+    event_name,
+    user_pseudo_id,
+    user_id,
+    traffic_source.source AS traffic_source_source,
+    traffic_source.medium AS traffic_source_medium,
+    traffic_source.name AS traffic_source_campaign,
+    (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'inquiry_method') AS inquiry_method
+  FROM \`gobang-bigquery.analytics_274122040.events_*\`
+  WHERE _TABLE_SUFFIX BETWEEN '20260625' AND '20260701'
+    AND event_name IN ('inquiry')
+)
+
+/* ===== Wide ===== */
+SELECT
+  event_date,
+  event_time,
+  event_name,
+  user_pseudo_id,
+  user_id,
+  traffic_source_source,
+  traffic_source_medium,
+  traffic_source_campaign,
+  inquiry_method
+FROM base
+LIMIT 1000`);
+  });
+});
+
+describe('generateWideSql — 기간 가드', () => {
+  it('dateRange가 null이면 throw', () => {
+    const selection = baseWideSelection({ dateRange: null });
+    expect(() => generateWideSql(fixtureCatalog, selection)).toThrow();
+  });
+
+  it('start/end가 빈 문자열이면 throw', () => {
+    const selection = baseWideSelection({ dateRange: { start: '', end: '2026-07-01' } });
+    expect(() => generateWideSql(fixtureCatalog, selection)).toThrow();
+  });
+});
+
+describe('generateWideSql — GROUP BY 없음 / SELECT * 금지', () => {
+  it('GROUP BY, 집계함수를 포함하지 않는다', () => {
+    const selection = baseWideSelection({ columns: ['price_deposit_min'] });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).not.toContain('GROUP BY');
+    expect(sql).not.toContain('COUNT(');
+    expect(sql).not.toContain('SELECT *');
+  });
+
+  it('기본 컬럼(event_date~traffic_source_campaign)을 항상 포함한다', () => {
+    const selection = baseWideSelection();
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).toContain(
+      [
+        'SELECT',
+        '  event_date,',
+        '  event_time,',
+        '  event_name,',
+        '  user_pseudo_id,',
+        '  user_id,',
+        '  traffic_source_source,',
+        '  traffic_source_medium,',
+        '  traffic_source_campaign',
+        'FROM base',
+      ].join('\n'),
+    );
+  });
+});
+
+describe('generateWideSql — LIMIT', () => {
+  it('limit이 숫자면 LIMIT n을 마지막 줄에 붙인다', () => {
+    const selection = baseWideSelection({ limit: 500 });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql.trim().endsWith('LIMIT 500')).toBe(true);
+  });
+
+  it('limit이 null이면 LIMIT 절을 생략하고 Assumptions에 해제 사실을 남긴다', () => {
+    const selection = baseWideSelection({ limit: null });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql.trim().endsWith('FROM base')).toBe(true);
+    expect(sql).not.toMatch(/\nLIMIT \d+/);
+    expect(sql).toContain('/* LIMIT: 해제됨 — 전체 반환, 대량 스캔 주의 */');
+  });
+});
+
+describe('generateWideSql — event_params 컬럼', () => {
+  it('numeric 타입 컬럼은 COALESCE + SAFE_CAST 패턴을 사용한다', () => {
+    const selection = baseWideSelection({ columns: ['price_deposit_min'] });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).toContain(
+      "(SELECT COALESCE(value.int_value, SAFE_CAST(value.double_value AS INT64)) FROM UNNEST(event_params) WHERE key = 'price_deposit_min') AS price_deposit_min",
+    );
+    expect(sql).toContain('  price_deposit_min\nFROM base');
+  });
+
+  it('선택한 컬럼 순서를 그대로 보존한다', () => {
+    const selection = baseWideSelection({ columns: ['review_count', 'branch_type'] });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).toContain('  review_count,\n  branch_type\nFROM base');
+  });
+
+  it('컬럼을 선택하지 않으면 기본 컬럼만 뽑는다', () => {
+    const selection = baseWideSelection({ columns: [] });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).toContain('  traffic_source_campaign\nFROM base');
+  });
+});
+
+describe('generateWideSql — 필터', () => {
+  it('필터 조건은 집계 모드와 동일한 WHERE 절을 생성한다', () => {
+    const selection = baseWideSelection({
+      filters: [{ field: 'page_path', operator: 'CONTAINS', value: 'branch' }],
+    });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).toContain("WHERE page_path LIKE '%branch%'");
+  });
+
+  it('필터 필드가 columns에 없어도 base CTE에서 자동으로 UNNEST 추출한다', () => {
+    const selection = baseWideSelection({
+      columns: [],
+      filters: [{ field: 'price_deposit_min', operator: '=', value: 50000000 }],
+    });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).toContain(
+      "(SELECT COALESCE(value.int_value, SAFE_CAST(value.double_value AS INT64)) FROM UNNEST(event_params) WHERE key = 'price_deposit_min') AS price_deposit_min",
+    );
+    expect(sql).toContain('WHERE price_deposit_min = 50000000');
+  });
+});
+
+describe('generateWideSql — 프로퍼티/테이블 참조', () => {
+  it('propertyKey에 따라 프로젝트.데이터셋을 정확히 참조한다 (uceo)', () => {
+    const selection = baseWideSelection({ propertyKey: 'uceo', events: ['page_view'] });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).toContain('FROM `test-project.analytics_222.events_*`');
+  });
+
+  it('이벤트를 선택하지 않으면 event_name IN 조건을 생략한다', () => {
+    const selection = baseWideSelection({ events: [] });
+    const sql = generateWideSql(fixtureCatalog, selection);
+    expect(sql).not.toContain('event_name IN');
+    expect(sql).toContain('/* 이벤트: 전체 */');
+  });
+});
+
+describe('generateWideSql — 알 수 없는 파라미터', () => {
+  it('카탈로그에 없는 파라미터 키를 컬럼으로 선택하면 throw', () => {
+    const selection = baseWideSelection({ columns: ['not_exist_key'] });
+    expect(() => generateWideSql(fixtureCatalog, selection)).toThrow();
   });
 });
