@@ -73,6 +73,7 @@ describe('generateAggregateSql — 수용 기준 스냅샷 (실제 catalog.json)
     expect(sql).toBe(`/* ===== Assumptions ===== */
 /* 기간: 2026-06-25 ~ 2026-07-01 */
 /* 이벤트: inquiry */
+/* 사람 조건: 없음 (판정 기간 = 조회 기간) */
 /* 필터: 없음 */
 /* 실행 전 BQ 에디터에서 예상 스캔량을 확인하세요. */
 
@@ -324,6 +325,7 @@ describe('generateWideSql — 수용 기준 스냅샷 (실제 catalog.json)', ()
 /* 모드: 상세(Wide) */
 /* 기간: 2026-06-25 ~ 2026-07-01 */
 /* 이벤트: inquiry */
+/* 사람 조건: 없음 (판정 기간 = 조회 기간) */
 /* 필터: 없음 */
 /* LIMIT: 1000행 */
 /* 실행 전 BQ 에디터에서 예상 스캔량을 확인하세요. */
@@ -483,5 +485,66 @@ describe('generateWideSql — 알 수 없는 파라미터', () => {
   it('카탈로그에 없는 파라미터 키를 컬럼으로 선택하면 throw', () => {
     const selection = baseWideSelection({ columns: ['not_exist_key'] });
     expect(() => generateWideSql(fixtureCatalog, selection)).toThrow();
+  });
+});
+
+// ===== v2: 사람 조건(세그먼트) =====
+
+describe('generateAggregateSql — 사람 조건(세그먼트)', () => {
+  it('세그먼트가 없으면 seg_users CTE도 재필터도 없다(회귀)', () => {
+    const sql = generateAggregateSql(fixtureCatalog, baseSelection({ segments: [] }));
+    expect(sql).not.toContain('seg_users');
+    expect(sql).not.toContain('SELECT user_pseudo_id FROM seg_users');
+    expect(sql).toContain('/* 사람 조건: 없음 (판정 기간 = 조회 기간) */');
+  });
+
+  it('did=true 조건은 COUNTIF(...) > 0 HAVING을 만든다', () => {
+    const sql = generateAggregateSql(
+      fixtureCatalog,
+      baseSelection({ segments: [{ event: 'zzim_memo_place', did: true }] }),
+    );
+    expect(sql).toContain('seg_users AS (');
+    expect(sql).toContain("HAVING COUNTIF(event_name = 'zzim_memo_place') > 0");
+    expect(sql).toContain('user_pseudo_id IN (SELECT user_pseudo_id FROM seg_users)');
+  });
+
+  it('did=false 조건은 COUNTIF(...) = 0 HAVING을 만든다', () => {
+    const sql = generateAggregateSql(
+      fixtureCatalog,
+      baseSelection({ segments: [{ event: 'read_complete_notices', did: false }] }),
+    );
+    expect(sql).toContain("HAVING COUNTIF(event_name = 'read_complete_notices') = 0");
+  });
+
+  it('혼합 조건(했다+안했다)은 AND로 결합되고 base가 대상+조건 이벤트를 함께 스캔한다', () => {
+    const sql = generateAggregateSql(
+      fixtureCatalog,
+      baseSelection({
+        events: ['branch_view'],
+        segments: [
+          { event: 'zzim_memo_place', did: true },
+          { event: 'read_complete_notices', did: false },
+        ],
+      }),
+    );
+    // base는 대상(branch_view) + 세그먼트 이벤트를 모두 스캔
+    expect(sql).toContain("event_name IN ('branch_view', 'zzim_memo_place', 'read_complete_notices')");
+    // HAVING 두 줄 AND 결합
+    expect(sql).toContain("HAVING COUNTIF(event_name = 'zzim_memo_place') > 0");
+    expect(sql).toContain("AND COUNTIF(event_name = 'read_complete_notices') = 0");
+    // 외부 SELECT는 집계 대상만 다시 필터
+    expect(sql).toContain("WHERE event_name IN ('branch_view')");
+    expect(sql).toContain('AND user_pseudo_id IN (SELECT user_pseudo_id FROM seg_users)');
+  });
+});
+
+describe('generateWideSql — 사람 조건(세그먼트)', () => {
+  it('세그먼트가 있으면 seg_users CTE와 재필터를 만든다', () => {
+    const sql = generateWideSql(
+      fixtureCatalog,
+      baseWideSelection({ segments: [{ event: 'branch_view', did: true }] }),
+    );
+    expect(sql).toContain('seg_users AS (');
+    expect(sql).toContain('user_pseudo_id IN (SELECT user_pseudo_id FROM seg_users)');
   });
 });

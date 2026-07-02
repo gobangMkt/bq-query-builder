@@ -28,6 +28,13 @@ export interface FilterCondition {
   value: string | number | (string | number)[];
 }
 
+// v2: "사람 조건" — 조회 기간 안에서 특정 이벤트를 했다(did=true)/안 했다(did=false)로 유저를 거른다.
+// 여러 조건은 AND로 결합된다. 판정 기간은 조회 기간과 동일하다.
+export interface SegmentCondition {
+  event: string;
+  did: boolean;
+}
+
 export interface AggregateSelection {
   propertyKey: PropertyKey;
   dateRange: DateRange | null;
@@ -35,6 +42,7 @@ export interface AggregateSelection {
   dimensions: DimensionSelection[];
   metrics: MetricType[];
   filters: FilterCondition[];
+  segments?: SegmentCondition[];
 }
 
 // S6: 모드 토글(집계/상세). 상세 모드는 지표·차원 대신 "포함할 컬럼"(event_params 개별 키) 선택.
@@ -50,4 +58,5 @@ export interface WideSelection {
   filters: FilterCondition[];
   // null이면 LIMIT 미적용(전체 반환).
   limit: number | null;
+  segments?: SegmentCondition[];
 }

@@ -7,6 +7,7 @@ import type {
   DimensionSelection,
   FilterCondition,
   MetricType,
+  SegmentCondition,
   WideSelection,
 } from './types';
 
@@ -116,6 +117,39 @@ function buildFilterExpr(filter: FilterCondition, numeric: boolean): string {
   return `${field} ${operator} ${formatFilterValue(value as string | number, numeric)}`;
 }
 
+// ===== v2: 사람 조건(세그먼트) =====
+
+function segmentsOf(selection: { segments?: SegmentCondition[] }): SegmentCondition[] {
+  return selection.segments ?? [];
+}
+
+/** 대상 이벤트 + 세그먼트 조건 이벤트를 합친 목록(순서 보존, 중복 제거). base가 스캔할 이벤트다. */
+function unionBaseEvents(events: string[], segments: SegmentCondition[]): string[] {
+  const all = [...events];
+  for (const s of segments) if (!all.includes(s.event)) all.push(s.event);
+  return all;
+}
+
+/** seg_users CTE — 조회 기간 내에서 사람 조건(했다/안 했다)을 모두 만족하는 user_pseudo_id 집합 */
+function buildSegUsersCte(segments: SegmentCondition[]): string {
+  const havingLines = segments.map(
+    (s) => `COUNTIF(event_name = '${escapeSql(s.event)}') ${s.did ? '> 0' : '= 0'}`,
+  );
+  return [
+    'seg_users AS (',
+    '  SELECT user_pseudo_id',
+    '  FROM base',
+    '  GROUP BY user_pseudo_id',
+    havingLines.map((h, i) => (i === 0 ? `  HAVING ${h}` : `     AND ${h}`)).join('\n'),
+    ')',
+  ].join('\n');
+}
+
+function segmentsSummary(segments: SegmentCondition[]): string {
+  if (segments.length === 0) return '없음';
+  return segments.map((s) => `${s.event} ${s.did ? '한 사람' : '안 한 사람'}`).join(', ');
+}
+
 /** 선택 상태에서 base CTE가 event_params에서 UNNEST로 뽑아야 할 키 목록(순서 보존, 중복 제거) */
 function collectParamKeys(selection: AggregateSelection): string[] {
   const keys: string[] = [];
@@ -152,6 +186,7 @@ function buildAssumptionsComment(selection: AggregateSelection): string {
     '/* ===== Assumptions ===== */',
     `/* 기간: ${start} ~ ${end} */`,
     `/* 이벤트: ${eventSummary} */`,
+    `/* 사람 조건: ${segmentsSummary(segmentsOf(selection))} (판정 기간 = 조회 기간) */`,
     `/* 필터: ${filterSummary} */`,
     '/* 실행 전 BQ 에디터에서 예상 스캔량을 확인하세요. */',
   ].join('\n');
@@ -188,23 +223,13 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
     ...paramKeys.map((key) => paramColumnExpr(key, paramTypes.get(key) as ParamType)),
   ];
 
-  const baseWhereLines = [`_TABLE_SUFFIX BETWEEN '${toTableSuffix(start)}' AND '${toTableSuffix(end)}'`];
-  if (selection.events.length > 0) {
-    const eventList = selection.events.map((e) => `'${escapeSql(e)}'`).join(', ');
-    baseWhereLines.push(`event_name IN (${eventList})`);
-  }
-  const baseWhereClause = baseWhereLines
-    .map((line, i) => (i === 0 ? `  WHERE ${line}` : `    AND ${line}`))
-    .join('\n');
+  const segments = segmentsOf(selection);
+  const baseEvents = unionBaseEvents(selection.events, segments);
 
-  const baseCte = [
-    'WITH base AS (',
-    '  SELECT',
-    baseColumns.map((c) => `    ${c}`).join(',\n'),
-    `  FROM \`${catalog.projectId}.${property.datasetId}.events_*\``,
-    baseWhereClause,
-    ')',
-  ].join('\n');
+  const baseCteBody = buildBaseCteBody(catalog, property, baseEvents, { start, end }, baseColumns);
+  const cteBodies = [baseCteBody];
+  if (segments.length > 0) cteBodies.push(buildSegUsersCte(segments));
+  const cteBlock = `WITH ${cteBodies.join(',\n')}`;
 
   // ----- Aggregate SELECT -----
   const dimensionExprs = selection.dimensions.map(dimensionSelectExpr);
@@ -216,13 +241,24 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
     return buildFilterExpr(f, numeric);
   });
 
+  // 세그먼트가 있으면 base가 대상+조건 이벤트를 함께 스캔하므로, 집계 대상만 다시 걸러낸다.
+  const whereClauses: string[] = [];
+  if (segments.length > 0) {
+    if (selection.events.length > 0) {
+      const eventList = selection.events.map((e) => `'${escapeSql(e)}'`).join(', ');
+      whereClauses.push(`event_name IN (${eventList})`);
+    }
+    whereClauses.push('user_pseudo_id IN (SELECT user_pseudo_id FROM seg_users)');
+  }
+  whereClauses.push(...filterExprs);
+
   const outerLines = [
     'SELECT',
     [...dimensionExprs, ...metricExprs].map((c) => `  ${c}`).join(',\n'),
     'FROM base',
   ];
-  if (filterExprs.length > 0) {
-    outerLines.push(filterExprs.map((f, i) => (i === 0 ? `WHERE ${f}` : `  AND ${f}`)).join('\n'));
+  if (whereClauses.length > 0) {
+    outerLines.push(whereClauses.map((f, i) => (i === 0 ? `WHERE ${f}` : `  AND ${f}`)).join('\n'));
   }
   if (groupByList.length > 0) {
     outerLines.push(`GROUP BY ${groupByList.join(', ')}`);
@@ -232,10 +268,39 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
     buildAssumptionsComment(selection),
     '',
     '/* ===== base ===== */',
-    baseCte,
+    cteBlock,
     '',
     '/* ===== Aggregate ===== */',
     outerLines.join('\n'),
+  ].join('\n');
+}
+
+/** base CTE 본문(`base AS (...)`, WITH 없음) — 여러 CTE 조합을 위해 WITH는 호출부에서 붙인다. */
+function buildBaseCteBody(
+  catalog: Catalog,
+  property: CatalogProperty,
+  events: string[],
+  dateRange: { start: string; end: string },
+  baseColumns: string[],
+): string {
+  const baseWhereLines = [
+    `_TABLE_SUFFIX BETWEEN '${toTableSuffix(dateRange.start)}' AND '${toTableSuffix(dateRange.end)}'`,
+  ];
+  if (events.length > 0) {
+    const eventList = events.map((e) => `'${escapeSql(e)}'`).join(', ');
+    baseWhereLines.push(`event_name IN (${eventList})`);
+  }
+  const baseWhereClause = baseWhereLines
+    .map((line, i) => (i === 0 ? `  WHERE ${line}` : `    AND ${line}`))
+    .join('\n');
+
+  return [
+    'base AS (',
+    '  SELECT',
+    baseColumns.map((c) => `    ${c}`).join(',\n'),
+    `  FROM \`${catalog.projectId}.${property.datasetId}.events_*\``,
+    baseWhereClause,
+    ')',
   ].join('\n');
 }
 
@@ -283,52 +348,10 @@ function buildWideAssumptionsComment(selection: WideSelection): string {
     '/* 모드: 상세(Wide) */',
     `/* 기간: ${start} ~ ${end} */`,
     `/* 이벤트: ${eventSummary} */`,
+    `/* 사람 조건: ${segmentsSummary(segmentsOf(selection))} (판정 기간 = 조회 기간) */`,
     `/* 필터: ${filterSummary} */`,
     `/* LIMIT: ${limitSummary} */`,
     '/* 실행 전 BQ 에디터에서 예상 스캔량을 확인하세요. */',
-  ].join('\n');
-}
-
-/** base CTE 조립 — 집계 모드와 동일한 컬럼 세트(파라미터 키만 다름)를 뽑는다. */
-function buildBaseCte(
-  catalog: Catalog,
-  property: CatalogProperty,
-  events: string[],
-  dateRange: { start: string; end: string },
-  paramKeys: string[],
-  paramTypes: Map<string, ParamType>,
-): string {
-  const baseColumns = [
-    "PARSE_DATE('%Y%m%d', event_date) AS event_date",
-    'event_timestamp',
-    'TIMESTAMP_MICROS(event_timestamp) AS event_time',
-    'event_name',
-    'user_pseudo_id',
-    'user_id',
-    'traffic_source.source AS traffic_source_source',
-    'traffic_source.medium AS traffic_source_medium',
-    'traffic_source.name AS traffic_source_campaign',
-    ...paramKeys.map((key) => paramColumnExpr(key, paramTypes.get(key) as ParamType)),
-  ];
-
-  const baseWhereLines = [
-    `_TABLE_SUFFIX BETWEEN '${toTableSuffix(dateRange.start)}' AND '${toTableSuffix(dateRange.end)}'`,
-  ];
-  if (events.length > 0) {
-    const eventList = events.map((e) => `'${escapeSql(e)}'`).join(', ');
-    baseWhereLines.push(`event_name IN (${eventList})`);
-  }
-  const baseWhereClause = baseWhereLines
-    .map((line, i) => (i === 0 ? `  WHERE ${line}` : `    AND ${line}`))
-    .join('\n');
-
-  return [
-    'WITH base AS (',
-    '  SELECT',
-    baseColumns.map((c) => `    ${c}`).join(',\n'),
-    `  FROM \`${catalog.projectId}.${property.datasetId}.events_*\``,
-    baseWhereClause,
-    ')',
   ].join('\n');
 }
 
@@ -346,7 +369,25 @@ export function generateWideSql(catalog: Catalog, selection: WideSelection): str
     paramTypes.set(key, findParamType(property, selection.events, key));
   }
 
-  const baseCte = buildBaseCte(catalog, property, selection.events, { start, end }, paramKeys, paramTypes);
+  const baseColumns = [
+    "PARSE_DATE('%Y%m%d', event_date) AS event_date",
+    'event_timestamp',
+    'TIMESTAMP_MICROS(event_timestamp) AS event_time',
+    'event_name',
+    'user_pseudo_id',
+    'user_id',
+    'traffic_source.source AS traffic_source_source',
+    'traffic_source.medium AS traffic_source_medium',
+    'traffic_source.name AS traffic_source_campaign',
+    ...paramKeys.map((key) => paramColumnExpr(key, paramTypes.get(key) as ParamType)),
+  ];
+
+  const segments = segmentsOf(selection);
+  const baseEvents = unionBaseEvents(selection.events, segments);
+  const baseCteBody = buildBaseCteBody(catalog, property, baseEvents, { start, end }, baseColumns);
+  const cteBodies = [baseCteBody];
+  if (segments.length > 0) cteBodies.push(buildSegUsersCte(segments));
+  const cteBlock = `WITH ${cteBodies.join(',\n')}`;
 
   const outerColumns = [...WIDE_FIXED_OUTPUT_COLUMNS, ...selection.columns];
 
@@ -355,9 +396,19 @@ export function generateWideSql(catalog: Catalog, selection: WideSelection): str
     return buildFilterExpr(f, numeric);
   });
 
+  const whereClauses: string[] = [];
+  if (segments.length > 0) {
+    if (selection.events.length > 0) {
+      const eventList = selection.events.map((e) => `'${escapeSql(e)}'`).join(', ');
+      whereClauses.push(`event_name IN (${eventList})`);
+    }
+    whereClauses.push('user_pseudo_id IN (SELECT user_pseudo_id FROM seg_users)');
+  }
+  whereClauses.push(...filterExprs);
+
   const outerLines = ['SELECT', outerColumns.map((c) => `  ${c}`).join(',\n'), 'FROM base'];
-  if (filterExprs.length > 0) {
-    outerLines.push(filterExprs.map((f, i) => (i === 0 ? `WHERE ${f}` : `  AND ${f}`)).join('\n'));
+  if (whereClauses.length > 0) {
+    outerLines.push(whereClauses.map((f, i) => (i === 0 ? `WHERE ${f}` : `  AND ${f}`)).join('\n'));
   }
   if (selection.limit !== null) {
     outerLines.push(`LIMIT ${selection.limit}`);
@@ -367,7 +418,7 @@ export function generateWideSql(catalog: Catalog, selection: WideSelection): str
     buildWideAssumptionsComment(selection),
     '',
     '/* ===== base ===== */',
-    baseCte,
+    cteBlock,
     '',
     '/* ===== Wide ===== */',
     outerLines.join('\n'),
