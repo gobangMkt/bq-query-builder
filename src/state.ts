@@ -48,7 +48,7 @@ const initialRange = presetRange(7);
 
 export const state: AppState = {
   property: 'gobang',
-  inputMode: 'select',
+  inputMode: 'chat',
   mode: 'aggregate',
   datePreset: 7,
   dateFrom: initialRange.from,

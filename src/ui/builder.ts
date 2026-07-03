@@ -23,6 +23,8 @@ import { alertCircleIcon, checkIcon, messageIcon, slidersIcon } from './icons';
 import { renderMetricsHtml } from './metrics';
 import { renderPreviewHtml, renderWidePreviewHtml } from './preview';
 import { defaultSegmentFor, renderSegmentsHtml } from './segments';
+import { renderChatResultHtml, renderChatShellHtml } from './chat';
+import { parseQuery, type ParseResult } from '../nl/parse';
 import { buildSelectionFromState, buildWideSelectionFromState, renderSqlSectionHtml } from './sql-output';
 
 const PRESETS: Array<{ days: 7 | 14 | 30; label: string }> = [
@@ -42,6 +44,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const inputModeEl = root.querySelector<HTMLElement>('.input-mode-seg')!;
   const selectPanelEl = root.querySelector<HTMLElement>('.input-panel-select')!;
   const chatPanelEl = root.querySelector<HTMLElement>('.input-panel-chat')!;
+  const chatSlotEl = root.querySelector<HTMLElement>('.chat-slot')!;
   const modeToggleEl = root.querySelector<HTMLElement>('.mode-toggle')!;
   const chipsEl = root.querySelector<HTMLElement>('.date-chips')!;
   const segSlotEl = root.querySelector<HTMLElement>('.segment-slot')!;
@@ -119,6 +122,62 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       btn.classList.toggle('is-active', active);
       btn.setAttribute('aria-selected', String(active));
     });
+  }
+
+  // ----- 대화형 -----
+  let chatResult: ParseResult | null = null;
+  const CHAT_EXAMPLE =
+    '지난 한 주 동안, 찜 메모를 누른 사람 중 공고완독을 하지 않은 사람들이 발생시킨 조회수';
+
+  function renderChatShell(): void {
+    chatSlotEl.innerHTML = renderChatShellHtml();
+    renderChatResult();
+  }
+
+  function renderChatResult(): void {
+    const resultEl = chatSlotEl.querySelector<HTMLElement>('.chat-result');
+    if (resultEl) resultEl.innerHTML = renderChatResultHtml(chatResult, currentProperty());
+  }
+
+  function handleChatParse(): void {
+    const input = chatSlotEl.querySelector<HTMLTextAreaElement>('.chat-input');
+    if (!input) return;
+    chatResult = parseQuery(input.value, currentProperty());
+    renderChatResult();
+  }
+
+  // 대화형 해석 결과를 셀렉형과 동일한 state로 변환하고 SQL을 생성한다(집계 전용).
+  function applyChatToState(): void {
+    if (!chatResult || chatResult.status !== 'parsed') return;
+    const r = chatResult;
+    if (r.target.resolved === null || r.segments.some((s) => s.choice.resolved === null)) return;
+
+    const range = presetRange(r.period.days);
+    state.mode = 'aggregate';
+    state.datePreset = [7, 14, 30].includes(r.period.days) ? (r.period.days as 7 | 14 | 30) : null;
+    state.dateFrom = range.from;
+    state.dateTo = range.to;
+    state.selectedEvents[state.property] = new Set([r.target.resolved]);
+    state.segments[state.property] = r.segments.map((s) => ({
+      event: s.choice.resolved as string,
+      did: s.did,
+    }));
+    state.dimensions[state.property] = [{ kind: 'event_date' }];
+    state.metrics[state.property] = new Set([r.metric]);
+    state.filters[state.property] = [];
+
+    // 셀렉형 컨트롤도 새 상태를 반영(사용자가 셀렉형으로 넘어가 이어서 다듬을 수 있게).
+    dateFromInput.value = range.from;
+    dateToInput.value = range.to;
+    syncPresetChips();
+    syncModeVisibility();
+    renderList();
+    renderSegments();
+    renderDims();
+    renderMetrics();
+    renderFilters();
+    renderPreview();
+    handleGenerateSql();
   }
 
   function renderPreview(): void {
@@ -245,11 +304,13 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     if (key === state.property) return;
     state.property = key;
     state.searchQuery = '';
+    chatResult = null;
     syncTabs();
     renderSearch();
     renderList();
     renderMetrics();
     renderSegments();
+    renderChatShell();
     refreshAfterSelectionChange();
     renderSql();
   });
@@ -261,6 +322,49 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     if (inputMode === state.inputMode) return;
     state.inputMode = inputMode;
     syncInputMode();
+  });
+
+  chatSlotEl.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.chat-parse-btn')) {
+      handleChatParse();
+      return;
+    }
+    if (target.closest('.chat-example-btn')) {
+      const input = chatSlotEl.querySelector<HTMLTextAreaElement>('.chat-input');
+      if (input) {
+        input.value = CHAT_EXAMPLE;
+        handleChatParse();
+      }
+      return;
+    }
+    if (target.closest('.chat-generate-btn')) {
+      applyChatToState();
+    }
+  });
+
+  chatSlotEl.addEventListener('change', (e) => {
+    const sel = (e.target as HTMLElement).closest<HTMLSelectElement>('.chat-choice');
+    if (!sel || !chatResult || chatResult.status !== 'parsed') return;
+    if (sel.dataset.role === 'target') {
+      chatResult.target.resolved = sel.value;
+    } else if (sel.dataset.role === 'segment') {
+      const seg = chatResult.segments[Number(sel.dataset.segIndex)];
+      if (seg) seg.choice.resolved = sel.value;
+    }
+    renderChatResult();
+  });
+
+  chatSlotEl.addEventListener('keydown', (e) => {
+    const ke = e as KeyboardEvent;
+    if (
+      ke.key === 'Enter' &&
+      !ke.shiftKey &&
+      (e.target as HTMLElement).classList.contains('chat-input')
+    ) {
+      e.preventDefault();
+      handleChatParse();
+    }
   });
 
   modeToggleEl.addEventListener('click', (e) => {
@@ -506,6 +610,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   renderSearch();
   renderList();
   renderSegments();
+  renderChatShell();
   renderDims();
   renderColumns();
   renderMetrics();
@@ -547,9 +652,7 @@ function shellHtml(catalog: Catalog): string {
       <div class="wb-body">
         <div class="wb-left">
           <div class="input-panel-chat is-hidden">
-            <div class="chat-slot">
-              <p class="chat-placeholder">대화형 입력은 곧 제공됩니다. 지금은 셀렉형으로 조립하세요.</p>
-            </div>
+            <div class="chat-slot"></div>
           </div>
 
           <div class="input-panel-select">
