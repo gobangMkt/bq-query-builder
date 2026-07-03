@@ -2,3 +2,7 @@
 node_modules/
 dist/
 
+# GAS 프록시 로컬 전용(시크릿·계정별 설정) — 절대 커밋 금지
+gas-proxy/setup.local.gs
+gas-proxy/.clasp.json
+
