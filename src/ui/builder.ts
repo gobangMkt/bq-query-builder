@@ -21,11 +21,12 @@ import {
 import type { FilterFieldOption } from './filters';
 import { alertCircleIcon, bookIcon, checkIcon, messageIcon, plusIcon, slidersIcon } from './icons';
 import { renderMetricsHtml } from './metrics';
-import { renderPreviewHtml, renderWidePreviewHtml } from './preview';
+import { renderAiPreviewHtml, renderPreviewHtml, renderWidePreviewHtml } from './preview';
 import { defaultSegmentFor, renderSegmentsHtml } from './segments';
 import { renderChatResultHtml, renderChatShellHtml, renderMentionItemsHtml, type ChatView } from './chat';
 import { parseQuery, type ParseResult } from '../nl/parse';
 import { callProxy, type ProxyHistoryItem } from '../nl/proxy';
+import { extractSelectColumns } from '../nl/sql-columns';
 import { buildSelectionFromState, buildWideSelectionFromState, renderSqlSectionHtml } from './sql-output';
 
 const PRESETS: Array<{ days: number; label: string }> = [
@@ -269,15 +270,18 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     chatView = { kind: 'loading' };
     chatResult = null;
     renderChatResult();
+    renderPreview();
 
     const res = await callProxy({ question, property: currentProperty(), history: chatHistory });
     if (res.ok) {
+      // SQL은 받아두되 바로 노출하지 않는다 — 구조 미리보기 확인 후 버튼으로 공개(추가 호출 없음).
       chatView = {
-        kind: 'sql',
+        kind: 'confirm',
         explanation: res.explanation,
         sql: res.sql,
         corrected: res.corrected,
         cached: Boolean(res.cached),
+        columns: extractSelectColumns(res.sql),
         spentKrw: res.budget?.spentKrw,
         capKrw: res.budget?.capKrw,
       };
@@ -290,6 +294,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       chatView = { kind: 'fallback', result: chatResult, notice: res.error };
     }
     renderChatResult();
+    renderPreview();
   }
 
   function handleChatCopy(btn: HTMLButtonElement): void {
@@ -347,6 +352,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   }
 
   function renderPreview(): void {
+    // 대화형 AI 결과가 있으면 그 SQL의 결과 컬럼으로 미리보기를 대체한다(확인 단계 포함).
+    if (state.inputMode === 'chat' && (chatView.kind === 'confirm' || chatView.kind === 'sql')) {
+      previewSlotEl.innerHTML = renderAiPreviewHtml(chatView.columns);
+      return;
+    }
     previewSlotEl.innerHTML =
       state.mode === 'detail'
         ? renderWidePreviewHtml(currentProperty(), [...state.detailColumns[state.property]])
@@ -512,6 +522,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     if (inputMode === state.inputMode) return;
     state.inputMode = inputMode;
     syncInputMode();
+    // 대화형 AI 미리보기 ↔ 셀렉형 상태 미리보기 전환.
+    renderPreview();
   });
 
   // 이벤트 모달 열기/닫기
@@ -557,6 +569,14 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       if (input) {
         input.value = CHAT_EXAMPLE;
         handleChatParse();
+      }
+      return;
+    }
+    if (target.closest('.chat-confirm-btn')) {
+      // 구조가 맞다고 확인 → 받아둔 SQL을 노출(프록시 재호출 없음).
+      if (chatView.kind === 'confirm') {
+        chatView = { ...chatView, kind: 'sql' };
+        renderChatResult();
       }
       return;
     }

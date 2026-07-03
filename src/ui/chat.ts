@@ -17,19 +17,25 @@ const METRIC_LABEL: Record<MetricType, string> = {
 
 const EXAMPLE = '지난 한 주 동안 배너 종류별 클릭율(CTR)을 날짜순으로';
 
+// 프록시가 돌려준 답변 한 건. confirm(구조 확인) → sql(노출)로 kind만 바뀌며 그대로 유지된다.
+export interface ChatAnswer {
+  explanation: string;
+  sql: string;
+  corrected: boolean;
+  cached: boolean;
+  // 최종 SELECT에서 추출한 결과 컬럼명(구조 미리보기용). 추정 실패 시 빈 배열.
+  columns: string[];
+  spentKrw?: number;
+  capKrw?: number;
+}
+
 // 대화형 결과 상태. builder.ts가 이 값을 만들어 renderChatResultHtml에 넘긴다.
+// confirm: SQL은 받아뒀지만 숨긴 채 구조 미리보기 확인을 먼저 요청하는 단계.
 export type ChatView =
   | { kind: 'idle' }
   | { kind: 'loading' }
-  | {
-      kind: 'sql';
-      explanation: string;
-      sql: string;
-      corrected: boolean;
-      cached: boolean;
-      spentKrw?: number;
-      capKrw?: number;
-    }
+  | ({ kind: 'confirm' } & ChatAnswer)
+  | ({ kind: 'sql' } & ChatAnswer)
   | { kind: 'fallback'; result: ParseResult; notice: string }
   | { kind: 'error'; message: string; budgetExceeded: boolean };
 
@@ -84,6 +90,8 @@ export function renderChatResultHtml(view: ChatView, property: CatalogProperty):
           <span class="chat-spinner" aria-hidden="true"></span>
           <span>AI가 SQL을 작성 중…</span>
         </div>`;
+    case 'confirm':
+      return renderConfirmHtml(view);
     case 'sql':
       return renderSqlAnswerHtml(view);
     case 'error':
@@ -98,6 +106,34 @@ export function renderChatResultHtml(view: ChatView, property: CatalogProperty):
         )} 규칙 해석으로 대신 처리했어요.</span></div>
         ${renderParseInterpHtml(view.result, property)}`;
   }
+}
+
+// 확인 단계 — SQL은 감춘 채 해석·결과 컬럼만 보여주고, 맞을 때만 SQL을 노출한다.
+function renderConfirmHtml(view: Extract<ChatView, { kind: 'confirm' }>): string {
+  const correctedBadge = view.corrected
+    ? `<span class="chat-answer-badge">자동 보정됨</span>`
+    : '';
+  const cachedBadge = view.cached ? `<span class="chat-answer-badge">캐시</span>` : '';
+  const colChips =
+    view.columns.length > 0
+      ? `<div class="chat-confirm-cols">${view.columns
+          .map((c) => `<span class="chat-answer-badge">${escapeHtml(c)}</span>`)
+          .join('')}</div>`
+      : '';
+  const note =
+    view.columns.length > 0
+      ? '예상 결과 구조를 우측 <b>구조 미리보기</b>에서 확인하세요.'
+      : '결과 컬럼을 추정하지 못했어요. 아래 버튼으로 SQL을 확인해 주세요.';
+
+  return `
+    <div class="chat-answer chat-confirm">
+      <p class="chat-answer-explain">${checkIcon}<span>${escapeHtml(view.explanation)}</span>${correctedBadge}${cachedBadge}</p>
+      <p class="chat-confirm-note">${note}</p>
+      ${colChips}
+      <button type="button" class="chat-confirm-btn">맞아요, SQL 생성</button>
+      <p class="chat-generate-hint">다르면 질문을 고쳐 다시 물어보세요.</p>
+    </div>
+  `;
 }
 
 function renderSqlAnswerHtml(view: Extract<ChatView, { kind: 'sql' }>): string {

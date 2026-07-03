@@ -49,6 +49,22 @@ export function renderPreviewHtml(
   return renderPreviewTableHtml(columns);
 }
 
+// 대화형(AI) 결과 — SQL에서 추출한 컬럼명으로 구조를 보여준다. 타입은 이름으로 추정.
+function guessKind(name: string): PreviewColumn['kind'] {
+  if (/date|_day$|^day/i.test(name)) return 'date';
+  if (/count|users|sessions|ctr|rate|ratio|pct|percent|avg|sum|total|cnt|clicks|views|impressions/i.test(name)) {
+    return 'numeric';
+  }
+  return 'string';
+}
+
+export function renderAiPreviewHtml(columns: string[]): string {
+  if (columns.length === 0) {
+    return `<p class="preview-empty">결과 컬럼을 추정하지 못했어요. 생성된 SQL을 직접 확인해 주세요.</p>`;
+  }
+  return renderPreviewTableHtml(columns.map((name) => ({ name, kind: guessKind(name) })));
+}
+
 // S6: 상세(Wide) 모드 — 기본 컬럼이 항상 있으므로 "비어있음" 상태가 없다.
 export function renderWidePreviewHtml(property: CatalogProperty, columns: string[]): string {
   const previewColumns = computeWidePreviewColumns(property, columns);
