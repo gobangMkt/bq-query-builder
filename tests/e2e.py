@@ -27,7 +27,7 @@ with sync_playwright() as p:
   # 2. 게이트: 정답 → 워크벤치(대화형 기본)
   pg.fill('.gate-input', 'gobang')
   pg.click('.gate-submit')
-  pg.wait_for_selector('.wb-side')
+  pg.wait_for_selector('.top-bar')
   check('게이트 통과 → 워크벤치', pg.locator('.property-tab').count() == 2)
   check('기본 입력모드 = 대화형(칩 입력 노출)', pg.locator('.chat-input').is_visible())
 
@@ -59,16 +59,29 @@ with sync_playwright() as p:
   pg.wait_for_selector('.chat-reject')
   check('지원 불가 질문은 거절+대안', pg.locator('.chat-reject-suggestion').count() >= 1)
 
-  # 5. 셀렉형 전환
+  # 5. 셀렉형 전환 — 상단 카테고리
   pg.click('.input-mode-btn[data-input-mode="select"]')
   pg.wait_for_selector('.input-panel-select:not(.is-hidden)')
   check('셀렉형 전환 시 기간 pill 노출(7/14/30/직접)', pg.locator('.date-pill').count() == 4)
-  check('섹션 내비 노출', pg.locator('.section-nav-btn').count() == 5)
+  # 대화형에서 이미 이벤트가 잡혀 rest가 보일 수 있으니, 초기 단순화는 별도 확인 없이 진행
 
-  # 6. 셀렉형: 이벤트 선택 → 사람 조건 추가 → 생성
-  # (대화형에서 만든 세그먼트가 셀렉형에도 이어짐 = 워크벤치 공유 상태. 증가량으로 검증)
-  pg.fill('.event-search', 'inquiry')
+  # 6. 이벤트 모달로 선택 → 문장에 칩 반영
+  # (앞선 대화형 단계에서 일부 이벤트가 이미 잡혀 있을 수 있어, 아직 안 잡힌 quicksearch로 추가)
+  pg.click('.ev-add-btn')
+  pg.wait_for_selector('.event-modal:not(.is-hidden)')
+  pg.fill('.event-search', 'quicksearch')
+  pg.wait_for_timeout(150)
+  # 모달 안에서 이벤트 사전 ⓘ 확인
+  pg.locator('.event-dict-toggle').first.click()
+  check('이벤트 사전 팝오버(모달 내) 표시', pg.locator('.event-dict[open] .event-dict-body').count() >= 1)
   pg.locator('.event-row').first.click()
+  pg.wait_for_timeout(150)
+  pg.click('.event-modal-done')
+  pg.wait_for_timeout(200)
+  check('선택 이벤트 칩 반영', pg.locator('.ev-chip').count() >= 1)
+  check('이벤트 선택 후 조건·행·값 노출(progressive)', pg.locator('.compose-rest').is_visible())
+
+  # 6b. 사람 조건 추가 → 생성
   before = pg.locator('.segment-row').count()
   pg.click('.segment-add')
   pg.wait_for_timeout(150)
@@ -94,13 +107,14 @@ with sync_playwright() as p:
   pg.wait_for_timeout(150)
   check('기간 비우면 생성 버튼 비활성', pg.locator('.sql-generate-btn').is_disabled())
 
-  # 8b. 이벤트 사전 팝오버
-  pg.locator('.event-dict-toggle').first.click()
-  check('이벤트 사전 팝오버 표시', pg.locator('.event-dict[open] .event-dict-body').count() >= 1)
+  # 8b. 상단 이벤트 사전 버튼으로 모달 열기
+  pg.click('.dict-open-btn')
+  check('이벤트 사전 버튼 → 모달 열림', pg.locator('.event-modal:not(.is-hidden)').count() >= 1)
+  pg.click('.event-modal-close')
 
   # 9. 새로고침 → 세션 유지
   pg.reload()
-  pg.wait_for_selector('.wb-side')
+  pg.wait_for_selector('.top-bar')
   check('새로고침 세션 유지', pg.locator('.gate-input').count() == 0)
 
   b.close()
