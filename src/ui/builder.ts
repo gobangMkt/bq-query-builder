@@ -9,7 +9,7 @@ import { presetRange } from '../utils/format';
 import { escapeHtml } from '../utils/html';
 import { unionParamsForEvents } from '../utils/params';
 import { renderDimensionsHtml } from './dimensions';
-import { renderEventListHtml, renderSearchHtml } from './events-list';
+import { renderEventDetailHtml, renderEventListHtml, renderSearchHtml } from './events-list';
 import {
   buildFilterFieldOptions,
   defaultFilterFor,
@@ -23,14 +23,15 @@ import { alertCircleIcon, bookIcon, checkIcon, messageIcon, plusIcon, slidersIco
 import { renderMetricsHtml } from './metrics';
 import { renderPreviewHtml, renderWidePreviewHtml } from './preview';
 import { defaultSegmentFor, renderSegmentsHtml } from './segments';
-import { renderChatResultHtml, renderChatShellHtml } from './chat';
+import { renderChatResultHtml, renderChatShellHtml, renderMentionItemsHtml, type ChatView } from './chat';
 import { parseQuery, type ParseResult } from '../nl/parse';
+import { callProxy, type ProxyHistoryItem } from '../nl/proxy';
 import { buildSelectionFromState, buildWideSelectionFromState, renderSqlSectionHtml } from './sql-output';
 
-const PRESETS: Array<{ days: 7 | 14 | 30; label: string }> = [
-  { days: 7, label: '최근 7일' },
-  { days: 14, label: '최근 14일' },
-  { days: 30, label: '최근 30일' },
+const PRESETS: Array<{ days: number; label: string }> = [
+  { days: 7, label: '7일' },
+  { days: 30, label: '30일' },
+  { days: 90, label: '90일' },
 ];
 
 export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
@@ -58,6 +59,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const composeRestEl = root.querySelector<HTMLElement>('.compose-rest')!;
   const selectedEventsSlotEl = root.querySelector<HTMLElement>('.selected-events-slot')!;
   const eventModalEl = root.querySelector<HTMLElement>('.event-modal')!;
+  const eventDetailSlotEl = root.querySelector<HTMLElement>('.event-detail-slot')!;
   const dictOpenBtn = root.querySelector<HTMLButtonElement>('.dict-open-btn')!;
   const dataFromLabelEl = root.querySelector<HTMLElement>('.data-from-label')!;
   const modalPropLabelEl = root.querySelector<HTMLElement>('.modal-prop-label')!;
@@ -74,8 +76,15 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     return buildFilterFieldOptions(currentProperty(), currentEventNames());
   }
 
+  // 모달 우측 상세 pane에 표시 중인 이벤트(호버/클릭으로 갱신). null이면 빈 상태.
+  let detailEventName: string | null = null;
+
   function renderList(): void {
     listEl.innerHTML = renderEventListHtml(currentProperty());
+  }
+
+  function renderEventDetail(): void {
+    eventDetailSlotEl.innerHTML = renderEventDetailHtml(currentProperty(), detailEventName);
   }
 
   function renderSearch(): void {
@@ -157,6 +166,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   function openEventModal(): void {
     eventModalEl.classList.remove('is-hidden');
+    renderEventDetail();
     const input = searchSlot.querySelector<HTMLInputElement>('.event-search');
     input?.focus();
   }
@@ -166,25 +176,138 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   }
 
   // ----- 대화형 -----
+  // 폴백(규칙파서) 결과. 프록시 실패 시에만 채워진다.
   let chatResult: ParseResult | null = null;
-  const CHAT_EXAMPLE =
-    '지난 한 주 동안, 찜 메모를 누른 사람 중 공고완독을 하지 않은 사람들이 발생시킨 조회수';
+  // 대화형 결과 뷰(로딩/SQL/폴백/에러). 기본 idle.
+  let chatView: ChatView = { kind: 'idle' };
+  // S4: 후속 질문 맥락(직전 질문·SQL). 프로퍼티 전환 시 비운다.
+  const chatHistory: ProxyHistoryItem[] = [];
+  const CHAT_EXAMPLE = '지난 한 주 동안 배너 종류별 클릭율(CTR)을 날짜순으로';
+
+  // ----- 대화형 @멘션 -----
+  type MentionItem = { name: string; label: string };
+  let mentionItems: MentionItem[] = [];
+  let mentionActive = 0;
+  let mentionStart = -1; // textarea value 안 '@'의 위치. -1이면 닫힘.
+
+  function chatInputEl(): HTMLTextAreaElement | null {
+    return chatSlotEl.querySelector<HTMLTextAreaElement>('.chat-input');
+  }
+
+  function mentionEl(): HTMLElement | null {
+    return chatSlotEl.querySelector<HTMLElement>('.chat-mention');
+  }
+
+  function closeMention(): void {
+    mentionStart = -1;
+    mentionItems = [];
+    mentionActive = 0;
+    const el = mentionEl();
+    if (el) el.classList.add('is-hidden');
+  }
+
+  function renderMention(): void {
+    const el = mentionEl();
+    if (!el) return;
+    el.innerHTML = renderMentionItemsHtml(mentionItems, mentionActive);
+    el.classList.remove('is-hidden');
+  }
+
+  // 캐럿 앞에서 공백/줄바꿈 없는 '@토큰'을 찾아 드롭다운을 갱신한다.
+  function updateMention(): void {
+    const input = chatInputEl();
+    if (!input) return closeMention();
+    const caret = input.selectionStart ?? input.value.length;
+    const before = input.value.slice(0, caret);
+    const at = before.lastIndexOf('@');
+    if (at === -1 || /[\s\n]/.test(before.slice(at + 1))) return closeMention();
+
+    const query = before.slice(at + 1).toLowerCase();
+    const events = currentProperty().events;
+    const matched = events.filter(
+      (ev) => ev.label.toLowerCase().includes(query) || ev.name.toLowerCase().includes(query),
+    );
+    mentionItems = matched.slice(0, 8).map((ev) => ({ name: ev.name, label: ev.label }));
+    mentionStart = at;
+    mentionActive = 0;
+    renderMention();
+  }
+
+  // 선택한 이벤트의 라벨을 '@토큰' 자리에 끼워넣는다(파서 사전이 라벨→이벤트로 해석).
+  function insertMention(name: string): void {
+    const input = chatInputEl();
+    if (!input || mentionStart < 0) return;
+    const ev = currentProperty().events.find((e) => e.name === name);
+    if (!ev) return;
+    const caret = input.selectionStart ?? input.value.length;
+    const insert = `${ev.label} `;
+    input.value = input.value.slice(0, mentionStart) + insert + input.value.slice(caret);
+    const pos = mentionStart + insert.length;
+    closeMention();
+    input.focus();
+    input.setSelectionRange(pos, pos);
+  }
 
   function renderChatShell(): void {
     chatSlotEl.innerHTML = renderChatShellHtml();
+    closeMention();
     renderChatResult();
   }
 
   function renderChatResult(): void {
     const resultEl = chatSlotEl.querySelector<HTMLElement>('.chat-result');
-    if (resultEl) resultEl.innerHTML = renderChatResultHtml(chatResult, currentProperty());
+    if (resultEl) resultEl.innerHTML = renderChatResultHtml(chatView, currentProperty());
   }
 
-  function handleChatParse(): void {
+  // 대화형: 질문 → GAS 프록시(Gemini)로 SQL 생성. 실패 시 규칙파서 폴백.
+  async function handleChatParse(): Promise<void> {
     const input = chatSlotEl.querySelector<HTMLTextAreaElement>('.chat-input');
     if (!input) return;
-    chatResult = parseQuery(input.value, currentProperty());
+    const question = input.value.trim();
+    if (!question) return;
+
+    chatView = { kind: 'loading' };
+    chatResult = null;
     renderChatResult();
+
+    const res = await callProxy({ question, property: currentProperty(), history: chatHistory });
+    if (res.ok) {
+      chatView = {
+        kind: 'sql',
+        explanation: res.explanation,
+        sql: res.sql,
+        corrected: res.corrected,
+        cached: Boolean(res.cached),
+        spentKrw: res.budget?.spentKrw,
+        capKrw: res.budget?.capKrw,
+      };
+      chatHistory.push({ question, sql: res.sql });
+    } else if (res.budgetExceeded) {
+      chatView = { kind: 'error', message: res.error, budgetExceeded: true };
+    } else {
+      // 프록시 실패/미배포 → 규칙파서로 폴백(해석 칩 UX).
+      chatResult = parseQuery(question, currentProperty());
+      chatView = { kind: 'fallback', result: chatResult, notice: res.error };
+    }
+    renderChatResult();
+  }
+
+  function handleChatCopy(btn: HTMLButtonElement): void {
+    if (chatView.kind !== 'sql' || !navigator.clipboard) return;
+    navigator.clipboard
+      .writeText(chatView.sql)
+      .then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = `${checkIcon}<span>복사됨</span>`;
+        btn.classList.add('is-copied');
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.classList.remove('is-copied');
+        }, 2000);
+      })
+      .catch(() => {
+        // 클립보드 실패는 조용히 무시.
+      });
   }
 
   // 대화형 해석 결과를 셀렉형과 동일한 state로 변환하고 SQL을 생성한다(집계 전용).
@@ -195,7 +318,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
     const range = presetRange(r.period.days);
     state.mode = 'aggregate';
-    state.datePreset = [7, 14, 30].includes(r.period.days) ? (r.period.days as 7 | 14 | 30) : null;
+    // 해석된 기간이 프리셋 버튼(7/30/90)과 같으면 해당 버튼이 강조된다.
+    state.datePreset = PRESETS.some((p) => p.days === r.period.days) ? r.period.days : null;
     state.dateFrom = range.from;
     state.dateTo = range.to;
     state.selectedEvents[state.property] = new Set([r.target.resolved]);
@@ -325,28 +449,28 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     renderPreview();
   }
 
-  // 기간 컨트롤: 프리셋 pill(7/14/30) + "직접" — 직접일 때만 날짜 범위 입력이 펼쳐진다.
+  // 기간 컨트롤: 시작/끝 날짜 입력을 상시 노출하고, 7/30/90 퀵셋으로 범위를 채운다.
+  // 프리셋을 누르면 해당 범위로 채워지고, 사용자가 날짜를 직접 고치면 어떤 프리셋도 활성화되지 않는다.
   function renderDateRange(): void {
-    const custom = state.datePreset === null;
-    const pills = PRESETS.map(
+    const presets = PRESETS.map(
       (p) => `
-        <button type="button" class="date-pill${state.datePreset === p.days ? ' is-selected' : ''}"
+        <button type="button" class="date-preset${state.datePreset === p.days ? ' is-selected' : ''}"
           data-days="${p.days}">${p.label}</button>
       `,
     ).join('');
-    const customPill = `
-      <button type="button" class="date-pill${custom ? ' is-selected' : ''}" data-custom="1">직접 선택</button>
-    `;
-    const inputs = custom
-      ? `
+    dateRangeSlotEl.innerHTML = `
+      <div class="date-control">
         <div class="date-inputs">
           <input type="date" class="date-from" value="${escapeHtml(state.dateFrom)}" aria-label="시작일" />
           <span class="date-sep">~</span>
           <input type="date" class="date-to" value="${escapeHtml(state.dateTo)}" aria-label="종료일" />
         </div>
-      `
-      : '';
-    dateRangeSlotEl.innerHTML = `<div class="date-pills">${pills}${customPill}</div>${inputs}`;
+        <div class="date-presets" role="group" aria-label="빠른 기간 선택">
+          <span class="date-presets-label">최근</span>
+          ${presets}
+        </div>
+      </div>
+    `;
   }
 
   function syncTabs(): void {
@@ -365,6 +489,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     state.property = key;
     state.searchQuery = '';
     chatResult = null;
+    chatView = { kind: 'idle' };
+    chatHistory.length = 0;
     dataFromLabelEl.textContent = currentProperty().label;
     modalPropLabelEl.textContent = currentProperty().label;
     syncTabs();
@@ -416,6 +542,12 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   chatSlotEl.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
+    const mentionBtn = target.closest<HTMLButtonElement>('.chat-mention-item');
+    if (mentionBtn) {
+      const name = mentionBtn.dataset.mentionName;
+      if (name) insertMention(name);
+      return;
+    }
     if (target.closest('.chat-parse-btn')) {
       handleChatParse();
       return;
@@ -430,7 +562,24 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     }
     if (target.closest('.chat-generate-btn')) {
       applyChatToState();
+      return;
     }
+    const copyBtn = target.closest<HTMLButtonElement>('.chat-copy-btn');
+    if (copyBtn) {
+      handleChatCopy(copyBtn);
+    }
+  });
+
+  chatSlotEl.addEventListener('input', (e) => {
+    if ((e.target as HTMLElement).classList.contains('chat-input')) updateMention();
+  });
+
+  // 드롭다운 바깥 클릭 시 닫기(멘션 항목/입력창 제외)
+  document.addEventListener('click', (e) => {
+    if (mentionStart < 0) return;
+    const t = e.target as HTMLElement;
+    if (t.closest('.chat-mention') || t.closest('.chat-input')) return;
+    closeMention();
   });
 
   chatSlotEl.addEventListener('change', (e) => {
@@ -447,11 +596,36 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   chatSlotEl.addEventListener('keydown', (e) => {
     const ke = e as KeyboardEvent;
-    if (
-      ke.key === 'Enter' &&
-      !ke.shiftKey &&
-      (e.target as HTMLElement).classList.contains('chat-input')
-    ) {
+    if (!(e.target as HTMLElement).classList.contains('chat-input')) return;
+
+    // 멘션 드롭다운이 열려 있으면 방향키/Enter/Tab/Esc를 드롭다운 조작에 쓴다.
+    if (mentionStart >= 0 && mentionItems.length > 0) {
+      const len = mentionItems.length;
+      if (ke.key === 'ArrowDown') {
+        e.preventDefault();
+        mentionActive = (mentionActive + 1) % len;
+        renderMention();
+        return;
+      }
+      if (ke.key === 'ArrowUp') {
+        e.preventDefault();
+        mentionActive = (mentionActive - 1 + len) % len;
+        renderMention();
+        return;
+      }
+      if (ke.key === 'Enter' || ke.key === 'Tab') {
+        e.preventDefault();
+        insertMention(mentionItems[mentionActive].name);
+        return;
+      }
+      if (ke.key === 'Escape') {
+        e.preventDefault();
+        closeMention();
+        return;
+      }
+    }
+
+    if (ke.key === 'Enter' && !ke.shiftKey) {
       e.preventDefault();
       handleChatParse();
     }
@@ -526,16 +700,9 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   });
 
   dateRangeSlotEl.addEventListener('click', (e) => {
-    const pill = (e.target as HTMLElement).closest<HTMLButtonElement>('.date-pill');
-    if (!pill) return;
-    if (pill.dataset.custom) {
-      // "직접 선택" — 프리셋 해제하고 현재 범위를 그대로 둔 채 날짜 입력을 펼친다.
-      state.datePreset = null;
-      renderDateRange();
-      onSelectionChanged();
-      return;
-    }
-    const days = Number(pill.dataset.days) as 7 | 14 | 30;
+    const preset = (e.target as HTMLElement).closest<HTMLButtonElement>('.date-preset');
+    if (!preset) return;
+    const days = Number(preset.dataset.days);
     const range = presetRange(days);
     state.datePreset = days;
     state.dateFrom = range.from;
@@ -546,11 +713,16 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   dateRangeSlotEl.addEventListener('change', (e) => {
     const target = e.target as HTMLElement;
+    // 날짜를 직접 고치면 프리셋 강조를 해제한다.
     if (target.classList.contains('date-from')) {
       state.dateFrom = (target as HTMLInputElement).value;
+      state.datePreset = null;
+      renderDateRange();
       onSelectionChanged();
     } else if (target.classList.contains('date-to')) {
       state.dateTo = (target as HTMLInputElement).value;
+      state.datePreset = null;
+      renderDateRange();
       onSelectionChanged();
     }
   });
@@ -560,16 +732,36 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     if (selected.has(name)) selected.delete(name);
     else selected.add(name);
     renderList();
+    renderEventDetail();
     renderSelectedEvents();
     syncComposeProgressive();
     refreshAfterSelectionChange();
     onSelectionChanged();
   }
 
+  // 리스트에서 이벤트를 클릭하면 선택 토글 + 우측 상세 pane 갱신.
   listEl.addEventListener('click', (e) => {
-    // ⓘ 사전(details)은 선택 토글에서 제외한다.
-    if ((e.target as HTMLElement).closest('.event-dict')) return;
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.event-row');
+    if (!btn) return;
+    const name = btn.dataset.event;
+    if (!name) return;
+    detailEventName = name;
+    toggleEvent(name);
+  });
+
+  // 호버 시 선택 없이 상세만 미리 보여준다.
+  listEl.addEventListener('mouseover', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.event-row');
+    if (!btn) return;
+    const name = btn.dataset.event;
+    if (!name || name === detailEventName) return;
+    detailEventName = name;
+    renderEventDetail();
+  });
+
+  // 상세 pane의 추가/빼기 버튼.
+  eventDetailSlotEl.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.event-detail-toggle');
     if (!btn) return;
     const name = btn.dataset.event;
     if (name) toggleEvent(name);
@@ -706,6 +898,87 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     onSelectionChanged();
   });
 
+  // ----- 좌/우 패널 크기 조절 -----
+  const bodyEl = root.querySelector<HTMLElement>('.wb-body2')!;
+  const composeEl = root.querySelector<HTMLElement>('.wb-compose')!;
+  const resizerEl = root.querySelector<HTMLElement>('.wb-resizer')!;
+  const COMPOSE_MIN = 360;
+  const COMPOSE_STORE_KEY = 'bq-compose-width';
+
+  function composeMax(): number {
+    // 우측 미리보기에 최소 420px는 남긴다.
+    return Math.max(COMPOSE_MIN, bodyEl.clientWidth - 420);
+  }
+
+  function applyComposeWidth(px: number): void {
+    const w = Math.round(Math.min(composeMax(), Math.max(COMPOSE_MIN, px)));
+    composeEl.style.width = `${w}px`;
+    try {
+      localStorage.setItem(COMPOSE_STORE_KEY, String(w));
+    } catch {
+      // 저장 실패는 무시(프라이빗 모드 등)
+    }
+  }
+
+  // 데스크톱 2열일 때만 적용(좁은 화면은 세로 스택 → 폭 조절 무의미).
+  function isSplitLayout(): boolean {
+    return window.matchMedia('(min-width: 1025px)').matches;
+  }
+
+  function restoreComposeWidth(): void {
+    if (!isSplitLayout()) {
+      composeEl.style.width = '';
+      return;
+    }
+    let saved = NaN;
+    try {
+      saved = Number(localStorage.getItem(COMPOSE_STORE_KEY));
+    } catch {
+      saved = NaN;
+    }
+    if (Number.isFinite(saved) && saved > 0) applyComposeWidth(saved);
+  }
+
+  let dragging = false;
+  resizerEl.addEventListener('pointerdown', (e) => {
+    if (!isSplitLayout()) return;
+    dragging = true;
+    resizerEl.setPointerCapture(e.pointerId);
+    resizerEl.classList.add('is-dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+  resizerEl.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    applyComposeWidth(e.clientX - bodyEl.getBoundingClientRect().left);
+  });
+  const endDrag = (e: PointerEvent): void => {
+    if (!dragging) return;
+    dragging = false;
+    try {
+      resizerEl.releasePointerCapture(e.pointerId);
+    } catch {
+      // capture가 이미 해제된 경우 무시
+    }
+    resizerEl.classList.remove('is-dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  };
+  resizerEl.addEventListener('pointerup', endDrag);
+  resizerEl.addEventListener('pointercancel', endDrag);
+
+  resizerEl.addEventListener('keydown', (e) => {
+    if (!isSplitLayout()) return;
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    const step = e.key === 'ArrowLeft' ? -24 : 24;
+    applyComposeWidth(composeEl.getBoundingClientRect().width + step);
+  });
+
+  window.addEventListener('resize', restoreComposeWidth);
+  restoreComposeWidth();
+
   renderDateRange();
   renderSearch();
   renderList();
@@ -731,13 +1004,7 @@ function shellHtml(catalog: Catalog): string {
     <div class="workbench">
       <header class="top-bar">
         <span class="wb-brand">BQ 쿼리 빌더</span>
-        <div class="input-mode-seg" role="tablist" aria-label="카테고리">
-          <button type="button" class="input-mode-btn${state.inputMode === 'chat' ? ' is-active' : ''}"
-            role="tab" aria-selected="${state.inputMode === 'chat'}" data-input-mode="chat">${messageIcon}<span>대화형</span></button>
-          <button type="button" class="input-mode-btn${state.inputMode === 'select' ? ' is-active' : ''}"
-            role="tab" aria-selected="${state.inputMode === 'select'}" data-input-mode="select">${slidersIcon}<span>셀렉형</span></button>
-        </div>
-        <div class="top-right">
+        <div class="property-group">
           <span class="data-label">찾을 데이터</span>
           <nav class="property-tabs" role="tablist" aria-label="찾을 데이터">
             ${propertyKeys
@@ -751,12 +1018,19 @@ function shellHtml(catalog: Catalog): string {
               )
               .join('')}
           </nav>
-          <button type="button" class="dict-open-btn">${bookIcon}<span>이벤트 사전</span></button>
         </div>
+        <button type="button" class="dict-open-btn">${bookIcon}<span>이벤트 사전</span></button>
       </header>
 
       <div class="wb-body2">
         <section class="wb-compose">
+          <div class="input-mode-seg" role="tablist" aria-label="입력 방식">
+            <button type="button" class="input-mode-btn${state.inputMode === 'chat' ? ' is-active' : ''}"
+              role="tab" aria-selected="${state.inputMode === 'chat'}" data-input-mode="chat">${messageIcon}<span>대화형</span></button>
+            <button type="button" class="input-mode-btn${state.inputMode === 'select' ? ' is-active' : ''}"
+              role="tab" aria-selected="${state.inputMode === 'select'}" data-input-mode="select">${slidersIcon}<span>셀렉형</span></button>
+          </div>
+
           <div class="input-panel-chat is-hidden">
             <div class="chat-slot"></div>
           </div>
@@ -814,6 +1088,9 @@ function shellHtml(catalog: Catalog): string {
           </div>
         </section>
 
+        <div class="wb-resizer" role="separator" aria-orientation="vertical"
+          aria-label="패널 크기 조절" tabindex="0"><span class="wb-resizer-grip"></span></div>
+
         <section class="wb-output">
           <div class="panel preview-section">
             <h2 class="panel-title">구조 미리보기</h2>
@@ -833,8 +1110,15 @@ function shellHtml(catalog: Catalog): string {
             <span class="event-modal-title">${bookIcon}<span>이벤트 고르기 · <b class="modal-prop-label">${escapeHtml(properties[state.property].label)}</b></span></span>
             <button type="button" class="event-modal-close" aria-label="닫기">✕</button>
           </div>
-          <div class="event-search-slot"></div>
-          <div class="event-list"></div>
+          <div class="event-modal-body">
+            <div class="event-modal-list-pane">
+              <div class="event-search-slot"></div>
+              <div class="event-list"></div>
+            </div>
+            <div class="event-modal-detail-pane">
+              <div class="event-detail-slot"></div>
+            </div>
+          </div>
           <div class="event-modal-foot">
             <button type="button" class="event-modal-done">완료</button>
           </div>

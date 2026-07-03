@@ -1,7 +1,7 @@
 import type { CatalogEvent, CatalogParam, CatalogProperty } from '../data/catalog-types';
 import { formatCount } from '../utils/format';
 import { escapeHtml } from '../utils/html';
-import { infoIcon, searchIcon } from './icons';
+import { checkIcon, searchIcon } from './icons';
 import { state } from '../state';
 
 // 숫자 프리픽스 퍼널(0. 일반 ~ 8. 광고)을 앞에, GA4 자동/시스템 생성/기타를 뒤에 배치한다.
@@ -77,14 +77,13 @@ export function renderEventListHtml(property: CatalogProperty): string {
   }
 
   const selected = state.selectedEvents[state.property];
-  const globals = globalParamKeys(property);
   return groupByFunnel(filtered)
     .map(
       (group) => `
         <div class="event-group">
           <h3 class="event-group-title">${escapeHtml(group.funnel)}</h3>
           <ul class="event-rows">
-            ${group.events.map((ev) => eventRowHtml(ev, selected.has(ev.name), globals)).join('')}
+            ${group.events.map((ev) => eventRowHtml(ev, selected.has(ev.name))).join('')}
           </ul>
         </div>
       `,
@@ -92,49 +91,74 @@ export function renderEventListHtml(property: CatalogProperty): string {
     .join('');
 }
 
-// 이벤트 사전 — 파라미터 표. '공통' 파라미터는 태그로 구분(상속/전역 결과 포함).
-function dictBodyHtml(ev: CatalogEvent, globals: Set<string>): string {
-  const desc = ev.description ? `<p class="dict-desc">${escapeHtml(ev.description)}</p>` : '';
-  if (ev.params.length === 0) {
-    return `${desc}<p class="dict-empty">기록된 파라미터가 없습니다.</p>`;
-  }
-  const rows = ev.params
-    .map((p) => {
-      const tag = globals.has(p.key) ? '<span class="dict-tag">공통</span>' : '';
-      const d = p.description ? escapeHtml(p.description) : '';
-      return `
-        <tr>
-          <td class="dict-key">${escapeHtml(p.key)}${tag}</td>
-          <td class="dict-type">${TYPE_LABEL[p.type]}</td>
-          <td class="dict-pdesc">${d}</td>
-        </tr>
-      `;
-    })
-    .join('');
+function eventRowHtml(ev: CatalogEvent, selected: boolean): string {
   return `
-    ${desc}
-    <table class="dict-table">
-      <thead><tr><th>파라미터</th><th>타입</th><th>설명</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
+    <li class="event-item">
+      <button type="button" class="event-row${selected ? ' is-selected' : ''}"
+        data-event="${escapeHtml(ev.name)}" aria-pressed="${selected}">
+        <span class="event-check" aria-hidden="true">${selected ? checkIcon : ''}</span>
+        <span class="event-label">${escapeHtml(ev.label)}</span>
+        <span class="event-name">${escapeHtml(ev.name)}</span>
+        <span class="event-count">${formatCount(ev.cnt)}</span>
+      </button>
+    </li>
   `;
 }
 
-function eventRowHtml(ev: CatalogEvent, selected: boolean, globals: Set<string>): string {
+/** 모달 우측 상세 pane — 이벤트의 설명 + 추출 가능한 파라미터 표. name=null이면 빈 상태. */
+export function renderEventDetailHtml(property: CatalogProperty, name: string | null): string {
+  if (!name) {
+    return `<div class="event-detail-empty">
+      <p>왼쪽에서 이벤트를 클릭하면<br />추출 가능한 파라미터와 설명이 여기에 표시됩니다.</p>
+    </div>`;
+  }
+  const ev = property.events.find((e) => e.name === name);
+  if (!ev) return '';
+
+  const selected = state.selectedEvents[state.property].has(ev.name);
+  const globals = globalParamKeys(property);
+  const desc = ev.description
+    ? `<p class="event-detail-desc">${escapeHtml(ev.description)}</p>`
+    : '';
+
+  const paramBlock =
+    ev.params.length === 0
+      ? `<p class="event-detail-noparams">기록된 파라미터가 없습니다.</p>`
+      : `<table class="param-table">
+          <thead><tr><th>파라미터</th><th>타입</th><th>설명</th></tr></thead>
+          <tbody>
+            ${ev.params
+              .map((p) => {
+                const common = globals.has(p.key) ? '<span class="param-common">공통</span>' : '';
+                const d = p.description ? escapeHtml(p.description) : '';
+                return `<tr>
+                  <td class="param-key">${escapeHtml(p.key)}${common}</td>
+                  <td class="param-type">${TYPE_LABEL[p.type]}</td>
+                  <td class="param-desc">${d}</td>
+                </tr>`;
+              })
+              .join('')}
+          </tbody>
+        </table>`;
+
   return `
-    <li class="event-item">
-      <div class="event-line">
-        <button type="button" class="event-row${selected ? ' is-selected' : ''}"
-          data-event="${escapeHtml(ev.name)}" aria-pressed="${selected}">
-          <span class="event-label">${escapeHtml(ev.label)}</span>
-          <span class="event-name">${escapeHtml(ev.name)}</span>
-          <span class="event-count">${formatCount(ev.cnt)}</span>
-        </button>
-        <details class="event-dict">
-          <summary class="event-dict-toggle" aria-label="${escapeHtml(ev.label)} 사전 보기">${infoIcon}</summary>
-          <div class="event-dict-body">${dictBodyHtml(ev, globals)}</div>
-        </details>
+    <div class="event-detail" data-detail-event="${escapeHtml(ev.name)}">
+      <div class="event-detail-head">
+        <div class="event-detail-titles">
+          <h3 class="event-detail-label">${escapeHtml(ev.label)}</h3>
+          <span class="event-detail-name">${escapeHtml(ev.name)}</span>
+        </div>
+        <span class="event-detail-count">${formatCount(ev.cnt)}</span>
       </div>
-    </li>
+      ${desc}
+      <div class="event-detail-params">
+        <span class="event-detail-subhead">추출 가능한 파라미터 <span class="param-count">${ev.params.length}</span></span>
+        ${paramBlock}
+      </div>
+      <button type="button" class="event-detail-toggle${selected ? ' is-selected' : ''}"
+        data-event="${escapeHtml(ev.name)}">
+        ${selected ? `${checkIcon}<span>선택됨 — 빼기</span>` : '<span>이 이벤트 추가</span>'}
+      </button>
+    </div>
   `;
 }

@@ -11,7 +11,8 @@ import type {
 } from './sql/types';
 
 export type PropertyKey = keyof Catalog['properties'];
-export type DatePreset = 7 | 14 | 30 | null;
+// 활성 프리셋(최근 N일). 사용자가 날짜를 직접 고치면 null(=직접 범위).
+export type DatePreset = number | null;
 
 // v2: 좌측 입력 방식. 대화형(문장→해석 칩) / 셀렉형(직접 조립). 우측 미리보기·SQL은 공통.
 export type InputMode = 'chat' | 'select';

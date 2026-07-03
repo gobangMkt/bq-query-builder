@@ -1,10 +1,13 @@
-// 대화형 입력 UI 렌더링. 파서 결과를 해석 칩으로 보여준다. 상태 변경/배선은 builder.ts.
+// 대화형 입력 UI 렌더링.
+// v6: 자연어 질문 → GAS 프록시(Gemini)로 SQL 생성. 결과는 ChatView 상태로 렌더한다.
+// 프록시 실패 시 기존 규칙파서(parseQuery) 해석 칩으로 폴백. 상태 변경/배선은 builder.ts.
 
 import type { CatalogProperty } from '../data/catalog-types';
 import type { MetricType } from '../sql/types';
 import type { EventChoice, ParseResult } from '../nl/parse';
 import { escapeHtml } from '../utils/html';
-import { alertTriangleIcon, arrowRightIcon, checkIcon } from './icons';
+import { highlightSql } from './sql-output';
+import { alertTriangleIcon, arrowRightIcon, checkIcon, copyIcon } from './icons';
 
 const METRIC_LABEL: Record<MetricType, string> = {
   event_count: '이벤트수',
@@ -12,37 +15,128 @@ const METRIC_LABEL: Record<MetricType, string> = {
   unique_sessions: '고유세션수',
 };
 
-const EXAMPLE =
-  '지난 한 주 동안, 찜 메모를 누른 사람 중 공고완독을 하지 않은 사람들이 발생시킨 조회수';
+const EXAMPLE = '지난 한 주 동안 배너 종류별 클릭율(CTR)을 날짜순으로';
+
+// 대화형 결과 상태. builder.ts가 이 값을 만들어 renderChatResultHtml에 넘긴다.
+export type ChatView =
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | {
+      kind: 'sql';
+      explanation: string;
+      sql: string;
+      corrected: boolean;
+      cached: boolean;
+      spentKrw?: number;
+      capKrw?: number;
+    }
+  | { kind: 'fallback'; result: ParseResult; notice: string }
+  | { kind: 'error'; message: string; budgetExceeded: boolean };
 
 export function renderChatShellHtml(): string {
   return `
     <div class="chat">
       <label class="chat-label" for="chat-input">무엇이 궁금하세요?</label>
-      <div class="chat-input-row">
-        <textarea id="chat-input" class="chat-input" rows="3"
-          placeholder="예: ${escapeHtml(EXAMPLE)}"></textarea>
-        <button type="button" class="chat-parse-btn">${arrowRightIcon}<span>해석</span></button>
+      <div class="chat-input-wrap">
+        <div class="chat-input-row">
+          <textarea id="chat-input" class="chat-input" rows="3"
+            placeholder="예: ${escapeHtml(EXAMPLE)}"></textarea>
+          <button type="button" class="chat-parse-btn">${arrowRightIcon}<span>SQL 만들기</span></button>
+        </div>
+        <div class="chat-mention is-hidden" role="listbox" aria-label="이벤트 추천"></div>
       </div>
+      <p class="chat-hint"><b>@</b>를 입력하면 이벤트를 골라 넣을 수 있어요. 만든 SQL은 BQ 콘솔에서 실행하세요.</p>
       <button type="button" class="chat-example-btn">예시 문장 넣기</button>
       <div class="chat-result"></div>
     </div>
   `;
 }
 
+// @멘션 드롭다운 항목 렌더. 이벤트 라벨 + 이벤트명.
+export function renderMentionItemsHtml(
+  items: Array<{ name: string; label: string }>,
+  activeIndex: number,
+): string {
+  if (items.length === 0) {
+    return `<div class="chat-mention-empty">일치하는 이벤트가 없어요</div>`;
+  }
+  return items
+    .map(
+      (it, i) => `
+        <button type="button" class="chat-mention-item${i === activeIndex ? ' is-active' : ''}"
+          role="option" aria-selected="${i === activeIndex}" data-mention-name="${escapeHtml(it.name)}">
+          <span class="chat-mention-label">${escapeHtml(it.label)}</span>
+          <span class="chat-mention-name">${escapeHtml(it.name)}</span>
+        </button>
+      `,
+    )
+    .join('');
+}
+
+// ===== 결과 렌더 =====
+export function renderChatResultHtml(view: ChatView, property: CatalogProperty): string {
+  switch (view.kind) {
+    case 'idle':
+      return '';
+    case 'loading':
+      return `
+        <div class="chat-loading">
+          <span class="chat-spinner" aria-hidden="true"></span>
+          <span>AI가 SQL을 작성 중…</span>
+        </div>`;
+    case 'sql':
+      return renderSqlAnswerHtml(view);
+    case 'error':
+      return `
+        <div class="chat-reject${view.budgetExceeded ? ' is-budget' : ''}">
+          <p class="chat-reject-reason">${alertTriangleIcon}<span>${escapeHtml(view.message)}</span></p>
+        </div>`;
+    case 'fallback':
+      return `
+        <div class="chat-fallback-note">${alertTriangleIcon}<span>${escapeHtml(
+          view.notice,
+        )} 규칙 해석으로 대신 처리했어요.</span></div>
+        ${renderParseInterpHtml(view.result, property)}`;
+  }
+}
+
+function renderSqlAnswerHtml(view: Extract<ChatView, { kind: 'sql' }>): string {
+  const correctedBadge = view.corrected
+    ? `<span class="chat-answer-badge">자동 보정됨</span>`
+    : '';
+  const cachedBadge = view.cached ? `<span class="chat-answer-badge">캐시</span>` : '';
+  const budgetNote =
+    view.spentKrw != null && view.capKrw != null
+      ? `<p class="chat-budget">이번 달 AI 사용 ₩${view.spentKrw} / ₩${view.capKrw}</p>`
+      : '';
+
+  return `
+    <div class="chat-answer">
+      <p class="chat-answer-explain">${checkIcon}<span>${escapeHtml(view.explanation)}</span>${correctedBadge}${cachedBadge}</p>
+      <div class="sql-code-wrap">
+        <pre class="sql-code"><code>${highlightSql(view.sql)}</code></pre>
+        <button type="button" class="chat-copy-btn">${copyIcon}<span>복사</span></button>
+      </div>
+      <p class="sql-copy-hint">BQ 콘솔에 붙여넣어 실행하세요.</p>
+      ${budgetNote}
+    </div>
+  `;
+}
+
+// ===== 폴백: 규칙파서 해석 칩(기존 UX) =====
 function eventLabel(property: CatalogProperty, name: string): string {
   const ev = property.events.find((e) => e.name === name);
   return ev && ev.label && ev.label !== name ? `${ev.label} · ${name}` : name;
 }
 
-function choiceControlHtml(
+function choiceValueHtml(
   property: CatalogProperty,
   choice: EventChoice,
   role: string,
   dataAttr: string,
 ): string {
   if (choice.resolved) {
-    return `<span class="chat-chip is-confirmed">${checkIcon}<span>${escapeHtml(
+    return `<span class="interp-value is-confirmed">${checkIcon}<span>${escapeHtml(
       eventLabel(property, choice.resolved),
     )}</span></span>`;
   }
@@ -50,19 +144,25 @@ function choiceControlHtml(
     .map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(eventLabel(property, c))}</option>`)
     .join('');
   return `
-    <span class="chat-chip is-question">
-      <span class="chat-chip-term">${escapeHtml(choice.term)}?</span>
-      <select class="chat-choice" data-role="${role}" ${dataAttr}>
-        <option value="" selected disabled>어떤 이벤트인가요</option>
+    <span class="interp-value is-pending">
+      <select class="chat-choice" data-role="${role}" ${dataAttr} aria-label="${escapeHtml(choice.term)} 이벤트 선택">
+        <option value="" selected disabled>“${escapeHtml(choice.term)}” — 어떤 이벤트?</option>
         ${options}
       </select>
     </span>
   `;
 }
 
-export function renderChatResultHtml(result: ParseResult | null, property: CatalogProperty): string {
-  if (!result) return '';
+function interpRowHtml(label: string, valueHtml: string): string {
+  return `
+    <div class="interp-row">
+      <dt class="interp-label">${escapeHtml(label)}</dt>
+      <dd class="interp-dd">${valueHtml}</dd>
+    </div>
+  `;
+}
 
+function renderParseInterpHtml(result: ParseResult, property: CatalogProperty): string {
   if (result.status === 'rejected') {
     return `
       <div class="chat-reject">
@@ -78,39 +178,47 @@ export function renderChatResultHtml(result: ParseResult | null, property: Catal
     )}</span></p></div>`;
   }
 
-  const periodChip = `<span class="chat-chip is-confirmed">${checkIcon}<span>기간: ${escapeHtml(
-    result.period.label,
-  )}</span></span>`;
+  const periodRow = interpRowHtml(
+    '기간',
+    `<span class="interp-value is-confirmed">${checkIcon}<span>${escapeHtml(result.period.label)}</span></span>`,
+  );
 
-  const segChips = result.segments
+  const segRows = result.segments
     .map((seg, i) => {
-      const didLabel = seg.did ? '한 사람' : '안 한 사람';
-      const control = choiceControlHtml(property, seg.choice, 'segment', `data-seg-index="${i}"`);
-      return `<div class="chat-chip-row"><span class="chat-chip-prefix">${escapeHtml(
-        didLabel,
-      )}:</span>${control}</div>`;
+      const label = seg.did ? '한 사람' : '안 한 사람';
+      const value = choiceValueHtml(property, seg.choice, 'segment', `data-seg-index="${i}"`);
+      return interpRowHtml(label, value);
     })
     .join('');
 
-  const targetControl = choiceControlHtml(property, result.target, 'target', '');
-  const targetChip = `<div class="chat-chip-row"><span class="chat-chip-prefix">집계 대상 (${escapeHtml(
-    METRIC_LABEL[result.metric],
-  )}):</span>${targetControl}</div>`;
+  const targetRow = interpRowHtml(
+    `집계 대상 · ${METRIC_LABEL[result.metric]}`,
+    choiceValueHtml(property, result.target, 'target', ''),
+  );
 
   const allResolved =
     result.target.resolved !== null && result.segments.every((s) => s.choice.resolved !== null);
+  const pendingCount =
+    (result.target.resolved === null ? 1 : 0) +
+    result.segments.filter((s) => s.choice.resolved === null).length;
+
+  const title = allResolved
+    ? '이렇게 이해했어요'
+    : `이렇게 이해했어요 — 확인할 항목 ${pendingCount}개`;
 
   return `
     <div class="chat-interp">
-      <p class="chat-interp-title">이렇게 이해했어요 — 노란 칩을 골라주세요</p>
-      <div class="chat-chip-row">${periodChip}</div>
-      ${segChips}
-      ${targetChip}
+      <p class="chat-interp-title">${escapeHtml(title)}</p>
+      <dl class="interp-list">
+        ${periodRow}
+        ${segRows}
+        ${targetRow}
+      </dl>
       <button type="button" class="chat-generate-btn"${allResolved ? '' : ' disabled'}>이대로 SQL 생성</button>
       ${
         allResolved
           ? ''
-          : '<p class="chat-generate-hint">노란 칩을 모두 확정하면 생성할 수 있어요.</p>'
+          : '<p class="chat-generate-hint">표시된 항목을 모두 고르면 생성할 수 있어요.</p>'
       }
     </div>
   `;
