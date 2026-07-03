@@ -146,10 +146,12 @@ button {
   color: var(--primary);
 }
 
+/* 입력 방식(대화형/셀렉형) 아래에서 묻는다 — 맥락상 작성 흐름의 첫 선택. */
 .property-group {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin: -6px 0 18px;
 }
 
 .top-bar .dict-open-btn {
@@ -1640,6 +1642,33 @@ button {
   .filter-remove {
     justify-self: end;
   }
+}
+
+/* 완성 문장 — 지금 선택이 어떤 질문인지 자연어로 보여준다 */
+.preview-sentence {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.preview-sentence b {
+  font-weight: 700;
+}
+
+.sentence-pending {
+  color: var(--text-muted);
+}
+
+/* 대화형 모드의 SQL 패널 안내 */
+.sql-chat-hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
 }
 
 /* 구조 미리보기 */

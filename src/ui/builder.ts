@@ -1,7 +1,7 @@
 import type { Catalog } from '../data/catalog-types';
 import { generateAggregateSql, generateWideSql } from '../sql/generate';
-import type { AppMode, FilterOperator, MetricType } from '../sql/types';
-import { state } from '../state';
+import type { AppMode, DimensionSelection, FilterOperator, MetricType } from '../sql/types';
+import { DETAIL_LIMIT_VALUE, state } from '../state';
 import type { InputMode, PropertyKey } from '../state';
 import { renderColumnsHtml } from './columns';
 import { dimensionKey, parseDimensionKey } from '../utils/dimension-key';
@@ -23,7 +23,13 @@ import { alertCircleIcon, bookIcon, checkIcon, messageIcon, plusIcon, slidersIco
 import { renderMetricsHtml } from './metrics';
 import { renderAiPreviewHtml, renderPreviewHtml, renderWidePreviewHtml } from './preview';
 import { defaultSegmentFor, renderSegmentsHtml } from './segments';
-import { renderChatResultHtml, renderChatShellHtml, renderMentionItemsHtml, type ChatView } from './chat';
+import {
+  renderChatResultHtml,
+  renderChatShellHtml,
+  renderChatSqlPanelHtml,
+  renderMentionItemsHtml,
+  type ChatView,
+} from './chat';
 import { parseQuery, type ParseResult } from '../nl/parse';
 import { callProxy, type ProxyHistoryItem } from '../nl/proxy';
 import { extractSelectColumns } from '../nl/sql-columns';
@@ -34,6 +40,28 @@ const PRESETS: Array<{ days: number; label: string }> = [
   { days: 30, label: '30일' },
   { days: 90, label: '90일' },
 ];
+
+// 완성 문장(미리보기 상단)용 라벨.
+const METRIC_SENTENCE_LABEL: Record<MetricType, string> = {
+  event_count: '이벤트수',
+  unique_users: '고유사용자수',
+  unique_sessions: '고유세션수',
+};
+
+function dimensionSentenceLabel(dim: DimensionSelection): string {
+  switch (dim.kind) {
+    case 'event_date':
+      return '날짜';
+    case 'event_name':
+      return '이벤트명';
+    case 'traffic_source':
+      return `유입 ${dim.field}`;
+    case 'branch_type':
+      return '지점유형';
+    case 'param':
+      return dim.key;
+  }
+}
 
 export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   root.innerHTML = shellHtml(catalog);
@@ -56,6 +84,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const columnSectionEl = root.querySelector<HTMLElement>('.column-section')!;
   const filterSlotEl = root.querySelector<HTMLElement>('.filter-slot')!;
   const previewSlotEl = root.querySelector<HTMLElement>('.preview-slot')!;
+  const previewSentenceSlotEl = root.querySelector<HTMLElement>('.preview-sentence-slot')!;
   const sqlSlotEl = root.querySelector<HTMLElement>('.sql-slot')!;
   const composeRestEl = root.querySelector<HTMLElement>('.compose-rest')!;
   const selectedEventsSlotEl = root.querySelector<HTMLElement>('.selected-events-slot')!;
@@ -271,6 +300,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     chatResult = null;
     renderChatResult();
     renderPreview();
+    renderSql();
 
     const res = await callProxy({ question, property: currentProperty(), history: chatHistory });
     if (res.ok) {
@@ -295,6 +325,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     }
     renderChatResult();
     renderPreview();
+    renderSql();
   }
 
   function handleChatCopy(btn: HTMLButtonElement): void {
@@ -351,7 +382,74 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     handleGenerateSql();
   }
 
+  function eventSentenceLabel(name: string): string {
+    const ev = currentProperty().events.find((e) => e.name === name);
+    return ev && ev.label && ev.label !== name ? ev.label : name;
+  }
+
+  // 셀렉형 선택 상태를 자연어 한 문장으로 조립한다 — 미리보기 상단에 항상 표시.
+  function composeStateSentence(): string {
+    const parts: string[] = [`<b>${escapeHtml(currentProperty().label)}</b> 데이터에서,`];
+
+    if (state.datePreset) {
+      parts.push(`최근 <b>${state.datePreset}일</b> 동안,`);
+    } else if (state.dateFrom && state.dateTo) {
+      parts.push(`<b>${escapeHtml(state.dateFrom)} ~ ${escapeHtml(state.dateTo)}</b> 동안,`);
+    } else {
+      parts.push(`<span class="sentence-pending">기간을 정하고,</span>`);
+    }
+
+    const names = currentEventNames();
+    if (names.length > 0) {
+      parts.push(`<b>${escapeHtml(names.map(eventSentenceLabel).join('·'))}</b> 이벤트를,`);
+    } else {
+      parts.push(`<span class="sentence-pending">이벤트를 골라,</span>`);
+    }
+
+    const filterCount = state.filters[state.property].length;
+    if (filterCount > 0) parts.push(`조건 <b>${filterCount}개</b>로 거른 것만,`);
+
+    if (state.mode === 'detail') {
+      const limitNote = state.detailLimitEnabled[state.property]
+        ? ` (최대 ${DETAIL_LIMIT_VALUE}행)`
+        : '';
+      parts.push(`상세 행 그대로 본다${limitNote}.`);
+    } else {
+      const dims = state.dimensions[state.property].map(dimensionSentenceLabel);
+      const mets = [...state.metrics[state.property]].map((m) => METRIC_SENTENCE_LABEL[m]);
+      if (dims.length > 0) parts.push(`<b>${escapeHtml(dims.join('·'))}</b>별로 묶어`);
+      parts.push(
+        mets.length > 0
+          ? `<b>${escapeHtml(mets.join('·'))}</b>를 본다.`
+          : `<span class="sentence-pending">지표를 골라 본다.</span>`,
+      );
+    }
+
+    const segs = state.segments[state.property];
+    if (segs.length > 0) {
+      const segText = segs
+        .map((s) => `${eventSentenceLabel(s.event)} ${s.did ? '한' : '안 한'}`)
+        .join('·');
+      parts.push(`(단, <b>${escapeHtml(segText)}</b> 사람만)`);
+    }
+
+    return parts.join(' ');
+  }
+
+  function renderSentence(): void {
+    // 대화형: AI 해석 문장을, 셀렉형: 선택 상태로 조립한 문장을 표시.
+    if (state.inputMode === 'chat' && chatView.kind !== 'fallback') {
+      previewSentenceSlotEl.innerHTML =
+        chatView.kind === 'confirm' || chatView.kind === 'sql'
+          ? `<p class="preview-sentence">“${escapeHtml(chatView.explanation)}”</p>`
+          : '';
+      return;
+    }
+    previewSentenceSlotEl.innerHTML = `<p class="preview-sentence">${composeStateSentence()}</p>`;
+  }
+
   function renderPreview(): void {
+    renderSentence();
     // 대화형 AI 결과가 있으면 그 SQL의 결과 컬럼으로 미리보기를 대체한다(확인 단계 포함).
     if (state.inputMode === 'chat' && (chatView.kind === 'confirm' || chatView.kind === 'sql')) {
       previewSlotEl.innerHTML = renderAiPreviewHtml(chatView.columns);
@@ -364,6 +462,12 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   }
 
   function renderSql(): void {
+    // 대화형 모드에선 SQL 패널이 대화 결과를 표시한다(SQL은 항상 우측 한 곳).
+    // 폴백(규칙파서) 경로만 셀렉형과 동일하게 state 기반 섹션을 쓴다.
+    if (state.inputMode === 'chat' && chatView.kind !== 'fallback') {
+      sqlSlotEl.innerHTML = renderChatSqlPanelHtml(chatView);
+      return;
+    }
     sqlSlotEl.innerHTML = renderSqlSectionHtml(state.property);
   }
 
@@ -390,6 +494,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   function onSelectionChanged(): void {
     invalidateGeneratedSql();
     renderSql();
+    renderSentence();
   }
 
   function handleGenerateSql(): void {
@@ -522,8 +627,9 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     if (inputMode === state.inputMode) return;
     state.inputMode = inputMode;
     syncInputMode();
-    // 대화형 AI 미리보기 ↔ 셀렉형 상태 미리보기 전환.
+    // 대화형 AI 미리보기·SQL 패널 ↔ 셀렉형 상태 기반 렌더 전환.
     renderPreview();
+    renderSql();
   });
 
   // 이벤트 모달 열기/닫기
@@ -573,20 +679,16 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       return;
     }
     if (target.closest('.chat-confirm-btn')) {
-      // 구조가 맞다고 확인 → 받아둔 SQL을 노출(프록시 재호출 없음).
+      // 구조가 맞다고 확인 → 받아둔 SQL을 우측 SQL 패널에 노출(프록시 재호출 없음).
       if (chatView.kind === 'confirm') {
         chatView = { ...chatView, kind: 'sql' };
         renderChatResult();
+        renderSql();
       }
       return;
     }
     if (target.closest('.chat-generate-btn')) {
       applyChatToState();
-      return;
-    }
-    const copyBtn = target.closest<HTMLButtonElement>('.chat-copy-btn');
-    if (copyBtn) {
-      handleChatCopy(copyBtn);
     }
   });
 
@@ -900,6 +1002,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   sqlSlotEl.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
+    const chatCopyBtn = target.closest<HTMLButtonElement>('.chat-sql-copy-btn');
+    if (chatCopyBtn) {
+      handleChatCopy(chatCopyBtn);
+      return;
+    }
     const generateBtn = target.closest<HTMLButtonElement>('.sql-generate-btn');
     if (generateBtn && !generateBtn.disabled) {
       handleGenerateSql();
@@ -1024,21 +1131,6 @@ function shellHtml(catalog: Catalog): string {
     <div class="workbench">
       <header class="top-bar">
         <span class="wb-brand">BQ 쿼리 빌더</span>
-        <div class="property-group">
-          <span class="data-label">찾을 데이터</span>
-          <nav class="property-tabs" role="tablist" aria-label="찾을 데이터">
-            ${propertyKeys
-              .map(
-                (key) => `
-                  <button type="button" class="property-tab${key === state.property ? ' is-active' : ''}"
-                    role="tab" aria-selected="${key === state.property}" data-property="${key}">
-                    ${escapeHtml(properties[key].label)}
-                  </button>
-                `,
-              )
-              .join('')}
-          </nav>
-        </div>
         <button type="button" class="dict-open-btn">${bookIcon}<span>이벤트 사전</span></button>
       </header>
 
@@ -1051,6 +1143,22 @@ function shellHtml(catalog: Catalog): string {
               role="tab" aria-selected="${state.inputMode === 'select'}" data-input-mode="select">${slidersIcon}<span>셀렉형</span></button>
           </div>
 
+          <div class="property-group">
+            <span class="data-label">찾을 데이터</span>
+            <nav class="property-tabs" role="tablist" aria-label="찾을 데이터">
+              ${propertyKeys
+                .map(
+                  (key) => `
+                    <button type="button" class="property-tab${key === state.property ? ' is-active' : ''}"
+                      role="tab" aria-selected="${key === state.property}" data-property="${key}">
+                      ${escapeHtml(properties[key].label)}
+                    </button>
+                  `,
+                )
+                .join('')}
+            </nav>
+          </div>
+
           <div class="input-panel-chat is-hidden">
             <div class="chat-slot"></div>
           </div>
@@ -1061,18 +1169,18 @@ function shellHtml(catalog: Catalog): string {
             <p class="compose-from"><b class="data-from-label">${escapeHtml(properties[state.property].label)}</b> 데이터에서,</p>
 
             <div class="compose-line">
-              <span class="compose-lead">기간</span>
+              <span class="compose-lead">기간 동안,</span>
               <div class="date-range-slot"></div>
             </div>
 
             <div class="compose-line">
-              <span class="compose-lead">이벤트</span>
+              <span class="compose-lead">이벤트를,</span>
               <div class="selected-events-slot"></div>
             </div>
 
             <div class="compose-rest">
               <div class="compose-line">
-                <span class="compose-lead">조건 <span class="lead-sub">(선택)</span></span>
+                <span class="compose-lead">조건인 것만 골라, <span class="lead-sub">(선택)</span></span>
                 <div class="filter-slot"></div>
               </div>
 
@@ -1087,11 +1195,11 @@ function shellHtml(catalog: Catalog): string {
                   </div>
                 </div>
                 <div class="dim-section${state.mode === 'detail' ? ' is-hidden' : ''}">
-                  <h3 class="sub-title">행 (그룹)</h3>
+                  <h3 class="sub-title">~별로 묶어 <span class="lead-sub">(행)</span></h3>
                   <div class="dim-groups"></div>
                 </div>
                 <div class="metric-section${state.mode === 'detail' ? ' is-hidden' : ''}">
-                  <h3 class="sub-title">값 (지표)</h3>
+                  <h3 class="sub-title">~을 본다 <span class="lead-sub">(값)</span></h3>
                   <div class="chip-group metric-group"></div>
                 </div>
                 <div class="column-section${state.mode === 'aggregate' ? ' is-hidden' : ''}">
@@ -1101,7 +1209,7 @@ function shellHtml(catalog: Catalog): string {
               </div>
 
               <div class="compose-line">
-                <span class="compose-lead">사람 조건 <span class="lead-sub">(고급·선택)</span></span>
+                <span class="compose-lead">단, ~한 사람만 <span class="lead-sub">(고급·선택)</span></span>
                 <div class="segment-slot"></div>
               </div>
             </div>
@@ -1114,6 +1222,7 @@ function shellHtml(catalog: Catalog): string {
         <section class="wb-output">
           <div class="panel preview-section">
             <h2 class="panel-title">구조 미리보기</h2>
+            <div class="preview-sentence-slot"></div>
             <div class="preview-slot"></div>
           </div>
           <div class="panel sql-section">

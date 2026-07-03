@@ -47,7 +47,7 @@ export function renderChatShellHtml(): string {
         <div class="chat-input-row">
           <textarea id="chat-input" class="chat-input" rows="3"
             placeholder="예: ${escapeHtml(EXAMPLE)}"></textarea>
-          <button type="button" class="chat-parse-btn">${arrowRightIcon}<span>SQL 만들기</span></button>
+          <button type="button" class="chat-parse-btn">${arrowRightIcon}<span>해석하기</span></button>
         </div>
         <div class="chat-mention is-hidden" role="listbox" aria-label="이벤트 추천"></div>
       </div>
@@ -123,40 +123,59 @@ function renderConfirmHtml(view: Extract<ChatView, { kind: 'confirm' }>): string
   const note =
     view.columns.length > 0
       ? '예상 결과 구조를 우측 <b>구조 미리보기</b>에서 확인하세요.'
-      : '결과 컬럼을 추정하지 못했어요. 아래 버튼으로 SQL을 확인해 주세요.';
+      : '결과 컬럼을 추정하지 못했어요. 맞다면 아래 버튼으로 SQL을 확인해 주세요.';
 
   return `
     <div class="chat-answer chat-confirm">
       <p class="chat-answer-explain">${checkIcon}<span>${escapeHtml(view.explanation)}</span>${correctedBadge}${cachedBadge}</p>
       <p class="chat-confirm-note">${note}</p>
       ${colChips}
-      <button type="button" class="chat-confirm-btn">맞아요, SQL 생성</button>
+      <button type="button" class="chat-confirm-btn">맞아요, 이대로</button>
       <p class="chat-generate-hint">다르면 질문을 고쳐 다시 물어보세요.</p>
     </div>
   `;
 }
 
+// 확인 후 — SQL 본문은 우측 SQL 패널에 있으므로 여기는 안내만 남긴다.
 function renderSqlAnswerHtml(view: Extract<ChatView, { kind: 'sql' }>): string {
   const correctedBadge = view.corrected
     ? `<span class="chat-answer-badge">자동 보정됨</span>`
     : '';
   const cachedBadge = view.cached ? `<span class="chat-answer-badge">캐시</span>` : '';
-  const budgetNote =
-    view.spentKrw != null && view.capKrw != null
-      ? `<p class="chat-budget">이번 달 AI 사용 ₩${view.spentKrw} / ₩${view.capKrw}</p>`
-      : '';
 
   return `
     <div class="chat-answer">
       <p class="chat-answer-explain">${checkIcon}<span>${escapeHtml(view.explanation)}</span>${correctedBadge}${cachedBadge}</p>
-      <div class="sql-code-wrap">
-        <pre class="sql-code"><code>${highlightSql(view.sql)}</code></pre>
-        <button type="button" class="chat-copy-btn">${copyIcon}<span>복사</span></button>
-      </div>
-      <p class="sql-copy-hint">BQ 콘솔에 붙여넣어 실행하세요.</p>
-      ${budgetNote}
+      <p class="chat-confirm-note">SQL이 우측 <b>SQL 패널</b>에 표시됐어요. 복사해서 BQ 콘솔에서 실행하세요.</p>
     </div>
   `;
+}
+
+// 우측 SQL 패널의 대화형 모드 렌더. 확인 전엔 안내, 확인 후엔 SQL 본문+복사.
+export function renderChatSqlPanelHtml(view: ChatView): string {
+  if (view.kind === 'sql') {
+    const budgetNote =
+      view.spentKrw != null && view.capKrw != null
+        ? `<p class="chat-budget">이번 달 AI 사용 ₩${view.spentKrw} / ₩${view.capKrw}</p>`
+        : '';
+    return `
+      <div class="sql-output">
+        <div class="sql-code-wrap">
+          <pre class="sql-code"><code>${highlightSql(view.sql)}</code></pre>
+          <button type="button" class="chat-sql-copy-btn">${copyIcon}<span>복사</span></button>
+        </div>
+        <p class="sql-copy-hint">BQ 콘솔에 붙여넣어 실행하세요.</p>
+        ${budgetNote}
+      </div>
+    `;
+  }
+  const hint =
+    view.kind === 'confirm'
+      ? '구조가 맞으면 좌측 "맞아요, 이대로"를 누르세요 — SQL이 여기에 표시됩니다.'
+      : view.kind === 'loading'
+        ? 'AI가 질문을 해석하는 중…'
+        : '질문을 해석한 뒤 확인하면 여기에 SQL이 표시됩니다.';
+  return `<p class="sql-chat-hint">${escapeHtml(hint)}</p>`;
 }
 
 // ===== 폴백: 규칙파서 해석 칩(기존 UX) =====
