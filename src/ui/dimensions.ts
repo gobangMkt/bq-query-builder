@@ -65,15 +65,19 @@ export function renderDimensionsHtml(
     : '';
 
   const paramChips = paramCandidates
-    .map((c) =>
-      chipHtml(
+    .map((c) => {
+      const partial = selectedEventNames.length > 1 && c.events.length < selectedEventNames.length;
+      const nullNote = partial
+        ? `${c.events.join(', ')}에만 있음 — 나머지 선택 이벤트 행에선 NULL`
+        : undefined;
+      return chipHtml(
         `param:${c.key}`,
         paramChipLabel(c, selectedEventNames),
         selectedKeys.has(`param:${c.key}`),
-        paramChipTitle(c),
+        paramChipTitle(c, nullNote),
         true,
-      ),
-    )
+      );
+    })
     .join('');
 
   const paramSection =

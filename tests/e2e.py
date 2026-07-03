@@ -1,5 +1,5 @@
-# E2E: 게이트 → 대화형(해석·거절) → 셀렉형(빌더·가드) — Python Playwright
-# 실행: 서버(3095) 띄운 뒤 `python tests/e2e.py`  (배포 검증은 BASE만 프로덕션 URL로 교체)
+# E2E: 게이트 → 대화형(해석·거절) → 셀렉형(사이드바·빌더·가드) — Python Playwright
+# 실행: 서버(3095) 띄운 뒤 `python tests/e2e.py`  (배포 검증은 인자로 프로덕션 URL 전달)
 import sys
 from playwright.sync_api import sync_playwright
 
@@ -27,7 +27,7 @@ with sync_playwright() as p:
   # 2. 게이트: 정답 → 워크벤치(대화형 기본)
   pg.fill('.gate-input', 'gobang')
   pg.click('.gate-submit')
-  pg.wait_for_selector('.wb-body')
+  pg.wait_for_selector('.wb-side')
   check('게이트 통과 → 워크벤치', pg.locator('.property-tab').count() == 2)
   check('기본 입력모드 = 대화형(칩 입력 노출)', pg.locator('.chat-input').is_visible())
 
@@ -62,7 +62,8 @@ with sync_playwright() as p:
   # 5. 셀렉형 전환
   pg.click('.input-mode-btn[data-input-mode="select"]')
   pg.wait_for_selector('.input-panel-select:not(.is-hidden)')
-  check('셀렉형 전환 시 기간 프리셋 노출', pg.locator('.date-chip').count() == 3)
+  check('셀렉형 전환 시 기간 pill 노출(7/14/30/직접)', pg.locator('.date-pill').count() == 4)
+  check('섹션 내비 노출', pg.locator('.section-nav-btn').count() == 5)
 
   # 6. 셀렉형: 이벤트 선택 → 사람 조건 추가 → 생성
   # (대화형에서 만든 세그먼트가 셀렉형에도 이어짐 = 워크벤치 공유 상태. 증가량으로 검증)
@@ -84,16 +85,22 @@ with sync_playwright() as p:
   pg.wait_for_timeout(200)
   check('상세 SQL LIMIT 1000', 'LIMIT 1000' in pg.inner_text('body'))
 
-  # 8. 기간 미선택 차단(가드)
+  # 8. 기간 미선택 차단(가드) — 직접 선택으로 날짜 입력 펼친 뒤 비우기
   pg.locator('.mode-btn[data-mode="aggregate"]').click()
+  pg.locator('.date-pill[data-custom="1"]').click()
+  pg.wait_for_selector('.date-from')
   pg.fill('.date-from', '')
   pg.fill('.date-to', '')
   pg.wait_for_timeout(150)
   check('기간 비우면 생성 버튼 비활성', pg.locator('.sql-generate-btn').is_disabled())
 
+  # 8b. 이벤트 사전 팝오버
+  pg.locator('.event-dict-toggle').first.click()
+  check('이벤트 사전 팝오버 표시', pg.locator('.event-dict[open] .event-dict-body').count() >= 1)
+
   # 9. 새로고침 → 세션 유지
   pg.reload()
-  pg.wait_for_selector('.wb-body')
+  pg.wait_for_selector('.wb-side')
   check('새로고침 세션 유지', pg.locator('.gate-input').count() == 0)
 
   b.close()

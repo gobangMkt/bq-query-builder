@@ -111,55 +111,52 @@ button {
   margin: 8px 0 0;
 }
 
-/* 워크벤치 셸 */
+/* 워크벤치 셸 — 좌 사이드바 · 중앙 스크롤 · 우 미리보기(각 열 독립 스크롤) */
 .workbench {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 20px 24px 48px;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.wb-header {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
+.wb-side {
+  width: 232px;
+  flex: none;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 14px 20px;
-}
-
-.wb-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--primary);
-  margin: 0;
-}
-
-.wb-body {
-  display: grid;
-  grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
-  gap: 20px;
-  align-items: start;
-}
-
-.wb-left {
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow-y: auto;
+}
+
+.wb-brand {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--primary);
+  padding: 0 20px;
+}
+
+.wb-center {
+  flex: 1;
   min-width: 0;
+  overflow-y: auto;
+  padding: 24px 26px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .wb-right {
-  position: sticky;
-  top: 20px;
+  width: 460px;
+  flex: none;
+  background: #fdfefe;
+  border-left: 1px solid var(--border);
+  padding: 24px 22px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-width: 0;
 }
 
 .input-panel-select {
@@ -175,9 +172,9 @@ button {
 
 /* 입력 방식 세그먼트(대화형/셀렉형) */
 .input-mode-seg {
-  margin-left: auto;
-  display: inline-flex;
+  display: flex;
   gap: 4px;
+  margin: 0 16px;
   padding: 4px;
   background: var(--bg);
   border: 1px solid var(--border-input);
@@ -185,11 +182,13 @@ button {
 }
 
 .input-mode-btn {
+  flex: 1;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   height: 36px;
-  padding: 0 14px;
+  padding: 0 10px;
   background: none;
   border: none;
   border-radius: 6px;
@@ -207,30 +206,96 @@ button {
 .property-tabs {
   display: flex;
   gap: 4px;
+  padding: 0 16px;
 }
 
 .property-tab {
-  height: 44px;
-  padding: 0 16px;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-input);
+  border-radius: 6px;
   color: var(--text-muted);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .property-tab.is-active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
   color: var(--primary);
-  border-bottom-color: var(--primary);
-  font-weight: 600;
+  font-weight: 700;
+}
+
+/* 섹션 내비(스크롤 스파이) */
+.section-nav {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.section-nav.is-hidden {
+  display: none;
+}
+
+.section-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 20px;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  color: var(--text-muted);
+  font-size: 15px;
+  text-align: left;
+}
+
+.section-nav-num {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border-input);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+}
+
+.section-nav-btn.is-active {
+  color: var(--primary);
+  font-weight: 700;
+  background: var(--primary-soft);
+  border-left-color: var(--primary);
+}
+
+.section-nav-btn.is-active .section-nav-num {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* 지표·열 섹션 헤더(제목 + 집계/상세 토글) */
+.output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sub-title {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 4px 0 8px;
 }
 
 /* 모드 토글(집계/상세) */
 .mode-toggle {
   display: inline-flex;
-  align-self: flex-start;
   gap: 4px;
-  padding: 8px 0 12px;
 }
 
 .mode-btn {
@@ -258,6 +323,12 @@ button {
 .metric-section.is-hidden,
 .column-section.is-hidden {
   display: none;
+}
+
+.dim-section,
+.metric-section,
+.column-section {
+  margin-top: 14px;
 }
 
 .panel-sub {
@@ -533,13 +604,44 @@ button {
   color: var(--text);
 }
 
-@media (max-width: 1024px) {
-  .wb-body {
-    grid-template-columns: 1fr;
+@media (max-width: 1080px) {
+  /* 좁은 화면: 3열 고정 대신 세로 스택(전체 페이지 스크롤) */
+  .workbench {
+    height: auto;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .wb-side {
+    width: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .section-nav-btn {
+    border-left: none;
+  }
+
+  .wb-center,
+  .wb-right {
+    width: auto;
+    overflow-y: visible;
   }
 
   .wb-right {
-    position: static;
+    border-left: none;
+    border-top: 1px solid var(--border);
   }
 }
 
@@ -564,32 +666,37 @@ button {
   margin: 0;
 }
 
-.date-chips {
+.date-pills {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.date-chip {
-  height: 44px;
-  padding: 0 16px;
+.date-pill {
+  height: 40px;
+  padding: 0 18px;
   background: var(--surface);
   border: 1px solid var(--border-input);
-  border-radius: 6px;
-  font-size: 15px;
+  border-radius: 20px;
+  font-size: 14px;
 }
 
-.date-chip.is-selected {
-  background: var(--primary-soft);
+.date-pill:hover {
+  background: var(--bg);
+}
+
+.date-pill.is-selected {
+  background: var(--primary);
   border-color: var(--primary);
-  color: var(--primary);
-  font-weight: 600;
+  color: #fff;
+  font-weight: 700;
 }
 
 .date-inputs {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 12px;
 }
 
 .date-inputs input[type='date'] {
@@ -631,7 +738,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-height: 420px;
+  max-height: 480px;
   overflow-y: auto;
 }
 
@@ -658,18 +765,24 @@ button {
   gap: 4px;
 }
 
+.event-line {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+}
+
 .event-row {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   min-height: 44px;
   text-align: left;
   background: var(--surface);
   border: 1px solid transparent;
   border-radius: 6px;
-  padding: 10px 12px;
+  padding: 0 12px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
+  align-items: baseline;
+  gap: 10px;
 }
 
 .event-row:hover {
@@ -682,14 +795,11 @@ button {
   color: var(--primary);
 }
 
-.event-row-main {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-
 .event-label {
   font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .event-row.is-selected .event-label {
@@ -700,14 +810,19 @@ button {
   font-family: 'JetBrains Mono', Consolas, monospace;
   font-size: 13px;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .event-count {
   margin-left: auto;
+  padding-left: 8px;
   font-family: 'JetBrains Mono', Consolas, monospace;
   font-size: 13px;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
+  flex: none;
 }
 
 .event-row.is-selected .event-name,
@@ -715,9 +830,106 @@ button {
   color: var(--primary);
 }
 
-.event-desc {
+/* 이벤트 사전(행 옆 ⓘ → 팝오버) */
+.event-dict {
+  flex: none;
+  position: relative;
+}
+
+.event-dict-toggle {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border-input);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.event-dict-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.event-dict[open] .event-dict-toggle {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.event-dict-body {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 340px;
+  max-height: 320px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+  padding: 14px;
+}
+
+.dict-desc {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.dict-empty {
   margin: 0;
   font-size: 13px;
+  color: var(--text-muted);
+}
+
+.dict-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.dict-table th {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dict-table td {
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--table-head);
+  vertical-align: top;
+}
+
+.dict-key {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.dict-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.dict-type {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.dict-pdesc {
   color: var(--text-muted);
 }
 

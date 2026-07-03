@@ -38,15 +38,15 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   const listEl = root.querySelector<HTMLElement>('.event-list')!;
   const searchSlot = root.querySelector<HTMLElement>('.event-search-slot')!;
-  const dateFromInput = root.querySelector<HTMLInputElement>('.date-from')!;
-  const dateToInput = root.querySelector<HTMLInputElement>('.date-to')!;
+  const dateRangeSlotEl = root.querySelector<HTMLElement>('.date-range-slot')!;
   const tabsEl = root.querySelector<HTMLElement>('.property-tabs')!;
   const inputModeEl = root.querySelector<HTMLElement>('.input-mode-seg')!;
+  const sectionNavEl = root.querySelector<HTMLElement>('.section-nav')!;
+  const centerEl = root.querySelector<HTMLElement>('.wb-center')!;
   const selectPanelEl = root.querySelector<HTMLElement>('.input-panel-select')!;
   const chatPanelEl = root.querySelector<HTMLElement>('.input-panel-chat')!;
   const chatSlotEl = root.querySelector<HTMLElement>('.chat-slot')!;
   const modeToggleEl = root.querySelector<HTMLElement>('.mode-toggle')!;
-  const chipsEl = root.querySelector<HTMLElement>('.date-chips')!;
   const segSlotEl = root.querySelector<HTMLElement>('.segment-slot')!;
   const dimGroupsEl = root.querySelector<HTMLElement>('.dim-groups')!;
   const metricGroupEl = root.querySelector<HTMLElement>('.metric-group')!;
@@ -117,10 +117,18 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     const isChat = state.inputMode === 'chat';
     chatPanelEl.classList.toggle('is-hidden', !isChat);
     selectPanelEl.classList.toggle('is-hidden', isChat);
+    // 섹션 내비는 셀렉형에서만 의미가 있다.
+    sectionNavEl.classList.toggle('is-hidden', isChat);
     inputModeEl.querySelectorAll<HTMLButtonElement>('.input-mode-btn').forEach((btn) => {
       const active = btn.dataset.inputMode === state.inputMode;
       btn.classList.toggle('is-active', active);
       btn.setAttribute('aria-selected', String(active));
+    });
+  }
+
+  function setActiveNav(target: string): void {
+    sectionNavEl.querySelectorAll<HTMLButtonElement>('.section-nav-btn').forEach((btn) => {
+      btn.classList.toggle('is-active', btn.dataset.target === target);
     });
   }
 
@@ -167,9 +175,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     state.filters[state.property] = [];
 
     // 셀렉형 컨트롤도 새 상태를 반영(사용자가 셀렉형으로 넘어가 이어서 다듬을 수 있게).
-    dateFromInput.value = range.from;
-    dateToInput.value = range.to;
-    syncPresetChips();
+    void range;
+    renderDateRange();
     syncModeVisibility();
     renderList();
     renderSegments();
@@ -283,10 +290,28 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     renderPreview();
   }
 
-  function syncPresetChips(): void {
-    chipsEl.querySelectorAll<HTMLButtonElement>('.date-chip').forEach((chip) => {
-      chip.classList.toggle('is-selected', state.datePreset === Number(chip.dataset.days));
-    });
+  // 기간 컨트롤: 프리셋 pill(7/14/30) + "직접" — 직접일 때만 날짜 범위 입력이 펼쳐진다.
+  function renderDateRange(): void {
+    const custom = state.datePreset === null;
+    const pills = PRESETS.map(
+      (p) => `
+        <button type="button" class="date-pill${state.datePreset === p.days ? ' is-selected' : ''}"
+          data-days="${p.days}">${p.label}</button>
+      `,
+    ).join('');
+    const customPill = `
+      <button type="button" class="date-pill${custom ? ' is-selected' : ''}" data-custom="1">직접 선택</button>
+    `;
+    const inputs = custom
+      ? `
+        <div class="date-inputs">
+          <input type="date" class="date-from" value="${escapeHtml(state.dateFrom)}" aria-label="시작일" />
+          <span class="date-sep">~</span>
+          <input type="date" class="date-to" value="${escapeHtml(state.dateTo)}" aria-label="종료일" />
+        </div>
+      `
+      : '';
+    dateRangeSlotEl.innerHTML = `<div class="date-pills">${pills}${customPill}</div>${inputs}`;
   }
 
   function syncTabs(): void {
@@ -323,6 +348,28 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     state.inputMode = inputMode;
     syncInputMode();
   });
+
+  // 섹션 내비: 클릭하면 해당 섹션으로 스크롤, 스크롤하면 현재 섹션을 강조(스크롤 스파이).
+  sectionNavEl.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.section-nav-btn');
+    if (!btn) return;
+    const target = btn.dataset.target;
+    if (!target) return;
+    const el = root.querySelector<HTMLElement>(`#${target}`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setActiveNav(target);
+  });
+
+  const spy = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((en) => en.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible[0]?.target.id) setActiveNav(visible[0].target.id);
+    },
+    { root: centerEl, rootMargin: '0px 0px -70% 0px', threshold: 0 },
+  );
+  selectPanelEl.querySelectorAll<HTMLElement>('section[id]').forEach((s) => spy.observe(s));
 
   chatSlotEl.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
@@ -435,32 +482,34 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     onSelectionChanged();
   });
 
-  chipsEl.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.date-chip');
-    if (!btn) return;
-    const days = Number(btn.dataset.days) as 7 | 14 | 30;
+  dateRangeSlotEl.addEventListener('click', (e) => {
+    const pill = (e.target as HTMLElement).closest<HTMLButtonElement>('.date-pill');
+    if (!pill) return;
+    if (pill.dataset.custom) {
+      // "직접 선택" — 프리셋 해제하고 현재 범위를 그대로 둔 채 날짜 입력을 펼친다.
+      state.datePreset = null;
+      renderDateRange();
+      onSelectionChanged();
+      return;
+    }
+    const days = Number(pill.dataset.days) as 7 | 14 | 30;
     const range = presetRange(days);
     state.datePreset = days;
     state.dateFrom = range.from;
     state.dateTo = range.to;
-    dateFromInput.value = range.from;
-    dateToInput.value = range.to;
-    syncPresetChips();
+    renderDateRange();
     onSelectionChanged();
   });
 
-  dateFromInput.addEventListener('change', () => {
-    state.dateFrom = dateFromInput.value;
-    state.datePreset = null;
-    syncPresetChips();
-    onSelectionChanged();
-  });
-
-  dateToInput.addEventListener('change', () => {
-    state.dateTo = dateToInput.value;
-    state.datePreset = null;
-    syncPresetChips();
-    onSelectionChanged();
+  dateRangeSlotEl.addEventListener('change', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('date-from')) {
+      state.dateFrom = (target as HTMLInputElement).value;
+      onSelectionChanged();
+    } else if (target.classList.contains('date-to')) {
+      state.dateTo = (target as HTMLInputElement).value;
+      onSelectionChanged();
+    }
   });
 
   listEl.addEventListener('click', (e) => {
@@ -607,6 +656,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     onSelectionChanged();
   });
 
+  renderDateRange();
   renderSearch();
   renderList();
   renderSegments();
@@ -621,14 +671,22 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   syncInputMode();
 }
 
+const SECTION_NAV = [
+  { target: 'sec-date', label: '기간' },
+  { target: 'sec-event', label: '이벤트' },
+  { target: 'sec-segment', label: '사람 조건' },
+  { target: 'sec-output', label: '지표·열' },
+  { target: 'sec-filter', label: '필터' },
+];
+
 function shellHtml(catalog: Catalog): string {
   const properties = catalog.properties;
   const propertyKeys = Object.keys(properties) as PropertyKey[];
 
   return `
     <div class="workbench">
-      <header class="wb-header">
-        <h1 class="wb-title">BQ 쿼리 빌더</h1>
+      <aside class="wb-side">
+        <div class="wb-brand">BQ 쿼리 빌더</div>
         <nav class="property-tabs" role="tablist" aria-label="프로퍼티">
           ${propertyKeys
             .map(
@@ -647,84 +705,81 @@ function shellHtml(catalog: Catalog): string {
           <button type="button" class="input-mode-btn${state.inputMode === 'select' ? ' is-active' : ''}"
             role="tab" aria-selected="${state.inputMode === 'select'}" data-input-mode="select">${slidersIcon}<span>셀렉형</span></button>
         </div>
-      </header>
+        <nav class="section-nav" aria-label="단계">
+          ${SECTION_NAV.map(
+            (s, i) => `
+              <button type="button" class="section-nav-btn${i === 0 ? ' is-active' : ''}" data-target="${s.target}">
+                <span class="section-nav-num">${i + 1}</span>${s.label}
+              </button>
+            `,
+          ).join('')}
+        </nav>
+      </aside>
 
-      <div class="wb-body">
-        <div class="wb-left">
-          <div class="input-panel-chat is-hidden">
-            <div class="chat-slot"></div>
-          </div>
+      <main class="wb-center">
+        <div class="input-panel-chat is-hidden">
+          <div class="chat-slot"></div>
+        </div>
 
-          <div class="input-panel-select">
-            <div class="mode-toggle" role="tablist" aria-label="모드">
-              <button type="button" class="mode-btn${state.mode === 'aggregate' ? ' is-active' : ''}"
-                role="tab" aria-selected="${state.mode === 'aggregate'}" data-mode="aggregate">집계</button>
-              <button type="button" class="mode-btn${state.mode === 'detail' ? ' is-active' : ''}"
-                role="tab" aria-selected="${state.mode === 'detail'}" data-mode="detail">상세</button>
+        <div class="input-panel-select">
+          <section id="sec-date" class="panel">
+            <h2 class="panel-title">기간</h2>
+            <div class="date-range-slot"></div>
+          </section>
+
+          <section id="sec-event" class="panel">
+            <h2 class="panel-title">이벤트</h2>
+            <div class="event-search-slot"></div>
+            <div class="event-list"></div>
+          </section>
+
+          <section id="sec-segment" class="panel">
+            <h2 class="panel-title">사람 조건 <span class="panel-sub">(선택)</span></h2>
+            <div class="segment-slot"></div>
+          </section>
+
+          <section id="sec-output" class="panel">
+            <div class="output-head">
+              <h2 class="panel-title">지표·열</h2>
+              <div class="mode-toggle" role="tablist" aria-label="모드">
+                <button type="button" class="mode-btn${state.mode === 'aggregate' ? ' is-active' : ''}"
+                  role="tab" aria-selected="${state.mode === 'aggregate'}" data-mode="aggregate">집계</button>
+                <button type="button" class="mode-btn${state.mode === 'detail' ? ' is-active' : ''}"
+                  role="tab" aria-selected="${state.mode === 'detail'}" data-mode="detail">상세</button>
+              </div>
             </div>
-
-            <section class="panel date-range">
-              <h2 class="panel-title">기간</h2>
-              <div class="date-chips">
-                ${PRESETS.map(
-                  (p) => `
-                    <button type="button" class="date-chip${state.datePreset === p.days ? ' is-selected' : ''}"
-                      data-days="${p.days}">${p.label}</button>
-                  `,
-                ).join('')}
-              </div>
-              <div class="date-inputs">
-                <input type="date" class="date-from" value="${state.dateFrom}" aria-label="시작일" />
-                <span class="date-sep">~</span>
-                <input type="date" class="date-to" value="${state.dateTo}" aria-label="종료일" />
-              </div>
-            </section>
-
-            <section class="panel event-section">
-              <h2 class="panel-title">이벤트</h2>
-              <div class="event-search-slot"></div>
-              <div class="event-list"></div>
-            </section>
-
-            <section class="panel segment-section">
-              <h2 class="panel-title">사람 조건 <span class="panel-sub">(선택)</span></h2>
-              <div class="segment-slot"></div>
-            </section>
-
-            <section class="panel dim-section${state.mode === 'detail' ? ' is-hidden' : ''}">
-              <h2 class="panel-title">차원 (행)</h2>
+            <div class="dim-section${state.mode === 'detail' ? ' is-hidden' : ''}">
+              <h3 class="sub-title">차원 (행)</h3>
               <div class="dim-groups"></div>
-            </section>
-
-            <section class="panel metric-section${state.mode === 'detail' ? ' is-hidden' : ''}">
-              <h2 class="panel-title">지표 (열)</h2>
+            </div>
+            <div class="metric-section${state.mode === 'detail' ? ' is-hidden' : ''}">
+              <h3 class="sub-title">지표 (열)</h3>
               <div class="chip-group metric-group"></div>
-            </section>
-
-            <section class="panel column-section${state.mode === 'aggregate' ? ' is-hidden' : ''}">
-              <h2 class="panel-title">포함할 컬럼</h2>
+            </div>
+            <div class="column-section${state.mode === 'aggregate' ? ' is-hidden' : ''}">
+              <h3 class="sub-title">포함할 컬럼</h3>
               <div class="column-groups"></div>
-            </section>
-
-            <section class="panel filter-section">
-              <h2 class="panel-title">필터</h2>
-              <div class="filter-slot"></div>
-            </section>
-          </div>
-        </div>
-
-        <div class="wb-right">
-          <section class="panel preview-section">
-            <h2 class="panel-title">구조 미리보기</h2>
-            <div class="preview-slot"></div>
+            </div>
           </section>
 
-          <section class="panel sql-section">
-            <h2 class="panel-title">SQL</h2>
-            <div class="sql-slot"></div>
+          <section id="sec-filter" class="panel">
+            <h2 class="panel-title">필터</h2>
+            <div class="filter-slot"></div>
           </section>
         </div>
-      </div>
+      </main>
+
+      <aside class="wb-right">
+        <section class="panel preview-section">
+          <h2 class="panel-title">구조 미리보기</h2>
+          <div class="preview-slot"></div>
+        </section>
+
+        <section class="panel sql-section">
+          <h2 class="panel-title">SQL</h2>
+          <div class="sql-slot"></div>
+        </section>
+      </aside>
     </div>
   `;
 }
