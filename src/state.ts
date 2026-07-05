@@ -7,6 +7,7 @@ import type {
   DimensionSelection,
   FilterCondition,
   MetricType,
+  RatioFormat,
   SegmentCondition,
 } from './sql/types';
 
@@ -25,6 +26,21 @@ export type SqlOutputState =
 // S6: 상세(Wide) 모드 LIMIT 기본값. 켜져 있으면 이 값을, 꺼져 있으면 LIMIT 없이 생성한다.
 export const DETAIL_LIMIT_VALUE = 1000;
 
+// 비율 지표 UI 상태. enabled + 분자/분모 이벤트가 모두 정해져야 SQL에 반영된다.
+export interface RatioConfigState {
+  enabled: boolean;
+  numeratorEvent: string | null;
+  denominatorEvent: string | null;
+  format: RatioFormat;
+  decimals: number;
+}
+
+export const RATIO_DECIMALS_MAX = 4;
+
+function initialRatio(): RatioConfigState {
+  return { enabled: false, numeratorEvent: null, denominatorEvent: null, format: 'percent', decimals: 2 };
+}
+
 export interface AppState {
   property: PropertyKey;
   inputMode: InputMode;
@@ -36,6 +52,7 @@ export interface AppState {
   selectedEvents: Record<PropertyKey, Set<string>>;
   dimensions: Record<PropertyKey, DimensionSelection[]>;
   metrics: Record<PropertyKey, Set<MetricType>>;
+  ratio: Record<PropertyKey, RatioConfigState>;
   // 상세 모드에서 "포함할 컬럼"으로 고른 event_params 키(기본 컬럼은 항상 포함되므로 담지 않는다).
   detailColumns: Record<PropertyKey, Set<string>>;
   detailLimitEnabled: Record<PropertyKey, boolean>;
@@ -66,6 +83,10 @@ export const state: AppState = {
   metrics: {
     gobang: new Set(['event_count']),
     uceo: new Set(['event_count']),
+  },
+  ratio: {
+    gobang: initialRatio(),
+    uceo: initialRatio(),
   },
   detailColumns: {
     gobang: new Set(),

@@ -1,7 +1,7 @@
 import type { Catalog } from '../data/catalog-types';
 import { generateAggregateSql, generateWideSql } from '../sql/generate';
-import type { AppMode, DimensionSelection, FilterOperator, MetricType } from '../sql/types';
-import { DETAIL_LIMIT_VALUE, state } from '../state';
+import type { AppMode, DimensionSelection, FilterOperator, MetricType, RatioFormat } from '../sql/types';
+import { DETAIL_LIMIT_VALUE, RATIO_DECIMALS_MAX, state } from '../state';
 import type { InputMode, PropertyKey } from '../state';
 import { renderColumnsHtml } from './columns';
 import { dimensionKey, parseDimensionKey } from '../utils/dimension-key';
@@ -20,7 +20,7 @@ import {
 } from './filters';
 import type { FilterFieldOption } from './filters';
 import { alertCircleIcon, bookIcon, checkIcon, messageIcon, plusIcon, slidersIcon } from './icons';
-import { renderMetricsHtml } from './metrics';
+import { renderMetricsHtml, renderRatioHtml, type RatioEventOption } from './metrics';
 import { renderAiPreviewHtml, renderPreviewHtml, renderWidePreviewHtml } from './preview';
 import { defaultSegmentFor, renderSegmentsHtml } from './segments';
 import {
@@ -78,6 +78,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const segSlotEl = root.querySelector<HTMLElement>('.segment-slot')!;
   const dimGroupsEl = root.querySelector<HTMLElement>('.dim-groups')!;
   const metricGroupEl = root.querySelector<HTMLElement>('.metric-group')!;
+  const ratioSlotEl = root.querySelector<HTMLElement>('.ratio-slot')!;
   const columnGroupsEl = root.querySelector<HTMLElement>('.column-groups')!;
   const dimSectionEl = root.querySelector<HTMLElement>('.dim-section')!;
   const metricSectionEl = root.querySelector<HTMLElement>('.metric-section')!;
@@ -85,6 +86,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const filterSlotEl = root.querySelector<HTMLElement>('.filter-slot')!;
   const previewSlotEl = root.querySelector<HTMLElement>('.preview-slot')!;
   const previewSentenceSlotEl = root.querySelector<HTMLElement>('.preview-sentence-slot')!;
+  const selectSentenceSlotEl = root.querySelector<HTMLElement>('.select-sentence-slot')!;
   const sqlSlotEl = root.querySelector<HTMLElement>('.sql-slot')!;
   const composeRestEl = root.querySelector<HTMLElement>('.compose-rest')!;
   const selectedEventsSlotEl = root.querySelector<HTMLElement>('.selected-events-slot')!;
@@ -136,6 +138,14 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
   function renderMetrics(): void {
     metricGroupEl.innerHTML = renderMetricsHtml(state.metrics[state.property]);
+  }
+
+  function ratioEventOptions(): RatioEventOption[] {
+    return currentEventNames().map((name) => ({ name, label: eventSentenceLabel(name) }));
+  }
+
+  function renderRatio(): void {
+    ratioSlotEl.innerHTML = renderRatioHtml(ratioEventOptions(), state.ratio[state.property]);
   }
 
   function renderColumns(): void {
@@ -418,9 +428,19 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       const dims = state.dimensions[state.property].map(dimensionSentenceLabel);
       const mets = [...state.metrics[state.property]].map((m) => METRIC_SENTENCE_LABEL[m]);
       if (dims.length > 0) parts.push(`<b>${escapeHtml(dims.join('·'))}</b>별로 묶어`);
+
+      const valuePhrases = [...mets];
+      const ratio = state.ratio[state.property];
+      if (ratio.enabled && ratio.numeratorEvent && ratio.denominatorEvent) {
+        const fmt =
+          ratio.format === 'percent' ? '%' : `소수 ${ratio.decimals}자리`;
+        valuePhrases.push(
+          `${eventSentenceLabel(ratio.numeratorEvent)} ÷ ${eventSentenceLabel(ratio.denominatorEvent)} 비율(${fmt})`,
+        );
+      }
       parts.push(
-        mets.length > 0
-          ? `<b>${escapeHtml(mets.join('·'))}</b>를 본다.`
+        valuePhrases.length > 0
+          ? `<b>${escapeHtml(valuePhrases.join('·'))}</b>를 본다.`
           : `<span class="sentence-pending">지표를 골라 본다.</span>`,
       );
     }
@@ -443,9 +463,13 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
         chatView.kind === 'confirm' || chatView.kind === 'sql'
           ? `<p class="preview-sentence">“${escapeHtml(chatView.explanation)}”</p>`
           : '';
+      selectSentenceSlotEl.innerHTML = '';
       return;
     }
-    previewSentenceSlotEl.innerHTML = `<p class="preview-sentence">${composeStateSentence()}</p>`;
+    const sentence = `<p class="preview-sentence">${composeStateSentence()}</p>`;
+    previewSentenceSlotEl.innerHTML = sentence;
+    // B: 셀렉형 좌측 패널 상단에도 같은 문장을 실시간으로 보여준다(선택값=파란색 + 설명).
+    selectSentenceSlotEl.innerHTML = state.inputMode === 'select' ? sentence : '';
   }
 
   function renderPreview(): void {
@@ -554,12 +578,19 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
 
     const validFields = new Set(currentFilterFieldOptions().map((o) => o.field));
     state.filters[state.property] = state.filters[state.property].filter((f) => validFields.has(f.field));
+
+    // 비율 분자/분모가 더 이상 선택 이벤트에 없으면 비운다.
+    const selectedSet = new Set(eventNames);
+    const ratio = state.ratio[state.property];
+    if (ratio.numeratorEvent && !selectedSet.has(ratio.numeratorEvent)) ratio.numeratorEvent = null;
+    if (ratio.denominatorEvent && !selectedSet.has(ratio.denominatorEvent)) ratio.denominatorEvent = null;
   }
 
   function refreshAfterSelectionChange(): void {
     pruneStaleSelections();
     renderDims();
     renderColumns();
+    renderRatio();
     renderFilters();
     renderPreview();
   }
@@ -915,6 +946,52 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     onSelectionChanged();
   });
 
+  // 비율 지표: 켜기 토글 / 분자·분모 select / 표시형식·소수점 변경.
+  function commitRatioChange(rerenderBlock: boolean): void {
+    if (rerenderBlock) renderRatio();
+    renderPreview();
+    onSelectionChanged();
+  }
+
+  ratioSlotEl.addEventListener('change', (e) => {
+    const target = e.target as HTMLElement;
+    const ratio = state.ratio[state.property];
+    if (target.classList.contains('ratio-enable')) {
+      ratio.enabled = (target as HTMLInputElement).checked;
+      // 켤 때 분자·분모가 비어 있으면 선택 이벤트 앞 2개로 기본 채움.
+      if (ratio.enabled) {
+        const names = currentEventNames();
+        if (!ratio.numeratorEvent && names[0]) ratio.numeratorEvent = names[0];
+        if (!ratio.denominatorEvent && names[1]) ratio.denominatorEvent = names[1] ?? null;
+      }
+      commitRatioChange(true);
+      return;
+    }
+    if (target.classList.contains('ratio-num')) {
+      ratio.numeratorEvent = (target as HTMLSelectElement).value || null;
+      commitRatioChange(false);
+      return;
+    }
+    if (target.classList.contains('ratio-den')) {
+      ratio.denominatorEvent = (target as HTMLSelectElement).value || null;
+      commitRatioChange(false);
+      return;
+    }
+    if (target.classList.contains('ratio-decimals')) {
+      const v = Number((target as HTMLSelectElement).value);
+      ratio.decimals = Number.isFinite(v) ? Math.max(0, Math.min(RATIO_DECIMALS_MAX, v)) : 0;
+      commitRatioChange(false);
+      return;
+    }
+  });
+
+  ratioSlotEl.addEventListener('click', (e) => {
+    const fmtBtn = (e.target as HTMLElement).closest<HTMLButtonElement>('.ratio-fmt-btn');
+    if (!fmtBtn) return;
+    state.ratio[state.property].format = fmtBtn.dataset.fmt as RatioFormat;
+    commitRatioChange(true);
+  });
+
   filterSlotEl.addEventListener('click', (e) => {
     const addBtn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-add');
     if (addBtn) {
@@ -1115,6 +1192,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   renderDims();
   renderColumns();
   renderMetrics();
+  renderRatio();
   renderFilters();
   renderPreview();
   renderSql();
@@ -1165,6 +1243,7 @@ function shellHtml(catalog: Catalog): string {
 
           <div class="input-panel-select">
             <p class="compose-head">이 문장을 채우면 SQL이 됩니다</p>
+            <div class="select-sentence-slot"></div>
 
             <p class="compose-from"><b class="data-from-label">${escapeHtml(properties[state.property].label)}</b> 데이터에서,</p>
 
@@ -1201,6 +1280,7 @@ function shellHtml(catalog: Catalog): string {
                 <div class="metric-section${state.mode === 'detail' ? ' is-hidden' : ''}">
                   <h3 class="sub-title">~을 본다 <span class="lead-sub">(값)</span></h3>
                   <div class="chip-group metric-group"></div>
+                  <div class="ratio-slot"></div>
                 </div>
                 <div class="column-section${state.mode === 'aggregate' ? ' is-hidden' : ''}">
                   <h3 class="sub-title">포함할 컬럼</h3>

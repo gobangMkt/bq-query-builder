@@ -9,6 +9,16 @@ export interface DateRange {
 
 export type MetricType = 'event_count' | 'unique_users' | 'unique_sessions';
 
+// 비율 지표: 분자/분모 이벤트의 발생 건수 비(SAFE_DIVIDE). 두 이벤트 모두 선택 이벤트 안에 있어야 한다.
+export type RatioFormat = 'percent' | 'decimal';
+
+export interface RatioMetric {
+  numeratorEvent: string;
+  denominatorEvent: string;
+  format: RatioFormat;
+  decimals: number; // 표시 소수점 자리(0~4)
+}
+
 export type TrafficSourceField = 'source' | 'medium' | 'campaign';
 
 export type DimensionSelection =
@@ -41,6 +51,8 @@ export interface AggregateSelection {
   events: string[];
   dimensions: DimensionSelection[];
   metrics: MetricType[];
+  // 비율 지표(선택). 있으면 SAFE_DIVIDE 컬럼을 추가로 낸다. metrics가 비어 있어도 ratio만으로 생성 가능.
+  ratio?: RatioMetric | null;
   filters: FilterCondition[];
   segments?: SegmentCondition[];
 }

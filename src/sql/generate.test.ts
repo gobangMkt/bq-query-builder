@@ -548,3 +548,112 @@ describe('generateWideSql — 사람 조건(세그먼트)', () => {
     expect(sql).toContain('user_pseudo_id IN (SELECT user_pseudo_id FROM seg_users)');
   });
 });
+
+// 비율 지표용 fixture — 두 이벤트(클릭/조회) + 공유 파라미터(ad_banner_type)
+const ratioCatalog: Catalog = {
+  projectId: 'test-project',
+  generatedAt: '2026-01-01T00:00:00.000Z',
+  properties: {
+    gobang: {
+      datasetId: 'analytics_111',
+      label: '고방',
+      events: [
+        {
+          name: 'ad_banner_view',
+          label: '배너 조회',
+          cnt: 100,
+          params: [{ key: 'ad_banner_type', type: 'string', cnt: 100 }],
+        },
+        {
+          name: 'ad_banner_click',
+          label: '배너 클릭',
+          cnt: 30,
+          params: [{ key: 'ad_banner_type', type: 'string', cnt: 30 }],
+        },
+      ],
+    },
+    uceo: { datasetId: 'analytics_222', label: 'U사장님', events: [] },
+  },
+};
+
+function ratioSelection(overrides: Partial<AggregateSelection> = {}): AggregateSelection {
+  return {
+    propertyKey: 'gobang',
+    dateRange: { start: '2026-06-25', end: '2026-07-01' },
+    events: ['ad_banner_view', 'ad_banner_click'],
+    dimensions: [],
+    metrics: [],
+    filters: [],
+    ratio: {
+      numeratorEvent: 'ad_banner_click',
+      denominatorEvent: 'ad_banner_view',
+      format: 'percent',
+      decimals: 2,
+    },
+    ...overrides,
+  };
+}
+
+describe('generateAggregateSql — 비율 지표', () => {
+  it('퍼센트 비율: SAFE_DIVIDE * 100 + ROUND(자리수) + 분자/분모 건수', () => {
+    const sql = generateAggregateSql(ratioCatalog, ratioSelection());
+    expect(sql).toContain("COUNTIF(event_name = 'ad_banner_click') AS numerator_count");
+    expect(sql).toContain("COUNTIF(event_name = 'ad_banner_view') AS denominator_count");
+    expect(sql).toContain(
+      "ROUND(SAFE_DIVIDE(COUNTIF(event_name = 'ad_banner_click'), COUNTIF(event_name = 'ad_banner_view')) * 100, 2) AS ratio_pct",
+    );
+    expect(sql).toContain('/* 비율: ad_banner_click ÷ ad_banner_view (%, 소수점 2자리) */');
+  });
+
+  it('소수 비율: * 100 없이 ROUND(SAFE_DIVIDE, 자리수) AS ratio', () => {
+    const sql = generateAggregateSql(
+      ratioCatalog,
+      ratioSelection({ ratio: { numeratorEvent: 'ad_banner_click', denominatorEvent: 'ad_banner_view', format: 'decimal', decimals: 3 } }),
+    );
+    expect(sql).toContain(
+      "ROUND(SAFE_DIVIDE(COUNTIF(event_name = 'ad_banner_click'), COUNTIF(event_name = 'ad_banner_view')), 3) AS ratio",
+    );
+    expect(sql).not.toContain('* 100');
+  });
+
+  it('metrics가 비어도 비율만으로 생성된다', () => {
+    const sql = generateAggregateSql(ratioCatalog, ratioSelection());
+    expect(sql).toContain('/* ===== Aggregate ===== */');
+    expect(sql).not.toContain('COUNT(*) AS event_count');
+  });
+
+  it('공유 차원과 함께 GROUP BY 된다 (CTR by ad_banner_type)', () => {
+    const sql = generateAggregateSql(
+      ratioCatalog,
+      ratioSelection({ dimensions: [{ kind: 'param', key: 'ad_banner_type' }] }),
+    );
+    expect(sql).toContain(
+      "(SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'ad_banner_type') AS ad_banner_type",
+    );
+    expect(sql).toContain('GROUP BY ad_banner_type');
+    expect(sql).toContain("event_name IN ('ad_banner_view', 'ad_banner_click')");
+  });
+
+  it('소수점 자리수는 0~4로 클램프된다', () => {
+    const sql = generateAggregateSql(
+      ratioCatalog,
+      ratioSelection({ ratio: { numeratorEvent: 'ad_banner_click', denominatorEvent: 'ad_banner_view', format: 'percent', decimals: 9 } }),
+    );
+    expect(sql).toContain('* 100, 4) AS ratio_pct');
+  });
+
+  it('분자/분모가 없으면 비율은 무시되고, metrics도 없으면 에러', () => {
+    expect(() =>
+      generateAggregateSql(
+        ratioCatalog,
+        ratioSelection({ metrics: [], ratio: { numeratorEvent: '', denominatorEvent: '', format: 'percent', decimals: 2 } }),
+      ),
+    ).toThrow('지표를 1개 이상');
+  });
+
+  it('metrics와 비율이 함께 있으면 둘 다 출력', () => {
+    const sql = generateAggregateSql(ratioCatalog, ratioSelection({ metrics: ['event_count'] }));
+    expect(sql).toContain('COUNT(*) AS event_count');
+    expect(sql).toContain('AS ratio_pct');
+  });
+});

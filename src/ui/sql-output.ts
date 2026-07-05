@@ -1,7 +1,7 @@
 // S5: SQL 출력 섹션 — S2 엔진 연결 + 비용 가드(기간 필수/90일 경고) + stale 표시.
 // 렌더링만 담당한다. 상태 변경·이벤트 배선은 builder.ts가 담당(다른 슬롯과 동일한 패턴).
 
-import type { AggregateSelection, DateRange, WideSelection } from '../sql/types';
+import type { AggregateSelection, DateRange, RatioMetric, WideSelection } from '../sql/types';
 import { DETAIL_LIMIT_VALUE, state } from '../state';
 import type { PropertyKey } from '../state';
 import { escapeHtml } from '../utils/html';
@@ -82,11 +82,24 @@ export function buildSelectionFromState(
     events: [...state.selectedEvents[property]],
     dimensions: state.dimensions[property],
     metrics: [...state.metrics[property]],
+    ratio: buildRatioFromState(property),
     filters: usableFilters,
     segments: state.segments[property],
   };
 
   return { selection, filterErrorsByIndex: errorsByIndex };
+}
+
+/** 비율 UI 상태를 엔진용 RatioMetric으로 변환. enabled + 분자·분모가 모두 있을 때만 활성. */
+function buildRatioFromState(property: PropertyKey): RatioMetric | null {
+  const r = state.ratio[property];
+  if (!r.enabled || !r.numeratorEvent || !r.denominatorEvent) return null;
+  return {
+    numeratorEvent: r.numeratorEvent,
+    denominatorEvent: r.denominatorEvent,
+    format: r.format,
+    decimals: r.decimals,
+  };
 }
 
 /**

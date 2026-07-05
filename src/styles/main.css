@@ -786,6 +786,93 @@ button {
   font-weight: 600;
 }
 
+/* 비율 지표 블록 */
+.ratio-block {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.ratio-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ratio-toggle input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+}
+.ratio-config {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ratio-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+.ratio-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ratio-field-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.ratio-field select {
+  height: 40px;
+  padding: 0 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-input);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+}
+.ratio-divide {
+  align-self: center;
+  padding-bottom: 8px;
+  font-size: 16px;
+  color: var(--text-muted);
+}
+.ratio-format-seg {
+  display: inline-flex;
+  gap: 4px;
+}
+.ratio-fmt-btn {
+  height: 40px;
+  min-width: 52px;
+  padding: 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-input);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.ratio-fmt-btn:hover {
+  background: var(--bg);
+}
+.ratio-fmt-btn.is-active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+.ratio-hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.ratio-hint b {
+  color: var(--primary);
+}
+
 .dim-section.is-hidden,
 .metric-section.is-hidden,
 .column-section.is-hidden {
@@ -1658,10 +1745,19 @@ button {
 
 .preview-sentence b {
   font-weight: 700;
+  color: var(--primary);
 }
 
 .sentence-pending {
   color: var(--text-muted);
+}
+
+/* B: 셀렉형 좌측 패널 상단 실시간 문장 */
+.select-sentence-slot {
+  margin: 0 0 4px;
+}
+.select-sentence-slot .preview-sentence {
+  margin: 0 0 16px;
 }
 
 /* 대화형 모드의 SQL 패널 안내 */

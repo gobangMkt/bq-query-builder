@@ -7,6 +7,7 @@ import type {
   DimensionSelection,
   FilterCondition,
   MetricType,
+  RatioMetric,
   SegmentCondition,
   WideSelection,
 } from './types';
@@ -34,6 +35,34 @@ const METRIC_EXPR: Record<MetricType, string> = {
 
 function escapeSql(value: string): string {
   return value.replace(/'/g, "''");
+}
+
+const RATIO_DECIMALS_MIN = 0;
+const RATIO_DECIMALS_MAX = 4;
+
+function clampDecimals(decimals: number): number {
+  if (!Number.isFinite(decimals)) return 0;
+  return Math.max(RATIO_DECIMALS_MIN, Math.min(RATIO_DECIMALS_MAX, Math.round(decimals)));
+}
+
+/** 유효한 비율 지표만 반환(분자·분모 이벤트가 모두 있어야 활성). 아니면 null. */
+function activeRatio(selection: AggregateSelection): RatioMetric | null {
+  const r = selection.ratio;
+  if (!r || !r.numeratorEvent || !r.denominatorEvent) return null;
+  return r;
+}
+
+/** 비율 지표 SELECT 표현식 — 분자/분모 건수 + SAFE_DIVIDE(퍼센트/소수). */
+function buildRatioExprs(ratio: RatioMetric): string[] {
+  const numCount = `COUNTIF(event_name = '${escapeSql(ratio.numeratorEvent)}')`;
+  const denCount = `COUNTIF(event_name = '${escapeSql(ratio.denominatorEvent)}')`;
+  const decimals = clampDecimals(ratio.decimals);
+  const divide = `SAFE_DIVIDE(${numCount}, ${denCount})`;
+  const ratioExpr =
+    ratio.format === 'percent'
+      ? `ROUND(${divide} * 100, ${decimals}) AS ratio_pct`
+      : `ROUND(${divide}, ${decimals}) AS ratio`;
+  return [`${numCount} AS numerator_count`, `${denCount} AS denominator_count`, ratioExpr];
 }
 
 function toTableSuffix(date: string): string {
@@ -125,8 +154,12 @@ function segmentsOf(selection: { segments?: SegmentCondition[] }): SegmentCondit
 
 /** 대상 이벤트 + 세그먼트 조건 이벤트를 합친 목록(순서 보존, 중복 제거). base가 스캔할 이벤트다. */
 function unionBaseEvents(events: string[], segments: SegmentCondition[]): string[] {
-  const all = [...events];
-  for (const s of segments) if (!all.includes(s.event)) all.push(s.event);
+  const all: string[] = [];
+  const add = (name: string) => {
+    if (name && !all.includes(name)) all.push(name);
+  };
+  for (const e of events) add(e);
+  for (const s of segments) add(s.event);
   return all;
 }
 
@@ -182,10 +215,19 @@ function buildAssumptionsComment(selection: AggregateSelection): string {
       ? selection.filters.map((f) => buildFilterExpr(f, isNumericFilterForDisplay(f))).join(', ')
       : '없음';
 
+  const ratio = activeRatio(selection);
+  const ratioLine = ratio
+    ? [
+        `/* 비율: ${ratio.numeratorEvent} ÷ ${ratio.denominatorEvent}` +
+          ` (${ratio.format === 'percent' ? '%' : '소수'}, 소수점 ${clampDecimals(ratio.decimals)}자리) */`,
+      ]
+    : [];
+
   return [
     '/* ===== Assumptions ===== */',
     `/* 기간: ${start} ~ ${end} */`,
     `/* 이벤트: ${eventSummary} */`,
+    ...ratioLine,
     `/* 사람 조건: ${segmentsSummary(segmentsOf(selection))} (판정 기간 = 조회 기간) */`,
     `/* 필터: ${filterSummary} */`,
     '/* 실행 전 BQ 에디터에서 예상 스캔량을 확인하세요. */',
@@ -196,8 +238,9 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
   if (!selection.dateRange || !selection.dateRange.start || !selection.dateRange.end) {
     throw new Error('기간을 먼저 선택하세요. 기간 없이는 SQL을 생성할 수 없습니다.');
   }
-  if (selection.metrics.length === 0) {
-    throw new Error('지표를 1개 이상 선택하세요.');
+  const ratio = activeRatio(selection);
+  if (selection.metrics.length === 0 && !ratio) {
+    throw new Error('지표를 1개 이상 선택하거나 비율을 설정하세요.');
   }
 
   const property = catalog.properties[selection.propertyKey];
@@ -224,7 +267,8 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
   ];
 
   const segments = segmentsOf(selection);
-  const baseEvents = unionBaseEvents(selection.events, segments);
+  const ratioEvents = ratio ? [ratio.numeratorEvent, ratio.denominatorEvent] : [];
+  const baseEvents = unionBaseEvents([...selection.events, ...ratioEvents], segments);
 
   const baseCteBody = buildBaseCteBody(catalog, property, baseEvents, { start, end }, baseColumns);
   const cteBodies = [baseCteBody];
@@ -234,6 +278,7 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
   // ----- Aggregate SELECT -----
   const dimensionExprs = selection.dimensions.map(dimensionSelectExpr);
   const metricExprs = selection.metrics.map((m) => METRIC_EXPR[m]);
+  const ratioExprs = ratio ? buildRatioExprs(ratio) : [];
   const groupByList = selection.dimensions.map(dimensionColumnName);
 
   const filterExprs = selection.filters.map((f) => {
@@ -254,7 +299,7 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
 
   const outerLines = [
     'SELECT',
-    [...dimensionExprs, ...metricExprs].map((c) => `  ${c}`).join(',\n'),
+    [...dimensionExprs, ...metricExprs, ...ratioExprs].map((c) => `  ${c}`).join(',\n'),
     'FROM base',
   ];
   if (whereClauses.length > 0) {
