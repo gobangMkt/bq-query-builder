@@ -86,7 +86,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const filterSlotEl = root.querySelector<HTMLElement>('.filter-slot')!;
   const previewSlotEl = root.querySelector<HTMLElement>('.preview-slot')!;
   const previewSentenceSlotEl = root.querySelector<HTMLElement>('.preview-sentence-slot')!;
-  const selectSentenceSlotEl = root.querySelector<HTMLElement>('.select-sentence-slot')!;
+  const dateLeadEl = root.querySelector<HTMLElement>('.compose-lead[data-lead="date"]')!;
+  const eventLeadEl = root.querySelector<HTMLElement>('.compose-lead[data-lead="event"]')!;
   const sqlSlotEl = root.querySelector<HTMLElement>('.sql-slot')!;
   const composeRestEl = root.querySelector<HTMLElement>('.compose-rest')!;
   const selectedEventsSlotEl = root.querySelector<HTMLElement>('.selected-events-slot')!;
@@ -457,19 +458,32 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   }
 
   function renderSentence(): void {
+    renderComposeLeads();
     // 대화형: AI 해석 문장을, 셀렉형: 선택 상태로 조립한 문장을 표시.
     if (state.inputMode === 'chat' && chatView.kind !== 'fallback') {
       previewSentenceSlotEl.innerHTML =
         chatView.kind === 'confirm' || chatView.kind === 'sql'
           ? `<p class="preview-sentence">“${escapeHtml(chatView.explanation)}”</p>`
           : '';
-      selectSentenceSlotEl.innerHTML = '';
       return;
     }
-    const sentence = `<p class="preview-sentence">${composeStateSentence()}</p>`;
-    previewSentenceSlotEl.innerHTML = sentence;
-    // B: 셀렉형 좌측 패널 상단에도 같은 문장을 실시간으로 보여준다(선택값=파란색 + 설명).
-    selectSentenceSlotEl.innerHTML = state.inputMode === 'select' ? sentence : '';
+    previewSentenceSlotEl.innerHTML = `<p class="preview-sentence">${composeStateSentence()}</p>`;
+  }
+
+  // B: 셀렉형 좌측 섹션 라벨을 선택값에 반응형으로 갱신한다 (예: "기간 동안," → "「7일」 기간 동안,").
+  function renderComposeLeads(): void {
+    let dateLead: string;
+    if (state.datePreset) dateLead = `<b>최근 ${state.datePreset}일</b> 기간 동안,`;
+    else if (state.dateFrom && state.dateTo)
+      dateLead = `<b>${escapeHtml(state.dateFrom)} ~ ${escapeHtml(state.dateTo)}</b> 기간 동안,`;
+    else dateLead = '기간 동안,';
+    dateLeadEl.innerHTML = dateLead;
+
+    const names = currentEventNames();
+    eventLeadEl.innerHTML =
+      names.length > 0
+        ? `<b>${escapeHtml(names.map(eventSentenceLabel).join('·'))}</b> 이벤트를,`
+        : '이벤트를,';
   }
 
   function renderPreview(): void {
@@ -1243,17 +1257,16 @@ function shellHtml(catalog: Catalog): string {
 
           <div class="input-panel-select">
             <p class="compose-head">이 문장을 채우면 SQL이 됩니다</p>
-            <div class="select-sentence-slot"></div>
 
             <p class="compose-from"><b class="data-from-label">${escapeHtml(properties[state.property].label)}</b> 데이터에서,</p>
 
             <div class="compose-line">
-              <span class="compose-lead">기간 동안,</span>
+              <span class="compose-lead" data-lead="date">기간 동안,</span>
               <div class="date-range-slot"></div>
             </div>
 
             <div class="compose-line">
-              <span class="compose-lead">이벤트를,</span>
+              <span class="compose-lead" data-lead="event">이벤트를,</span>
               <div class="selected-events-slot"></div>
             </div>
 
