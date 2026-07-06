@@ -237,6 +237,16 @@ function buildPrompt(question, property, schema, history, errorFeedback) {
   var lines = [];
   lines.push(INSTRUCTIONS);
   lines.push('');
+  // LLM은 실제 현재 날짜를 모른다. 오늘을 명시해 연도 생략·'현재까지' 같은 표현을 올바르게 해석시킨다.
+  var today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
+  lines.push('## 오늘 날짜(반드시 이 기준으로 해석)');
+  lines.push('오늘은 ' + today + ' (Asia/Seoul) 이다.');
+  lines.push(
+    "- 사용자가 연도를 생략하면(예: '7월 1일부터', '07.01') 반드시 오늘 날짜의 연도를 쓴다. 과거 임의 연도(2023 등)를 지어내지 마라.",
+  );
+  lines.push("- '현재까지'/'지금까지'/'오늘까지'/'최근'의 종료일은 오늘 날짜로 한다.");
+  lines.push('- 오늘보다 미래의 날짜는 쓰지 않는다(_TABLE_SUFFIX 상한은 오늘).');
+  lines.push('');
   lines.push('## 대상');
   lines.push('데이터셋: ' + property.datasetId + ' (' + (property.label || '') + ')');
   lines.push('테이블: `' + PROJECT_ID + '.' + property.datasetId + '.events_*`');
