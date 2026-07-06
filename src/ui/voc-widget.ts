@@ -28,7 +28,6 @@ export function mountVocWidget(root: HTMLElement): void {
 
   const messageEl = modal.querySelector<HTMLTextAreaElement>('.voc-message')!;
   const categoryEl = modal.querySelector<HTMLSelectElement>('.voc-category')!;
-  const phoneEl = modal.querySelector<HTMLInputElement>('.voc-phone')!;
   const submitBtn = modal.querySelector<HTMLButtonElement>('.voc-submit')!;
   const form = modal.querySelector<HTMLFormElement>('.voc-form')!;
 
@@ -64,11 +63,9 @@ export function mountVocWidget(root: HTMLElement): void {
       const res = await submitVoc({
         message,
         category: categoryEl.value,
-        phone: phoneEl.value.trim(),
       });
       if (res && res.ok) {
         messageEl.value = '';
-        phoneEl.value = '';
         close();
         toast('접수되었습니다. 감사합니다!', true);
       } else {
@@ -103,10 +100,6 @@ function modalHtml(): string {
         <label class="voc-field">
           <span class="voc-flabel">분류</span>
           <select class="voc-category">${options}</select>
-        </label>
-        <label class="voc-field">
-          <span class="voc-flabel">연락처 <span class="voc-optional">(선택 · 답변이 필요할 때만)</span></span>
-          <input type="text" class="voc-phone" placeholder="010-0000-0000" />
         </label>
         <div class="voc-actions">
           <button type="button" class="voc-cancel">취소</button>

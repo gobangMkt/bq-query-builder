@@ -2190,14 +2190,8 @@ button {
   color: var(--text);
 }
 
-.voc-optional {
-  font-weight: 400;
-  color: var(--text-muted);
-}
-
 .voc-message,
-.voc-category,
-.voc-phone {
+.voc-category {
   width: 100%;
   border: 1px solid var(--border-input);
   border-radius: var(--radius);
@@ -2213,8 +2207,7 @@ button {
 }
 
 .voc-message:focus,
-.voc-category:focus,
-.voc-phone:focus {
+.voc-category:focus {
   outline: none;
   border-color: var(--primary);
 }
