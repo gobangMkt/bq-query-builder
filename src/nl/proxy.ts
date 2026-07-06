@@ -82,3 +82,16 @@ export async function callProxy(args: CallProxyArgs): Promise<ProxyResult> {
   }
   return data;
 }
+
+// 현재 이번 달 AI 사용액/한도만 조회한다(질문 없이 GET 헬스체크). 실패 시 null.
+export async function fetchBudget(): Promise<ProxyBudget | null> {
+  if (!PROXY_URL) return null;
+  try {
+    const res = await fetch(PROXY_URL, { method: 'GET' });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { ok?: boolean; budget?: ProxyBudget };
+    return data && data.budget ? data.budget : null;
+  } catch {
+    return null;
+  }
+}

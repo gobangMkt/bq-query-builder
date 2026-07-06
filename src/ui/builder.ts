@@ -24,6 +24,7 @@ import { renderMetricsHtml, renderRatioHtml, type RatioEventOption } from './met
 import { renderAiPreviewHtml, renderPreviewHtml, renderWidePreviewHtml } from './preview';
 import { defaultSegmentFor, renderSegmentsHtml } from './segments';
 import {
+  renderChatBudgetHtml,
   renderChatResultHtml,
   renderChatShellHtml,
   renderChatSqlPanelHtml,
@@ -31,7 +32,7 @@ import {
   type ChatView,
 } from './chat';
 import { parseQuery, type ParseResult } from '../nl/parse';
-import { callProxy, type ProxyHistoryItem } from '../nl/proxy';
+import { callProxy, fetchBudget, type ProxyBudget, type ProxyHistoryItem } from '../nl/proxy';
 import { extractSelectColumns } from '../nl/sql-columns';
 import { buildSelectionFromState, buildWideSelectionFromState, renderSqlSectionHtml } from './sql-output';
 
@@ -224,6 +225,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   // S4: 후속 질문 맥락(직전 질문·SQL). 프로퍼티 전환 시 비운다.
   const chatHistory: ProxyHistoryItem[] = [];
   const CHAT_EXAMPLE = '지난 한 주 동안 배너 종류별 클릭율(CTR)을 날짜순으로';
+  // 이번 달 AI 사용액/한도(대화형 상단 상시 표시). 초기 GET + 매 응답마다 갱신. 미조회면 null.
+  let chatBudget: ProxyBudget | null = null;
 
   // ----- 대화형 @멘션 -----
   type MentionItem = { name: string; label: string };
@@ -292,7 +295,13 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   function renderChatShell(): void {
     chatSlotEl.innerHTML = renderChatShellHtml();
     closeMention();
+    renderChatBudget();
     renderChatResult();
+  }
+
+  function renderChatBudget(): void {
+    const slot = chatSlotEl.querySelector<HTMLElement>('.chat-budget-slot');
+    if (slot) slot.innerHTML = renderChatBudgetHtml(chatBudget);
   }
 
   function renderChatResult(): void {
@@ -314,6 +323,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     renderSql();
 
     const res = await callProxy({ question, property: currentProperty(), history: chatHistory });
+    // 성공·실패·예산초과 어느 경우든 budget이 실려오면 상단 사용량 바를 갱신한다.
+    if (res.budget) {
+      chatBudget = res.budget;
+      renderChatBudget();
+    }
     if (res.ok) {
       // SQL은 받아두되 바로 노출하지 않는다 — 구조 미리보기 확인 후 버튼으로 공개(추가 호출 없음).
       chatView = {
@@ -323,8 +337,6 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
         corrected: res.corrected,
         cached: Boolean(res.cached),
         columns: extractSelectColumns(res.sql),
-        spentKrw: res.budget?.spentKrw,
-        capKrw: res.budget?.capKrw,
       };
       chatHistory.push({ question, sql: res.sql });
     } else if (res.budgetExceeded) {
@@ -1213,6 +1225,14 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   syncModeVisibility();
   syncComposeProgressive();
   syncInputMode();
+
+  // 대화형 상단 사용량 바 초기값: 질문 없이 현재 이번 달 사용액을 GET으로 조회한다.
+  void fetchBudget().then((budget) => {
+    if (budget) {
+      chatBudget = budget;
+      renderChatBudget();
+    }
+  });
 }
 
 function shellHtml(catalog: Catalog): string {

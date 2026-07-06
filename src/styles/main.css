@@ -1312,10 +1312,70 @@ button {
   border-radius: var(--radius-sm);
   padding: 1px 6px;
 }
-.chat-budget {
-  margin: 0;
+/* 대화형 상단 AI 사용량 바 — 이번 달 누적 사용액/한도(₩900) 상시 표시 */
+.chat-budget-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.chat-budget-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chat-budget-title {
   font-size: 12px;
+  font-weight: 600;
   color: var(--text-muted);
+}
+
+.chat-budget-amount {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.chat-budget-cap {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.chat-budget-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.chat-budget-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.chat-budget-bar.is-mid .chat-budget-fill {
+  background: #f59e0b;
+}
+
+.chat-budget-bar.is-mid .chat-budget-amount {
+  color: #b45309;
+}
+
+.chat-budget-bar.is-high .chat-budget-fill {
+  background: var(--danger);
+}
+
+.chat-budget-bar.is-high .chat-budget-amount {
+  color: var(--danger);
 }
 
 /* 확인 단계 — SQL 노출 전 구조 확인 안내 */

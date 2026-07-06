@@ -5,6 +5,7 @@
 import type { CatalogProperty } from '../data/catalog-types';
 import type { MetricType } from '../sql/types';
 import type { EventChoice, ParseResult } from '../nl/parse';
+import type { ProxyBudget } from '../nl/proxy';
 import { escapeHtml } from '../utils/html';
 import { highlightSql } from './sql-output';
 import { alertTriangleIcon, arrowRightIcon, checkIcon, copyIcon } from './icons';
@@ -25,8 +26,6 @@ export interface ChatAnswer {
   cached: boolean;
   // 최종 SELECT에서 추출한 결과 컬럼명(구조 미리보기용). 추정 실패 시 빈 배열.
   columns: string[];
-  spentKrw?: number;
-  capKrw?: number;
 }
 
 // 대화형 결과 상태. builder.ts가 이 값을 만들어 renderChatResultHtml에 넘긴다.
@@ -42,6 +41,7 @@ export type ChatView =
 export function renderChatShellHtml(): string {
   return `
     <div class="chat">
+      <div class="chat-budget-slot"></div>
       <label class="chat-label" for="chat-input">무엇이 궁금하세요?</label>
       <div class="chat-input-wrap">
         <div class="chat-input-row">
@@ -54,6 +54,27 @@ export function renderChatShellHtml(): string {
       <p class="chat-hint"><b>@</b>를 입력하면 이벤트를 골라 넣을 수 있어요. 만든 SQL은 BQ 콘솔에서 실행하세요.</p>
       <button type="button" class="chat-example-btn">예시 문장 넣기</button>
       <div class="chat-result"></div>
+    </div>
+  `;
+}
+
+// 대화형 상단 AI 사용량 바. 이번 달 누적 사용액 / 한도(₩900)를 진행바로 상시 표시한다.
+// budget 미조회(null) 시엔 빈 문자열 — 자리만 두고 도착하면 채운다.
+export function renderChatBudgetHtml(budget: ProxyBudget | null): string {
+  if (!budget) return '';
+  const cap = budget.capKrw > 0 ? budget.capKrw : 1;
+  const spent = Math.max(0, budget.spentKrw);
+  const pct = Math.min(100, Math.round((spent / cap) * 100));
+  const level = pct >= 90 ? 'is-high' : pct >= 70 ? 'is-mid' : '';
+  return `
+    <div class="chat-budget-bar ${level}" role="group" aria-label="이번 달 AI 사용량">
+      <div class="chat-budget-head">
+        <span class="chat-budget-title">이번 달 AI 사용</span>
+        <span class="chat-budget-amount">₩${spent.toLocaleString('ko-KR')} <span class="chat-budget-cap">/ ₩${budget.capKrw.toLocaleString('ko-KR')}</span></span>
+      </div>
+      <div class="chat-budget-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
+        <div class="chat-budget-fill" style="width: ${pct}%"></div>
+      </div>
     </div>
   `;
 }
@@ -154,10 +175,6 @@ function renderSqlAnswerHtml(view: Extract<ChatView, { kind: 'sql' }>): string {
 // 우측 SQL 패널의 대화형 모드 렌더. 확인 전엔 안내, 확인 후엔 SQL 본문+복사.
 export function renderChatSqlPanelHtml(view: ChatView): string {
   if (view.kind === 'sql') {
-    const budgetNote =
-      view.spentKrw != null && view.capKrw != null
-        ? `<p class="chat-budget">이번 달 AI 사용 ₩${view.spentKrw} / ₩${view.capKrw}</p>`
-        : '';
     return `
       <div class="sql-output">
         <div class="sql-code-wrap">
@@ -165,7 +182,6 @@ export function renderChatSqlPanelHtml(view: ChatView): string {
           <button type="button" class="chat-sql-copy-btn">${copyIcon}<span>복사</span></button>
         </div>
         <p class="sql-copy-hint">BQ 콘솔에 붙여넣어 실행하세요.</p>
-        ${budgetNote}
       </div>
     `;
   }
