@@ -42,6 +42,7 @@ import { callProxy, fetchBudget, type ProxyBudget, type ProxyHistoryItem } from 
 import { extractSelectColumns } from '../nl/sql-columns';
 import { buildSelectionFromState, buildWideSelectionFromState, renderSqlSectionHtml } from './sql-output';
 import { mountVocWidget } from './voc-widget';
+import { mountHelpWidget } from './help-widget';
 
 const PRESETS: Array<{ days: number; label: string }> = [
   { days: 7, label: '7일' },
@@ -73,6 +74,7 @@ function dimensionSentenceLabel(dim: DimensionSelection): string {
 
 export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   root.innerHTML = shellHtml(catalog);
+  mountHelpWidget(root);
   mountVocWidget(root);
 
   const listEl = root.querySelector<HTMLElement>('.event-list')!;

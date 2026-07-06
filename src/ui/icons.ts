@@ -37,6 +37,16 @@ export const copyIcon = base(
 
 export const checkIcon = base('<path d="M20 6 9 17l-5-5"/>');
 
+export const helpCircleIcon = base(
+  '<circle cx="12" cy="12" r="10"/>' +
+    '<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+);
+
+export const externalLinkIcon = base(
+  '<path d="M15 3h6v6"/><path d="M10 14 21 3"/>' +
+    '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+);
+
 // v2: 대화형/셀렉형 세그먼트 + 사람 조건
 export const messageIcon = base(
   '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
