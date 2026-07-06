@@ -1543,12 +1543,78 @@ button {
   gap: 4px;
 }
 
+.event-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 4px 6px;
+  border-bottom: 1px solid var(--border);
+}
+
 .event-group-title {
   font-size: 13px;
   color: var(--text-muted);
   margin: 0;
-  padding: 4px 4px 6px;
-  border-bottom: 1px solid var(--border);
+  padding: 0;
+}
+
+/* 퍼널 그룹 단위 일괄 추가/빼기 — 아웃라인 버튼(그룹 제목 우측) */
+.event-group-bulk {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.event-group-bulk:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.event-group-bulk.is-selected {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+/* 검색결과 전체 일괄 추가/빼기 — 리스트 최상단 강조 버튼 */
+.event-bulk {
+  margin-bottom: 4px;
+}
+
+.event-bulk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: 9px 12px;
+  cursor: pointer;
+}
+
+.event-bulk-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.event-bulk-btn:hover {
+  border-color: var(--primary);
+}
+
+.event-bulk-btn.is-selected {
+  color: var(--text-muted);
+  background: var(--surface-2);
 }
 
 .event-rows {

@@ -9,7 +9,13 @@ import { presetRange } from '../utils/format';
 import { escapeHtml } from '../utils/html';
 import { unionParamsForEvents } from '../utils/params';
 import { renderDimensionsHtml } from './dimensions';
-import { renderEventDetailHtml, renderEventListHtml, renderSearchHtml } from './events-list';
+import {
+  filterEvents,
+  funnelKey,
+  renderEventDetailHtml,
+  renderEventListHtml,
+  renderSearchHtml,
+} from './events-list';
 import {
   buildFilterFieldOptions,
   defaultFilterFor,
@@ -918,9 +924,37 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     onSelectionChanged();
   }
 
-  // 리스트에서 이벤트를 클릭하면 선택 토글 + 우측 상세 pane 갱신.
+  // 검색결과·퍼널 그룹 단위 일괄 추가/빼기. 여러 이벤트를 한 번에 처리하고 렌더는 1회만.
+  function bulkToggleEvents(names: string[], add: boolean): void {
+    if (names.length === 0) return;
+    const selected = state.selectedEvents[state.property];
+    for (const name of names) {
+      if (add) selected.add(name);
+      else selected.delete(name);
+    }
+    renderList();
+    renderEventDetail();
+    renderSelectedEvents();
+    syncComposeProgressive();
+    refreshAfterSelectionChange();
+    onSelectionChanged();
+  }
+
+  // 리스트에서 이벤트를 클릭하면 선택 토글 + 우측 상세 pane 갱신. 일괄 버튼은 그보다 먼저 가로챈다.
   listEl.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.event-row');
+    const target = e.target as HTMLElement;
+    const bulkBtn = target.closest<HTMLButtonElement>('[data-bulk-scope]');
+    if (bulkBtn) {
+      const add = bulkBtn.dataset.bulkAction === 'add';
+      const filtered = filterEvents(currentProperty(), state.searchQuery.trim());
+      const names =
+        bulkBtn.dataset.bulkScope === 'group'
+          ? filtered.filter((ev) => funnelKey(ev) === bulkBtn.dataset.bulkKey).map((ev) => ev.name)
+          : filtered.map((ev) => ev.name);
+      bulkToggleEvents(names, add);
+      return;
+    }
+    const btn = target.closest<HTMLButtonElement>('.event-row');
     if (!btn) return;
     const name = btn.dataset.event;
     if (!name) return;
