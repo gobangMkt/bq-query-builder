@@ -25,7 +25,7 @@ import {
   validateFilters,
 } from './filters';
 import type { FilterFieldOption } from './filters';
-import { alertCircleIcon, bookIcon, checkIcon, messageIcon, plusIcon, slidersIcon } from './icons';
+import { alertCircleIcon, bookIcon, checkIcon, messageIcon, plusIcon, settingsIcon, slidersIcon } from './icons';
 import { renderMetricsHtml, renderRatioHtml, type RatioEventOption } from './metrics';
 import { renderAiPreviewHtml, renderPreviewHtml, renderWidePreviewHtml } from './preview';
 import { defaultSegmentFor, renderSegmentsHtml } from './segments';
@@ -699,6 +699,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     renderSql();
   });
 
+  // 관리자 패널 바로가기(#admin) — main.ts가 hashchange로 라우팅한다.
+  root.querySelector<HTMLButtonElement>('.admin-open-btn')?.addEventListener('click', () => {
+    location.hash = '#admin';
+  });
+
   // 이벤트 모달 열기/닫기
   dictOpenBtn.addEventListener('click', openEventModal);
   selectedEventsSlotEl.addEventListener('click', (e) => {
@@ -1283,6 +1288,7 @@ function shellHtml(catalog: Catalog): string {
         <span class="wb-brand">BQ 쿼리 빌더</span>
         <div class="top-bar-actions">
           <button type="button" class="dict-open-btn">${bookIcon}<span>이벤트 사전</span></button>
+          <button type="button" class="admin-open-btn" title="관리자" aria-label="관리자">${settingsIcon}</button>
         </div>
       </header>
 

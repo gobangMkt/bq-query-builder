@@ -9,7 +9,7 @@ export const PROXY_URL =
 
 // 관리자 핸드오프 패널(#admin) 전용. 팀 게이트(ACCESS_KEY)와 별개.
 // 정적 사이트 한계상 클라이언트 검증(외부인 차단용). 소유자가 값 변경 가능.
-export const ADMIN_KEY = 'gobang-admin';
+export const ADMIN_KEY = 'gobangMKT';
 export const ADMIN_STORAGE_KEY = 'bqb_admin';
 
 export type PropertyKey = 'gobang' | 'uceo';
