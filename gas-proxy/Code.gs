@@ -15,8 +15,8 @@ var GEMINI_URL =
 var PROJECT_ID = 'gobang-bigquery';
 var ALLOWED_DATASETS = ['analytics_274122040', 'analytics_279311003'];
 
-// ---- 비용 하드캡 (절대 1000원 초과 불가하도록 보수적으로 900원에서 차단) ----
-var MONTHLY_BUDGET_KRW = 900;
+// ---- 비용 하드캡 (1500원에서 차단) ----
+var MONTHLY_BUDGET_KRW = 1500;
 var USD_KRW = 1400; // 보수적 환율(높게 잡아 과소추정 방지)
 var PRICE_IN_PER_M = 0.3; // gemini-2.5-flash 입력 $/1M tokens
 var PRICE_OUT_PER_M = 2.5; // 출력 $/1M tokens
