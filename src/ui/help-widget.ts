@@ -4,7 +4,7 @@
 import { escapeHtml } from '../utils/html';
 import { externalLinkIcon, helpCircleIcon } from './icons';
 import {
-  HELP_LINKS,
+  BQ_CONSOLE_URL,
   HELP_TABS,
   RUN_CAUTION,
   RUN_STEPS,
@@ -95,7 +95,6 @@ function modalHtml(): string {
 function tabContentHtml(id: string): string {
   if (id === 'usage') return usageHtml();
   if (id === 'run') return runHtml();
-  if (id === 'links') return linksHtml();
   return '';
 }
 
@@ -105,6 +104,11 @@ function usageHtml(): string {
       <li class="help-usage-item">
         <span class="help-usage-name">${escapeHtml(it.name)}</span>
         <span class="help-usage-desc">${escapeHtml(it.desc)}</span>
+        ${
+          it.example
+            ? `<span class="help-usage-example"><span class="help-example-tag">예시</span>${escapeHtml(it.example)}</span>`
+            : ''
+        }
       </li>`,
   ).join('');
   return `
@@ -129,26 +133,11 @@ function runHtml(): string {
         </div>
       </li>`,
   ).join('');
-  const bqLink = HELP_LINKS[0];
   return `
     <ol class="help-steps">${steps}</ol>
-    <a class="help-cta" href="${escapeHtml(bqLink.href)}" target="_blank" rel="noopener noreferrer">
+    <a class="help-cta" href="${escapeHtml(BQ_CONSOLE_URL)}" target="_blank" rel="noopener noreferrer">
       ${externalLinkIcon}<span>BigQuery 콘솔 열기</span>
     </a>
     <p class="help-caution">⚠️ ${escapeHtml(RUN_CAUTION)}</p>
   `;
-}
-
-function linksHtml(): string {
-  const links = HELP_LINKS.map(
-    (l) => `
-      <a class="help-link" href="${escapeHtml(l.href)}" target="_blank" rel="noopener noreferrer">
-        ${externalLinkIcon}
-        <span class="help-link-text">
-          <span class="help-link-label">${escapeHtml(l.label)}</span>
-          ${l.note ? `<span class="help-link-note">${escapeHtml(l.note)}</span>` : ''}
-        </span>
-      </a>`,
-  ).join('');
-  return `<div class="help-links">${links}</div>`;
 }
