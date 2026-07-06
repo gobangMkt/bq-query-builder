@@ -21,6 +21,7 @@ SQL/BigQuery를 모르는 구성원(UX팀 등)이 **BigQuery SQL 텍스트**를 
 - **비용 가드**: 기간 미선택 시 생성 불가(`_TABLE_SUFFIX` 항상 포함), 90일 초과 경고, 상세 모드 기본 LIMIT 1000
 - **대상 데이터**: `gobang-bigquery.analytics_274122040`(고방 raw) / `analytics_279311003`(U사장님 raw)
 - **접근**: 진입 시 비밀번호 게이트 (`src/config.ts`의 `ACCESS_KEY` — 클라이언트 검증이라 완전 보안 아님, 외부인 차단용)
+- **관리자 핸드오프 패널(`#admin`)**: 소유자 전용(비번 `ADMIN_KEY`, 팀 게이트와 별개, 숨은 라우트). 프로퍼티 선택 → 노션 택소노미 URL 확인 → 기간 넣어 BQ 검증쿼리 생성·복사 → BQ 결과 붙여넣기 → **[Claude 핸드오프 텍스트 복사]**. 실제 동기화(노션 MCP로 택소노미 읽기·병합·JSON갱신·빌드·배포)는 Claude 세션이 수행하고, 브라우저는 텍스트 패키징만 한다(런타임 의존성 0 유지). 순수함수: `src/admin/verify-query.ts`·`src/admin/handoff.ts`, UI: `src/ui/admin.ts`.
 
 ## 대화형이 지원하는/안 하는 것
 | 지원 | 안 됨(이유 + 대안 안내) |
@@ -41,6 +42,7 @@ SQL/BigQuery를 모르는 구성원(UX팀 등)이 **BigQuery SQL 텍스트**를 
 - 클라이언트는 `src/config.ts`의 `PROXY_URL`(exec URL)로 이 프록시를 호출. 배포·재배포 절차는 `gas-proxy/README.md`.
 
 ### 카탈로그 갱신 (GTM 이벤트 추가/변경 시)
+> 관리자는 `#admin` 패널에서 검증쿼리 생성 → 결과 붙여넣기 → 핸드오프 텍스트를 복사해 Claude 세션에 넘기면 아래 1~4를 Claude가 대신 수행한다.
 1. `docs/verify-query.sql`을 BQ 콘솔에서 실행 (고방·U사장님 각 1회, 데이터셋 ID만 교체)
 2. 결과를 JSON으로 저장해 `data/inventory-*.json` 교체
 3. 텍소노미 변경분은 `data/taxonomy-*.json`에 반영
