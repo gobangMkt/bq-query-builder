@@ -154,8 +154,12 @@ button {
   margin: -6px 0 18px;
 }
 
-.top-bar .dict-open-btn {
+/* 우측 상단 액션 그룹 — 이벤트 사전·의견 보내기를 묶어 모드 전환에도 위치 고정 */
+.top-bar-actions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .data-label {

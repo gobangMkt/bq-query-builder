@@ -180,7 +180,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     const isChat = state.inputMode === 'chat';
     chatPanelEl.classList.toggle('is-hidden', !isChat);
     selectPanelEl.classList.toggle('is-hidden', isChat);
-    dictOpenBtn.classList.toggle('is-hidden', isChat);
+    // 이벤트 사전은 모드와 무관하게 항상 우측 상단 고정(대화형에서도 파라미터 조회용). 위치가 흔들리지 않게 숨기지 않는다.
     inputModeEl.querySelectorAll<HTMLButtonElement>('.input-mode-btn').forEach((btn) => {
       const active = btn.dataset.inputMode === state.inputMode;
       btn.classList.toggle('is-active', active);
@@ -1279,7 +1279,9 @@ function shellHtml(catalog: Catalog): string {
     <div class="workbench">
       <header class="top-bar">
         <span class="wb-brand">BQ 쿼리 빌더</span>
-        <button type="button" class="dict-open-btn">${bookIcon}<span>이벤트 사전</span></button>
+        <div class="top-bar-actions">
+          <button type="button" class="dict-open-btn">${bookIcon}<span>이벤트 사전</span></button>
+        </div>
       </header>
 
       <div class="wb-body2">

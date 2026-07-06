@@ -6,14 +6,17 @@ import { alertTriangleIcon, checkIcon, messageIcon } from './icons';
 import { escapeHtml } from '../utils/html';
 
 export function mountVocWidget(root: HTMLElement): void {
-  const topBar = root.querySelector<HTMLElement>('.top-bar');
-  if (!topBar) return;
+  // 상단 우측 액션 그룹에 붙여 모드 전환과 무관하게 위치를 고정한다(그룹이 없으면 top-bar 직속).
+  const actions =
+    root.querySelector<HTMLElement>('.top-bar-actions') ??
+    root.querySelector<HTMLElement>('.top-bar');
+  if (!actions) return;
 
   const openBtn = document.createElement('button');
   openBtn.type = 'button';
   openBtn.className = 'voc-open-btn';
   openBtn.innerHTML = `${messageIcon}<span>의견 보내기</span>`;
-  topBar.appendChild(openBtn);
+  actions.appendChild(openBtn);
 
   const modal = document.createElement('div');
   modal.className = 'voc-modal is-hidden';
