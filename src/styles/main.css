@@ -2075,3 +2075,242 @@ button {
   font-size: 13px;
   color: var(--text-muted);
 }
+
+/* ===== VoC 위젯 (의견 보내기) ===== */
+.voc-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--primary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.voc-open-btn:hover {
+  background: var(--primary-soft);
+}
+
+.voc-open-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.voc-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.voc-modal.is-hidden {
+  display: none;
+}
+
+.voc-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(24, 24, 27, 0.4);
+}
+
+.voc-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.voc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.voc-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.voc-title svg {
+  width: 18px;
+  height: 18px;
+  color: var(--primary);
+}
+
+.voc-close {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+
+.voc-close:hover {
+  color: var(--text);
+}
+
+.voc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+}
+
+.voc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.voc-flabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.voc-optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.voc-message,
+.voc-category,
+.voc-phone {
+  width: 100%;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.voc-message {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.voc-message:focus,
+.voc-category:focus,
+.voc-phone:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.voc-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.voc-cancel {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.voc-cancel:hover {
+  color: var(--text);
+}
+
+.voc-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.voc-submit:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.voc-submit:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.voc-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: voc-spin 0.7s linear infinite;
+}
+
+@keyframes voc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.voc-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 12px);
+  z-index: 200;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 90vw;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.voc-toast.is-shown {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.voc-toast svg {
+  width: 16px;
+  height: 16px;
+}
+
+.voc-toast.is-ok {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.voc-toast.is-error {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid #fca5a5;
+}

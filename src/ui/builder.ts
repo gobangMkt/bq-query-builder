@@ -41,6 +41,7 @@ import { parseQuery, type ParseResult } from '../nl/parse';
 import { callProxy, fetchBudget, type ProxyBudget, type ProxyHistoryItem } from '../nl/proxy';
 import { extractSelectColumns } from '../nl/sql-columns';
 import { buildSelectionFromState, buildWideSelectionFromState, renderSqlSectionHtml } from './sql-output';
+import { mountVocWidget } from './voc-widget';
 
 const PRESETS: Array<{ days: number; label: string }> = [
   { days: 7, label: '7일' },
@@ -72,6 +73,7 @@ function dimensionSentenceLabel(dim: DimensionSelection): string {
 
 export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   root.innerHTML = shellHtml(catalog);
+  mountVocWidget(root);
 
   const listEl = root.querySelector<HTMLElement>('.event-list')!;
   const searchSlot = root.querySelector<HTMLElement>('.event-search-slot')!;

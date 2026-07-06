@@ -46,6 +46,13 @@ SQL/BigQuery를 모르는 구성원(UX팀 등)이 **BigQuery SQL 텍스트**를 
 3. 텍소노미 변경분은 `data/taxonomy-*.json`에 반영
 4. `npm run build:catalog` → 커밋·push → 자동 재배포
 
+## VoC 연동
+- 신고하기 버튼: 상단 바 **"의견 보내기"** (모달: 내용·분류·연락처[선택] → 제출 → 성공/실패 토스트)
+- project 태그: `bq-query-builder`
+- SDK: `src/voc/voc.ts`(submitVoc) · 위젯: `src/ui/voc-widget.ts`(`mountVocWidget`)
+- 수집 대상: 전 서비스 공통 중앙 VoC 시트 (submitVoc만 호출, 처리·라우팅은 VoC 관제센터가 담당)
+- 관제: VoC관제센터 (http://localhost:3066)
+
 ## 배포링크
 - 프로덕션: https://gobangmkt.github.io/bq-query-builder/
 - GitHub: https://github.com/gobangMkt/bq-query-builder
