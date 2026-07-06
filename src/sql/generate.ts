@@ -26,11 +26,12 @@ const FIXED_STRING_FIELDS = new Set([
 const BRANCH_TYPE_MERGE_VALUES = ['원룸텔', '고시원'];
 const BRANCH_TYPE_MERGE_LABEL = '고시원·원룸텔';
 
+// 결과 컬럼 alias는 SQL을 모르는 사람이 바로 읽도록 한글로 둔다(BigQuery는 백틱으로 감싼다).
 const METRIC_EXPR: Record<MetricType, string> = {
-  event_count: 'COUNT(*) AS event_count',
-  unique_users: 'COUNT(DISTINCT user_pseudo_id) AS unique_users',
+  event_count: 'COUNT(*) AS `이벤트수`',
+  unique_users: 'COUNT(DISTINCT user_pseudo_id) AS `고유사용자수`',
   unique_sessions:
-    'COUNT(DISTINCT CONCAT(user_pseudo_id, CAST(ga_session_id AS STRING))) AS unique_sessions',
+    'COUNT(DISTINCT CONCAT(user_pseudo_id, CAST(ga_session_id AS STRING))) AS `고유세션수`',
 };
 
 function escapeSql(value: string): string {
@@ -52,7 +53,8 @@ function activeRatio(selection: AggregateSelection): RatioMetric | null {
   return r;
 }
 
-/** 비율 지표 SELECT 표현식 — 분자/분모 건수 + SAFE_DIVIDE(퍼센트/소수). */
+/** 비율 지표 SELECT 표현식 — 분자/분모 건수 + SAFE_DIVIDE(퍼센트/소수).
+ *  분자·분모 컬럼은 어떤 이벤트를 센 건지 바로 알도록 `이벤트명_건수`로, 비율은 단위를 alias에 담는다. */
 function buildRatioExprs(ratio: RatioMetric): string[] {
   const numCount = `COUNTIF(event_name = '${escapeSql(ratio.numeratorEvent)}')`;
   const denCount = `COUNTIF(event_name = '${escapeSql(ratio.denominatorEvent)}')`;
@@ -60,9 +62,13 @@ function buildRatioExprs(ratio: RatioMetric): string[] {
   const divide = `SAFE_DIVIDE(${numCount}, ${denCount})`;
   const ratioExpr =
     ratio.format === 'percent'
-      ? `ROUND(${divide} * 100, ${decimals}) AS ratio_pct`
-      : `ROUND(${divide}, ${decimals}) AS ratio`;
-  return [`${numCount} AS numerator_count`, `${denCount} AS denominator_count`, ratioExpr];
+      ? `ROUND(${divide} * 100, ${decimals}) AS \`비율(%)\``
+      : `ROUND(${divide}, ${decimals}) AS \`비율\``;
+  return [
+    `${numCount} AS \`${ratio.numeratorEvent}_건수\``,
+    `${denCount} AS \`${ratio.denominatorEvent}_건수\``,
+    ratioExpr,
+  ];
 }
 
 function toTableSuffix(date: string): string {

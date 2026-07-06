@@ -99,8 +99,8 @@ WITH base AS (
 SELECT
   event_date,
   inquiry_method,
-  COUNT(*) AS event_count,
-  COUNT(DISTINCT user_pseudo_id) AS unique_users
+  COUNT(*) AS \`이벤트수\`,
+  COUNT(DISTINCT user_pseudo_id) AS \`고유사용자수\`
 FROM base
 GROUP BY event_date, inquiry_method`);
   });
@@ -195,7 +195,7 @@ describe('generateAggregateSql — 지표', () => {
       "(SELECT COALESCE(value.int_value, SAFE_CAST(value.double_value AS INT64)) FROM UNNEST(event_params) WHERE key = 'ga_session_id') AS ga_session_id",
     );
     expect(sql).toContain(
-      'COUNT(DISTINCT CONCAT(user_pseudo_id, CAST(ga_session_id AS STRING))) AS unique_sessions',
+      'COUNT(DISTINCT CONCAT(user_pseudo_id, CAST(ga_session_id AS STRING))) AS `고유세션수`',
     );
   });
 });
@@ -597,21 +597,21 @@ function ratioSelection(overrides: Partial<AggregateSelection> = {}): AggregateS
 describe('generateAggregateSql — 비율 지표', () => {
   it('퍼센트 비율: SAFE_DIVIDE * 100 + ROUND(자리수) + 분자/분모 건수', () => {
     const sql = generateAggregateSql(ratioCatalog, ratioSelection());
-    expect(sql).toContain("COUNTIF(event_name = 'ad_banner_click') AS numerator_count");
-    expect(sql).toContain("COUNTIF(event_name = 'ad_banner_view') AS denominator_count");
+    expect(sql).toContain("COUNTIF(event_name = 'ad_banner_click') AS `ad_banner_click_건수`");
+    expect(sql).toContain("COUNTIF(event_name = 'ad_banner_view') AS `ad_banner_view_건수`");
     expect(sql).toContain(
-      "ROUND(SAFE_DIVIDE(COUNTIF(event_name = 'ad_banner_click'), COUNTIF(event_name = 'ad_banner_view')) * 100, 2) AS ratio_pct",
+      "ROUND(SAFE_DIVIDE(COUNTIF(event_name = 'ad_banner_click'), COUNTIF(event_name = 'ad_banner_view')) * 100, 2) AS `비율(%)`",
     );
     expect(sql).toContain('/* 비율: ad_banner_click ÷ ad_banner_view (%, 소수점 2자리) */');
   });
 
-  it('소수 비율: * 100 없이 ROUND(SAFE_DIVIDE, 자리수) AS ratio', () => {
+  it('소수 비율: * 100 없이 ROUND(SAFE_DIVIDE, 자리수) AS `비율`', () => {
     const sql = generateAggregateSql(
       ratioCatalog,
       ratioSelection({ ratio: { numeratorEvent: 'ad_banner_click', denominatorEvent: 'ad_banner_view', format: 'decimal', decimals: 3 } }),
     );
     expect(sql).toContain(
-      "ROUND(SAFE_DIVIDE(COUNTIF(event_name = 'ad_banner_click'), COUNTIF(event_name = 'ad_banner_view')), 3) AS ratio",
+      "ROUND(SAFE_DIVIDE(COUNTIF(event_name = 'ad_banner_click'), COUNTIF(event_name = 'ad_banner_view')), 3) AS `비율`",
     );
     expect(sql).not.toContain('* 100');
   });
@@ -619,7 +619,7 @@ describe('generateAggregateSql — 비율 지표', () => {
   it('metrics가 비어도 비율만으로 생성된다', () => {
     const sql = generateAggregateSql(ratioCatalog, ratioSelection());
     expect(sql).toContain('/* ===== Aggregate ===== */');
-    expect(sql).not.toContain('COUNT(*) AS event_count');
+    expect(sql).not.toContain('COUNT(*) AS `이벤트수`');
   });
 
   it('공유 차원과 함께 GROUP BY 된다 (CTR by ad_banner_type)', () => {
@@ -639,7 +639,7 @@ describe('generateAggregateSql — 비율 지표', () => {
       ratioCatalog,
       ratioSelection({ ratio: { numeratorEvent: 'ad_banner_click', denominatorEvent: 'ad_banner_view', format: 'percent', decimals: 9 } }),
     );
-    expect(sql).toContain('* 100, 4) AS ratio_pct');
+    expect(sql).toContain('* 100, 4) AS `비율(%)`');
   });
 
   it('분자/분모가 없으면 비율은 무시되고, metrics도 없으면 에러', () => {
@@ -653,7 +653,7 @@ describe('generateAggregateSql — 비율 지표', () => {
 
   it('metrics와 비율이 함께 있으면 둘 다 출력', () => {
     const sql = generateAggregateSql(ratioCatalog, ratioSelection({ metrics: ['event_count'] }));
-    expect(sql).toContain('COUNT(*) AS event_count');
-    expect(sql).toContain('AS ratio_pct');
+    expect(sql).toContain('COUNT(*) AS `이벤트수`');
+    expect(sql).toContain('AS `비율(%)`');
   });
 });

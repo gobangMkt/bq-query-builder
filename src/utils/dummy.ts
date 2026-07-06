@@ -13,10 +13,11 @@ export interface PreviewColumn {
   kind: PreviewValueKind;
 }
 
+// SQL 생성부(generate.ts METRIC_EXPR)의 alias와 일치시켜 미리보기 헤더가 실제 결과와 같도록 한다.
 const METRIC_COLUMN_NAME: Record<MetricType, string> = {
-  event_count: 'event_count',
-  unique_users: 'unique_users',
-  unique_sessions: 'unique_sessions',
+  event_count: '이벤트수',
+  unique_users: '고유사용자수',
+  unique_sessions: '고유세션수',
 };
 
 export const PREVIEW_ROW_COUNT = 3;
