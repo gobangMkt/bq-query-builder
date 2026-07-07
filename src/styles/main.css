@@ -726,20 +726,6 @@ button {
   flex: none;
 }
 
-/* 사전 모드 — 선택 버튼 대신 읽기전용 '이미 담김' 표시. */
-.event-detail-selected-note {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 13px;
-}
-
-.event-detail-selected-note svg {
-  flex: none;
-}
-
 @media (max-width: 720px) {
   .event-modal-card {
     height: 88vh;

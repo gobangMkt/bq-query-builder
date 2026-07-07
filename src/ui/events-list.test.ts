@@ -83,11 +83,11 @@ describe('renderEventListHtml — 모달 모드', () => {
     expect(html).not.toContain('event-bulk-btn');
   });
 
-  it('dict 모드에서도 선택된 이벤트는 행에 체크가 읽기전용으로 남는다', () => {
+  it('dict 모드는 쿼리 선택 상태를 비추지 않는다 (선택돼 있어도 체크 없음)', () => {
     state.selectedEvents.gobang = new Set(['ad_banner_view']);
     const html = renderEventListHtml(property, 'dict');
     expect(html).toContain('data-event="ad_banner_view"');
-    expect(html).toContain('is-selected');
+    expect(html).not.toContain('is-selected');
   });
 });
 
@@ -107,10 +107,10 @@ describe('renderEventDetailHtml — 모달 모드', () => {
     expect(html).not.toContain('event-detail-toggle');
   });
 
-  it('dict 모드에서 이미 담긴 이벤트는 읽기전용 표시만 둔다', () => {
+  it('dict 모드는 이미 담긴 이벤트여도 선택 표시를 비추지 않는다', () => {
     state.selectedEvents.gobang = new Set(['ad_banner_view']);
     const html = renderEventDetailHtml(property, 'ad_banner_view', 'dict');
-    expect(html).toContain('event-detail-selected-note');
+    expect(html).not.toContain('event-detail-selected-note');
     expect(html).not.toContain('event-detail-toggle');
   });
 });

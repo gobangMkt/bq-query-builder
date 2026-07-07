@@ -90,9 +90,9 @@ export function renderEventListHtml(property: CatalogProperty, mode: EventModalM
     return `<p class="event-empty">검색 결과가 없습니다.</p>`;
   }
 
-  const selected = state.selectedEvents[state.property];
-  // 사전 모드는 열람 전용 — 선택을 바꾸는 일괄 추가/빼기 바는 렌더하지 않는다.
+  // 사전 모드는 순수 열람 — 쿼리 선택 상태를 일절 비추지 않는다(체크·일괄바 없음).
   const showBulk = mode === 'pick';
+  const selected = showBulk ? state.selectedEvents[state.property] : new Set<string>();
 
   // 검색 중이면 결과 전체를 한 번에 넣고 빼는 바를 리스트 맨 위에 둔다(이미 전부 선택돼 있으면 '빼기'로 토글).
   const searchBulk =
@@ -218,10 +218,8 @@ export function renderEventDetailHtml(
       </div>
       ${
         mode === 'dict'
-          ? // 사전 모드: 선택을 바꾸는 버튼 대신, 이미 담긴 이벤트면 읽기전용 표시만 둔다.
-            selected
-            ? `<p class="event-detail-selected-note">${checkIcon}<span>이미 담긴 이벤트</span></p>`
-            : ''
+          ? // 사전 모드: 순수 열람 — 선택 상태를 비추지 않는다(추가 버튼·담김 표시 모두 없음).
+            ''
           : `<button type="button" class="event-detail-toggle${selected ? ' is-selected' : ''}"
         data-event="${escapeHtml(ev.name)}">
         ${selected ? `${checkIcon}<span>선택됨 — 빼기</span>` : '<span>이 이벤트 추가</span>'}
