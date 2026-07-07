@@ -2667,6 +2667,13 @@ button {
   align-items: center;
   flex-wrap: wrap;
 }
+.admin-window {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.admin-window-dates {
+  opacity: 0.7;
+}
 .admin-prop {
   height: 38px;
   padding: 0 10px;

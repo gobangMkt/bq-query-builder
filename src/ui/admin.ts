@@ -38,9 +38,12 @@ export function renderAdminGate(root: HTMLElement, onSuccess: () => void): void 
 
 const PROPERTY_KEYS: PropertyKey[] = ['gobang', 'uceo'];
 
+// 검증쿼리 스캔 창 — "오늘 기준 최근 N일" 고정 롤링. 목적이 상시 최신화라 수동 날짜 입력은 불필요.
+const WINDOW_DAYS = 30;
+
 // 핸드오프를 활성화하기 전 관리자가 밟아야 하는 프로세스 단계.
 const CHECK_STEPS: Array<{ id: string; label: string }> = [
-  { id: 'range', label: '프로퍼티와 기간을 정했다' },
+  { id: 'range', label: '프로퍼티를 정했다' },
   { id: 'run', label: '검증쿼리를 복사해 BQ 콘솔에서 실행했다' },
   { id: 'paste', label: '실행 결과를 아래에 붙여넣었다' },
 ];
@@ -48,7 +51,9 @@ const CHECK_STEPS: Array<{ id: string; label: string }> = [
 export function renderAdminPanel(root: HTMLElement, catalog: Catalog): void {
   const today = new Date();
   const toIso = (d: Date): string => d.toISOString().slice(0, 10);
-  const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const windowStart = new Date(today.getTime() - WINDOW_DAYS * 24 * 60 * 60 * 1000);
+  const startDate = toIso(windowStart);
+  const endDate = toIso(today);
 
   const propOptions = PROPERTY_KEYS.map(
     (k) => `<option value="${k}">${catalog.properties[k].label} (${catalog.properties[k].datasetId})</option>`,
@@ -78,18 +83,14 @@ export function renderAdminPanel(root: HTMLElement, catalog: Catalog): void {
         <p class="admin-lead">노션 택소노미 + BQ 실측을 Claude 세션에 넘길 텍스트를 만듭니다. 실제 반영은 빌드·배포 경유.</p>
 
         <section class="panel">
-          <h2 class="panel-title">1. 프로퍼티 &amp; 기간</h2>
+          <h2 class="panel-title">1. 프로퍼티</h2>
           <p class="panel-sub">
             <b>프로퍼티</b> = 어느 서비스 데이터를 동기화할지. 고르면 해당 BQ 데이터셋·노션 택소노미 URL이 자동 지정됩니다.
-            <b>기간</b> = 아래 검증쿼리가 스캔할 날짜 범위(기본 최근 30일). <code>events_YYYYMMDD</code> 파티션 중 이 범위만 조회합니다.
+            검증쿼리는 <b>오늘 기준 최근 ${WINDOW_DAYS}일</b>을 자동 스캔합니다(상시 최신화 목적 — 날짜 수동 지정 불필요).
           </p>
           <div class="admin-row">
             <select class="admin-prop">${propOptions}</select>
-            <div class="date-inputs">
-              <input type="date" class="admin-start" value="${toIso(monthAgo)}" aria-label="시작일" />
-              <span class="date-sep">~</span>
-              <input type="date" class="admin-end" value="${toIso(today)}" aria-label="종료일" />
-            </div>
+            <span class="admin-window">검증 기간: 최근 ${WINDOW_DAYS}일 <span class="admin-window-dates">(${startDate} ~ ${endDate})</span></span>
           </div>
           <p class="admin-notion">노션 택소노미: <a class="admin-notion-link" href="#" target="_blank" rel="noreferrer"></a></p>
         </section>
@@ -125,8 +126,6 @@ export function renderAdminPanel(root: HTMLElement, catalog: Catalog): void {
   const backBtn = root.querySelector<HTMLButtonElement>('.admin-back-btn')!;
   const propSel = root.querySelector<HTMLSelectElement>('.admin-prop')!;
   const notionLink = root.querySelector<HTMLAnchorElement>('.admin-notion-link')!;
-  const startInput = root.querySelector<HTMLInputElement>('.admin-start')!;
-  const endInput = root.querySelector<HTMLInputElement>('.admin-end')!;
   const queryArea = root.querySelector<HTMLTextAreaElement>('.admin-query')!;
   const copyQueryBtn = root.querySelector<HTMLButtonElement>('.admin-copy-query')!;
   const resultArea = root.querySelector<HTMLTextAreaElement>('.admin-result')!;
@@ -140,11 +139,7 @@ export function renderAdminPanel(root: HTMLElement, catalog: Catalog): void {
     const key = currentKey();
     notionLink.textContent = NOTION_TAXONOMY_URLS[key];
     notionLink.href = NOTION_TAXONOMY_URLS[key];
-    queryArea.value = buildVerifyQuery(
-      catalog.properties[key].datasetId,
-      startInput.value,
-      endInput.value,
-    );
+    queryArea.value = buildVerifyQuery(catalog.properties[key].datasetId, startDate, endDate);
   };
 
   // 프로세스 게이트: 체크 3개 모두 + 결과 붙여넣음 → 핸드오프 활성.
@@ -178,8 +173,6 @@ export function renderAdminPanel(root: HTMLElement, catalog: Catalog): void {
   });
 
   propSel.addEventListener('change', refreshQuery);
-  startInput.addEventListener('change', refreshQuery);
-  endInput.addEventListener('change', refreshQuery);
   resultArea.addEventListener('input', refreshHandoffState);
   checkboxes.forEach((c) => c.addEventListener('change', refreshHandoffState));
 
@@ -196,8 +189,8 @@ export function renderAdminPanel(root: HTMLElement, catalog: Catalog): void {
       propertyLabel: catalog.properties[key].label,
       datasetId: catalog.properties[key].datasetId,
       notionUrl: NOTION_TAXONOMY_URLS[key],
-      startDate: startInput.value,
-      endDate: endInput.value,
+      startDate,
+      endDate,
       bqResult: resultArea.value.trim(),
     });
     navigator.clipboard.writeText(text).then(() => flashCopied(copyHandoffBtn));
