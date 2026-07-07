@@ -596,9 +596,10 @@ button {
   display: inline-flex;
 }
 
-/* 사전 = 무채색 열람 스킨 */
+/* 사전 = 무채색 열람 스킨 (회색 띠) */
 .event-modal.is-dict .event-modal-head {
   background: var(--surface-2);
+  border-bottom-color: var(--border-input);
 }
 
 .event-modal.is-dict .event-modal-icon {
@@ -615,7 +616,12 @@ button {
   background: var(--surface-2);
 }
 
-/* 고르기 = 파란 액센트 스킨 */
+/* 고르기 = 파란 액센트 스킨 (연파랑 띠) */
+.event-modal.is-pick .event-modal-head {
+  background: var(--primary-soft);
+  border-bottom-color: var(--primary);
+}
+
 .event-modal.is-pick .event-modal-icon {
   color: var(--primary);
 }
