@@ -79,6 +79,10 @@ export function renderAdminPanel(root: HTMLElement, catalog: Catalog): void {
 
         <section class="panel">
           <h2 class="panel-title">1. 프로퍼티 &amp; 기간</h2>
+          <p class="panel-sub">
+            <b>프로퍼티</b> = 어느 서비스 데이터를 동기화할지. 고르면 해당 BQ 데이터셋·노션 택소노미 URL이 자동 지정됩니다.
+            <b>기간</b> = 아래 검증쿼리가 스캔할 날짜 범위(기본 최근 30일). <code>events_YYYYMMDD</code> 파티션 중 이 범위만 조회합니다.
+          </p>
           <div class="admin-row">
             <select class="admin-prop">${propOptions}</select>
             <div class="date-inputs">
@@ -92,7 +96,12 @@ export function renderAdminPanel(root: HTMLElement, catalog: Catalog): void {
 
         <section class="panel">
           <h2 class="panel-title">2. BQ 검증쿼리</h2>
-          <p class="panel-sub">복사해 BQ 콘솔에서 실행하세요. 이 도구는 BQ를 실행하지 않습니다.</p>
+          <p class="panel-sub">
+            선택한 기간에 <b>실제로 수집된 모든 이벤트·파라미터를 전수 집계</b>합니다(특정 이벤트만 거르지 않음).
+            노션 택소노미(설계)와 실측을 대조하기 위한 인벤토리 조사용.
+            컬럼: <code>event_name</code>(이벤트명) · <code>param_key</code>(파라미터) · <code>cnt</code>(등장 횟수) · <code>string/int/double_cnt</code>(값 타입 분포).
+            복사해 BQ 콘솔에서 실행하세요 — 이 도구는 BQ를 실행하지 않습니다.
+          </p>
           <textarea class="admin-query" rows="10" readonly></textarea>
           <div class="admin-actions">
             <button type="button" class="dict-open-btn admin-copy-query">${copyIcon}<span>검증쿼리 복사</span></button>

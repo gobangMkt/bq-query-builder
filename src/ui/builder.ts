@@ -1288,7 +1288,6 @@ function shellHtml(catalog: Catalog): string {
         <span class="wb-brand">BQ 쿼리 빌더</span>
         <div class="top-bar-actions">
           <button type="button" class="dict-open-btn">${bookIcon}<span>이벤트 사전</span></button>
-          <button type="button" class="admin-open-btn" title="관리자" aria-label="관리자">${settingsIcon}</button>
         </div>
       </header>
 
@@ -1412,6 +1411,10 @@ function shellHtml(catalog: Catalog): string {
           </div>
         </div>
       </div>
+
+      <footer class="wb-foot">
+        <button type="button" class="admin-open-btn" title="관리자">${settingsIcon}<span>관리자</span></button>
+      </footer>
     </div>
   `;
 }

@@ -2610,22 +2610,33 @@ button {
 }
 
 /* ===== 관리자 패널 ===== */
-/* 상단 바 관리자 바로가기(gear) — 아이콘만, 눈에 안 띄게 뮤트 */
+/* 관리자 진입 — 유저 UI와 분리해 화면 최하단 푸터에 톤다운 링크로 배치 */
+.wb-foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 14px;
+  border-top: 1px solid var(--border);
+}
 .admin-open-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: var(--surface);
-  border: 1px solid var(--border-input);
-  border-radius: 8px;
+  gap: 6px;
+  padding: 4px 8px;
+  background: none;
+  border: 0;
+  font-size: 12px;
   color: var(--text-muted);
+  opacity: 0.65;
   cursor: pointer;
+}
+.admin-open-btn svg {
+  width: 14px;
+  height: 14px;
 }
 .admin-open-btn:hover {
   color: var(--primary);
-  background: var(--primary-soft);
+  opacity: 1;
 }
 
 .admin-wb {
