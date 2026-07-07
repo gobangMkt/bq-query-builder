@@ -31,7 +31,7 @@ function renderPreviewTableHtml(columns: PreviewColumn[]): string {
     <div class="preview-table-wrap">
       <table class="preview-table">${theadHtml}${tbodyHtml}</table>
     </div>
-    <p class="preview-caption">구조 확인용 더미값 — 실데이터 아님</p>
+    <p class="preview-caption">실데이터 형태의 예시 값 — 실제 조회 결과는 아님</p>
   `;
 }
 
