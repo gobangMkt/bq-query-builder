@@ -110,6 +110,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const modalPropLabelEl = root.querySelector<HTMLElement>('.modal-prop-label')!;
   const modalModeLabelEl = root.querySelector<HTMLElement>('.modal-mode-label')!;
   const modalDoneBtn = root.querySelector<HTMLButtonElement>('.event-modal-done')!;
+  const modalIconEl = root.querySelector<HTMLElement>('.event-modal-icon')!;
+  const modalCountNEl = root.querySelector<HTMLElement>('.event-modal-count-n')!;
 
   // 모달 진입점 구분: '고르기'(+이벤트)는 선택 편집, '사전'(이벤트 사전 버튼)은 열람 전용.
   let modalMode: EventModalMode = 'pick';
@@ -220,6 +222,12 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       .join('');
     const emptyHint = names.length === 0 ? '<span class="ev-empty">아직 없음 — 이벤트를 고르세요</span>' : '';
     selectedEventsSlotEl.innerHTML = `${chips}${emptyHint}<button type="button" class="ev-add-btn">${plusIcon}<span>이벤트</span></button>`;
+    syncModalCount();
+  }
+
+  // pick 모드 헤더의 '선택 N' 카운트를 현재 선택 수와 맞춘다.
+  function syncModalCount(): void {
+    modalCountNEl.textContent = String(state.selectedEvents[state.property].size);
   }
 
   function openEventModal(mode: EventModalMode): void {
@@ -228,6 +236,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     modalModeLabelEl.textContent = isDict ? '이벤트 사전' : '이벤트 고르기';
     eventModalEl.setAttribute('aria-label', isDict ? '이벤트 사전' : '이벤트 고르기');
     modalDoneBtn.textContent = isDict ? '닫기' : '완료';
+    // 역할 대비 스킨: 사전=무채색 열람, 고르기=파란 액센트 편집.
+    eventModalEl.classList.toggle('is-dict', isDict);
+    eventModalEl.classList.toggle('is-pick', !isDict);
+    modalIconEl.innerHTML = isDict ? bookIcon : checkIcon;
+    syncModalCount();
     eventModalEl.classList.remove('is-hidden');
     // 모드에 따라 일괄 버튼/선택 요소 유무가 달라지므로 리스트도 다시 그린다.
     renderList();
@@ -1413,7 +1426,7 @@ function shellHtml(catalog: Catalog): string {
         <div class="event-modal-backdrop"></div>
         <div class="event-modal-card">
           <div class="event-modal-head">
-            <span class="event-modal-title">${bookIcon}<span><span class="modal-mode-label">이벤트 고르기</span> · <b class="modal-prop-label">${escapeHtml(properties[state.property].label)}</b></span></span>
+            <span class="event-modal-title"><span class="event-modal-icon">${bookIcon}</span><span><span class="modal-mode-label">이벤트 고르기</span> · <b class="modal-prop-label">${escapeHtml(properties[state.property].label)}</b></span><span class="event-modal-tag">읽기전용</span><span class="event-modal-count"><b class="event-modal-count-n">0</b> 선택</span></span>
             <button type="button" class="event-modal-close" aria-label="닫기">✕</button>
           </div>
           <div class="event-modal-body">

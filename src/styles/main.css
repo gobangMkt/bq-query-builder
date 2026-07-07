@@ -552,6 +552,74 @@ button {
   background: var(--primary-hover);
 }
 
+/* ── 모드 대비: 사전(dict)=무채색 열람 · 고르기(pick)=파란 액센트 편집 ── */
+.event-modal-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.event-modal-icon svg {
+  display: block;
+}
+
+/* 사전 태그 / 선택 카운트 — 모드 클래스로 하나만 노출 */
+.event-modal-tag,
+.event-modal-count {
+  display: none;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+}
+
+.event-modal-tag {
+  color: var(--text-muted);
+  border: 1px solid var(--border-input);
+  letter-spacing: 0.02em;
+}
+
+.event-modal-count {
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.event-modal-count-n {
+  font-weight: 800;
+}
+
+.event-modal.is-dict .event-modal-tag {
+  display: inline-flex;
+}
+
+.event-modal.is-pick .event-modal-count {
+  display: inline-flex;
+}
+
+/* 사전 = 무채색 열람 스킨 */
+.event-modal.is-dict .event-modal-head {
+  background: var(--surface-2);
+}
+
+.event-modal.is-dict .event-modal-icon {
+  color: var(--text-muted);
+}
+
+.event-modal.is-dict .event-modal-done {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border-input);
+}
+
+.event-modal.is-dict .event-modal-done:hover {
+  background: var(--surface-2);
+}
+
+/* 고르기 = 파란 액센트 스킨 */
+.event-modal.is-pick .event-modal-icon {
+  color: var(--primary);
+}
+
 /* 상세 pane */
 .event-detail-empty {
   height: 100%;
