@@ -15,6 +15,7 @@ import {
   renderEventDetailHtml,
   renderEventListHtml,
   renderSearchHtml,
+  type EventModalMode,
 } from './events-list';
 import {
   buildFilterFieldOptions,
@@ -107,6 +108,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   const dictOpenBtn = root.querySelector<HTMLButtonElement>('.dict-open-btn')!;
   const dataFromLabelEl = root.querySelector<HTMLElement>('.data-from-label')!;
   const modalPropLabelEl = root.querySelector<HTMLElement>('.modal-prop-label')!;
+  const modalModeLabelEl = root.querySelector<HTMLElement>('.modal-mode-label')!;
+  const modalDoneBtn = root.querySelector<HTMLButtonElement>('.event-modal-done')!;
+
+  // 모달 진입점 구분: '고르기'(+이벤트)는 선택 편집, '사전'(이벤트 사전 버튼)은 열람 전용.
+  let modalMode: EventModalMode = 'pick';
 
   function currentProperty() {
     return catalog.properties[state.property];
@@ -124,11 +130,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   let detailEventName: string | null = null;
 
   function renderList(): void {
-    listEl.innerHTML = renderEventListHtml(currentProperty());
+    listEl.innerHTML = renderEventListHtml(currentProperty(), modalMode);
   }
 
   function renderEventDetail(): void {
-    eventDetailSlotEl.innerHTML = renderEventDetailHtml(currentProperty(), detailEventName);
+    eventDetailSlotEl.innerHTML = renderEventDetailHtml(currentProperty(), detailEventName, modalMode);
   }
 
   function renderSearch(): void {
@@ -216,8 +222,15 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     selectedEventsSlotEl.innerHTML = `${chips}${emptyHint}<button type="button" class="ev-add-btn">${plusIcon}<span>이벤트</span></button>`;
   }
 
-  function openEventModal(): void {
+  function openEventModal(mode: EventModalMode): void {
+    modalMode = mode;
+    const isDict = mode === 'dict';
+    modalModeLabelEl.textContent = isDict ? '이벤트 사전' : '이벤트 고르기';
+    eventModalEl.setAttribute('aria-label', isDict ? '이벤트 사전' : '이벤트 고르기');
+    modalDoneBtn.textContent = isDict ? '닫기' : '완료';
     eventModalEl.classList.remove('is-hidden');
+    // 모드에 따라 일괄 버튼/선택 요소 유무가 달라지므로 리스트도 다시 그린다.
+    renderList();
     renderEventDetail();
     const input = searchSlot.querySelector<HTMLInputElement>('.event-search');
     input?.focus();
@@ -705,11 +718,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   });
 
   // 이벤트 모달 열기/닫기
-  dictOpenBtn.addEventListener('click', openEventModal);
+  dictOpenBtn.addEventListener('click', () => openEventModal('dict'));
   selectedEventsSlotEl.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
     if (target.closest('.ev-add-btn')) {
-      openEventModal();
+      openEventModal('pick');
       return;
     }
     const removeBtn = target.closest<HTMLButtonElement>('.ev-chip-x');
@@ -968,6 +981,11 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     const name = btn.dataset.event;
     if (!name) return;
     detailEventName = name;
+    // 사전 모드는 열람 전용 — 클릭해도 선택을 바꾸지 않고 상세만 갱신한다.
+    if (modalMode === 'dict') {
+      renderEventDetail();
+      return;
+    }
     toggleEvent(name);
   });
 
@@ -1395,7 +1413,7 @@ function shellHtml(catalog: Catalog): string {
         <div class="event-modal-backdrop"></div>
         <div class="event-modal-card">
           <div class="event-modal-head">
-            <span class="event-modal-title">${bookIcon}<span>이벤트 고르기 · <b class="modal-prop-label">${escapeHtml(properties[state.property].label)}</b></span></span>
+            <span class="event-modal-title">${bookIcon}<span><span class="modal-mode-label">이벤트 고르기</span> · <b class="modal-prop-label">${escapeHtml(properties[state.property].label)}</b></span></span>
             <button type="button" class="event-modal-close" aria-label="닫기">✕</button>
           </div>
           <div class="event-modal-body">

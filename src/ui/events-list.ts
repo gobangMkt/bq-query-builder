@@ -71,6 +71,9 @@ const TYPE_LABEL: Record<CatalogParam['type'], string> = {
   numeric: '숫자',
 };
 
+// 모달은 두 진입점이 공유한다. 'pick'=이벤트 고르기(선택 토글·일괄 버튼 O), 'dict'=이벤트 사전(열람 전용, 선택 요소 X).
+export type EventModalMode = 'dict' | 'pick';
+
 export function renderSearchHtml(): string {
   return `
     <span class="event-search-icon">${searchIcon}</span>
@@ -79,7 +82,7 @@ export function renderSearchHtml(): string {
   `;
 }
 
-export function renderEventListHtml(property: CatalogProperty): string {
+export function renderEventListHtml(property: CatalogProperty, mode: EventModalMode = 'pick'): string {
   const query = state.searchQuery.trim();
   const filtered = property.events.filter((ev) => matchesQuery(ev, query));
 
@@ -88,17 +91,20 @@ export function renderEventListHtml(property: CatalogProperty): string {
   }
 
   const selected = state.selectedEvents[state.property];
+  // 사전 모드는 열람 전용 — 선택을 바꾸는 일괄 추가/빼기 바는 렌더하지 않는다.
+  const showBulk = mode === 'pick';
 
   // 검색 중이면 결과 전체를 한 번에 넣고 빼는 바를 리스트 맨 위에 둔다(이미 전부 선택돼 있으면 '빼기'로 토글).
-  const searchBulk = query
-    ? bulkButtonHtml(
-        'search',
-        query,
-        filtered,
-        selected,
-        (n) => `검색결과 ${n}개 모두`,
-      )
-    : '';
+  const searchBulk =
+    showBulk && query
+      ? bulkButtonHtml(
+          'search',
+          query,
+          filtered,
+          selected,
+          (n) => `검색결과 ${n}개 모두`,
+        )
+      : '';
 
   const groupsHtml = groupByFunnel(filtered)
     .map(
@@ -106,7 +112,7 @@ export function renderEventListHtml(property: CatalogProperty): string {
         <div class="event-group">
           <div class="event-group-head">
             <h3 class="event-group-title">${escapeHtml(group.funnel)}</h3>
-            ${bulkButtonHtml('group', group.funnel, group.events, selected, () => '그룹')}
+            ${showBulk ? bulkButtonHtml('group', group.funnel, group.events, selected, () => '그룹') : ''}
           </div>
           <ul class="event-rows">
             ${group.events.map((ev) => eventRowHtml(ev, selected.has(ev.name))).join('')}
@@ -157,7 +163,11 @@ function eventRowHtml(ev: CatalogEvent, selected: boolean): string {
 }
 
 /** 모달 우측 상세 pane — 이벤트의 설명 + 추출 가능한 파라미터 표. name=null이면 빈 상태. */
-export function renderEventDetailHtml(property: CatalogProperty, name: string | null): string {
+export function renderEventDetailHtml(
+  property: CatalogProperty,
+  name: string | null,
+  mode: EventModalMode = 'pick',
+): string {
   if (!name) {
     return `<div class="event-detail-empty">
       <p>왼쪽에서 이벤트를 클릭하면<br />추출 가능한 파라미터와 설명이 여기에 표시됩니다.</p>
@@ -206,10 +216,17 @@ export function renderEventDetailHtml(property: CatalogProperty, name: string | 
         <span class="event-detail-subhead">추출 가능한 파라미터 <span class="param-count">${ev.params.length}</span></span>
         ${paramBlock}
       </div>
-      <button type="button" class="event-detail-toggle${selected ? ' is-selected' : ''}"
+      ${
+        mode === 'dict'
+          ? // 사전 모드: 선택을 바꾸는 버튼 대신, 이미 담긴 이벤트면 읽기전용 표시만 둔다.
+            selected
+            ? `<p class="event-detail-selected-note">${checkIcon}<span>이미 담긴 이벤트</span></p>`
+            : ''
+          : `<button type="button" class="event-detail-toggle${selected ? ' is-selected' : ''}"
         data-event="${escapeHtml(ev.name)}">
         ${selected ? `${checkIcon}<span>선택됨 — 빼기</span>` : '<span>이 이벤트 추가</span>'}
-      </button>
+      </button>`
+      }
     </div>
   `;
 }
