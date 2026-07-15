@@ -22,6 +22,9 @@ export interface CatalogProperty {
   datasetId: string;
   label: string;
   events: CatalogEvent[];
+  // 있으면 마트류: 단일 물리 테이블(datasetId.tableId)을 event_date로 직접 필터.
+  // 없으면 raw GA4 export: `datasetId.events_*` 와일드카드 + _TABLE_SUFFIX.
+  tableId?: string;
 }
 
 export interface Catalog {
@@ -30,5 +33,6 @@ export interface Catalog {
   properties: {
     gobang: CatalogProperty;
     uceo: CatalogProperty;
+    gobang_mart: CatalogProperty;
   };
 }

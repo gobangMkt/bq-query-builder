@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildCatalog, determineType, parseInventory } from './build-catalog.mjs';
+import { buildCatalog, buildMartPropertyEvents, determineType, parseInventory } from './build-catalog.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -12,6 +12,9 @@ const gobangInventoryRaw = readFileSync(path.join(dataDir, 'inventory-gobang-202
 const uceoInventoryRaw = readFileSync(path.join(dataDir, 'inventory-uceo-20260702.json'), 'utf-8');
 const gobangTaxonomy = JSON.parse(readFileSync(path.join(dataDir, 'taxonomy-gobang.json'), 'utf-8'));
 const uceoTaxonomy = JSON.parse(readFileSync(path.join(dataDir, 'taxonomy-uceo.json'), 'utf-8'));
+const martSchema = JSON.parse(
+  readFileSync(path.join(dataDir, 'mart-schema-gobang-events.json'), 'utf-8'),
+);
 
 describe('parseInventory', () => {
   it('JSON 배열 형식을 파싱하고 숫자 필드를 Number로 변환한다', () => {
@@ -69,14 +72,23 @@ describe('determineType', () => {
 });
 
 describe('buildCatalog — 실측 데이터 병합', () => {
-  const catalog = buildCatalog({ gobangInventoryRaw, uceoInventoryRaw, gobangTaxonomy, uceoTaxonomy });
+  const catalog = buildCatalog({
+    gobangInventoryRaw,
+    uceoInventoryRaw,
+    gobangTaxonomy,
+    uceoTaxonomy,
+    martColumns: martSchema.columns,
+  });
 
   it('프로퍼티 메타(datasetId/label)가 정확하다', () => {
     expect(catalog.projectId).toBe('gobang-bigquery');
     expect(catalog.properties.gobang.datasetId).toBe('analytics_274122040');
-    expect(catalog.properties.gobang.label).toBe('고방');
+    expect(catalog.properties.gobang.label).toBe('고방 원본');
     expect(catalog.properties.uceo.datasetId).toBe('analytics_279311003');
     expect(catalog.properties.uceo.label).toBe('U사장님');
+    expect(catalog.properties.gobang_mart.datasetId).toBe('gobang_mart');
+    expect(catalog.properties.gobang_mart.label).toBe('고방 마트');
+    expect(catalog.properties.gobang_mart.tableId).toBe('Gobang_events');
   });
 
   it('고방 31개, U사장님 13개 이벤트가 정확히 포함된다 (인벤토리 밖 이벤트 없음)', () => {
@@ -147,5 +159,65 @@ describe('buildCatalog — 실측 데이터 병합', () => {
     for (let i = 1; i < events.length; i++) {
       expect(events[i - 1].cnt).toBeGreaterThanOrEqual(events[i].cnt);
     }
+  });
+
+  it('고방 마트는 고방 원본과 동일한 이벤트 목록(name/label/cnt)을 재사용한다', () => {
+    const rawEvents = catalog.properties.gobang.events;
+    const martEvents = catalog.properties.gobang_mart.events;
+    expect(martEvents).toHaveLength(rawEvents.length);
+    expect(martEvents.map((e) => e.name)).toEqual(rawEvents.map((e) => e.name));
+    expect(martEvents.map((e) => e.label)).toEqual(rawEvents.map((e) => e.label));
+  });
+
+  it('고방 마트 이벤트마다 마트 스키마의 전체 컬럼(40개)이 파라미터로 부여된다', () => {
+    for (const event of catalog.properties.gobang_mart.events) {
+      expect(event.params).toHaveLength(martSchema.columns.length);
+      const keys = new Set(event.params.map((p) => p.key));
+      for (const col of martSchema.columns) {
+        expect(keys.has(col.key)).toBe(true);
+      }
+    }
+  });
+});
+
+describe('buildMartPropertyEvents', () => {
+  const rawEvents = [
+    { name: 'inquiry', label: '문의', cnt: 100, description: '문의 이벤트' },
+    { name: 'page_view', label: 'page_view', cnt: 50 },
+  ];
+  const martColumns = [
+    { key: 'branch_id', type: 'int', description: '지점 ID' },
+    { key: 'branch_type', type: 'string' },
+  ];
+
+  it('raw 이벤트의 name/label/cnt/description을 그대로 재사용한다', () => {
+    const events = buildMartPropertyEvents(rawEvents, martColumns);
+    expect(events).toHaveLength(2);
+    expect(events[0]).toMatchObject({ name: 'inquiry', label: '문의', cnt: 100, description: '문의 이벤트' });
+    expect(events[1]).toMatchObject({ name: 'page_view', label: 'page_view', cnt: 50 });
+    expect(events[1].description).toBeUndefined();
+  });
+
+  it('모든 이벤트가 동일한 전체 컬럼 목록을 params로 갖는다', () => {
+    const events = buildMartPropertyEvents(rawEvents, martColumns);
+    for (const event of events) {
+      expect(event.params.map((p) => p.key)).toEqual(['branch_id', 'branch_type']);
+    }
+  });
+
+  it('타입·설명이 마트 컬럼 정의대로 매핑된다', () => {
+    const events = buildMartPropertyEvents(rawEvents, martColumns);
+    const branchId = events[0].params.find((p) => p.key === 'branch_id');
+    expect(branchId?.type).toBe('int');
+    expect(branchId?.description).toBe('지점 ID');
+    const branchType = events[0].params.find((p) => p.key === 'branch_type');
+    expect(branchType?.type).toBe('string');
+    expect(branchType?.description).toBeUndefined();
+  });
+
+  it('컬럼 순서를 보존하도록 cnt를 역순으로 부여한다', () => {
+    const events = buildMartPropertyEvents(rawEvents, martColumns);
+    const [first, second] = events[0].params;
+    expect(first.cnt).toBeGreaterThan(second.cnt);
   });
 });

@@ -11,8 +11,9 @@ const ROOT = path.resolve(__dirname, '..');
 export const PROJECT_ID = 'gobang-bigquery';
 
 export const PROPERTY_META = {
-  gobang: { datasetId: 'analytics_274122040', label: '고방' },
+  gobang: { datasetId: 'analytics_274122040', label: '고방 원본' },
   uceo: { datasetId: 'analytics_279311003', label: 'U사장님' },
+  gobang_mart: { datasetId: 'gobang_mart', label: '고방 마트', tableId: 'Gobang_events' },
 };
 
 /**
@@ -111,12 +112,46 @@ export function buildPropertyEvents(inventoryRows, taxonomy) {
 }
 
 /**
+ * 마트 컬럼 목록(INFORMATION_SCHEMA에서 확보) → CatalogParam[]. 스키마 순서를 유지하도록
+ * cnt를 역순으로 부여한다(마트는 실측 사용빈도가 없어 byCntDesc 정렬이 원래 순서를 지키게 함).
+ */
+function toMartParams(martColumns) {
+  return martColumns.map((col, i) => {
+    const param = { key: col.key, type: col.type, cnt: martColumns.length - i };
+    if (col.description) param.description = col.description;
+    return param;
+  });
+}
+
+/**
+ * 마트(예: 고방 마트)의 이벤트 목록을 만든다. 마트는 raw를 재조합한 것이라 같은 이벤트를
+ * 그대로 쓰되(name/label/cnt/description/funnel 재사용), 파라미터는 이벤트별 보유 여부 없이
+ * 마트 테이블의 전체 컬럼을 모든 이벤트에 동일하게 부여한다(컬럼이 전부 NULLABLE).
+ */
+export function buildMartPropertyEvents(rawEvents, martColumns) {
+  const params = toMartParams(martColumns);
+  return rawEvents.map((event) => {
+    const result = { name: event.name, label: event.label, cnt: event.cnt, params };
+    if (event.description) result.description = event.description;
+    if (event.funnel) result.funnel = event.funnel;
+    return result;
+  });
+}
+
+/**
  * 프로퍼티별 인벤토리 원문 + 텍소노미 객체 + 메타(datasetId/label)를 받아
  * catalog.json 전체 구조를 반환한다. 순수 함수 (파일 I/O 없음) — 테스트에서 직접 호출.
  */
-export function buildCatalog({ gobangInventoryRaw, uceoInventoryRaw, gobangTaxonomy, uceoTaxonomy }) {
+export function buildCatalog({
+  gobangInventoryRaw,
+  uceoInventoryRaw,
+  gobangTaxonomy,
+  uceoTaxonomy,
+  martColumns = [],
+}) {
   const gobangRows = parseInventory(gobangInventoryRaw);
   const uceoRows = parseInventory(uceoInventoryRaw);
+  const gobangEvents = buildPropertyEvents(gobangRows, gobangTaxonomy);
 
   return {
     projectId: PROJECT_ID,
@@ -124,11 +159,15 @@ export function buildCatalog({ gobangInventoryRaw, uceoInventoryRaw, gobangTaxon
     properties: {
       gobang: {
         ...PROPERTY_META.gobang,
-        events: buildPropertyEvents(gobangRows, gobangTaxonomy),
+        events: gobangEvents,
       },
       uceo: {
         ...PROPERTY_META.uceo,
         events: buildPropertyEvents(uceoRows, uceoTaxonomy),
+      },
+      gobang_mart: {
+        ...PROPERTY_META.gobang_mart,
+        events: buildMartPropertyEvents(gobangEvents, martColumns),
       },
     },
   };
@@ -140,15 +179,27 @@ function main() {
   const uceoInventoryRaw = readFileSync(path.join(dataDir, 'inventory-uceo-20260702.json'), 'utf-8');
   const gobangTaxonomy = JSON.parse(readFileSync(path.join(dataDir, 'taxonomy-gobang.json'), 'utf-8'));
   const uceoTaxonomy = JSON.parse(readFileSync(path.join(dataDir, 'taxonomy-uceo.json'), 'utf-8'));
+  const martSchema = JSON.parse(
+    readFileSync(path.join(dataDir, 'mart-schema-gobang-events.json'), 'utf-8'),
+  );
 
-  const catalog = buildCatalog({ gobangInventoryRaw, uceoInventoryRaw, gobangTaxonomy, uceoTaxonomy });
+  const catalog = buildCatalog({
+    gobangInventoryRaw,
+    uceoInventoryRaw,
+    gobangTaxonomy,
+    uceoTaxonomy,
+    martColumns: martSchema.columns,
+  });
 
   const outPath = path.join(ROOT, 'src', 'data', 'catalog.json');
   writeFileSync(outPath, JSON.stringify(catalog, null, 2) + '\n', 'utf-8');
 
   const gobangCount = catalog.properties.gobang.events.length;
   const uceoCount = catalog.properties.uceo.events.length;
-  console.log(`catalog.json 생성 완료: 고방 ${gobangCount}개 이벤트, U사장님 ${uceoCount}개 이벤트 → ${outPath}`);
+  const martCount = catalog.properties.gobang_mart.events.length;
+  console.log(
+    `catalog.json 생성 완료: 고방 ${gobangCount}개 이벤트, U사장님 ${uceoCount}개 이벤트, 고방 마트 ${martCount}개 이벤트 → ${outPath}`,
+  );
 }
 
 // 직접 실행됐을 때만 main() 수행 (vitest에서 import 시 부작용 없음)

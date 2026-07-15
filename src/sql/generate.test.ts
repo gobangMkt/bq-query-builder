@@ -42,6 +42,23 @@ const fixtureCatalog: Catalog = {
         },
       ],
     },
+    gobang_mart: {
+      datasetId: 'gobang_mart',
+      label: '고방 마트',
+      tableId: 'Gobang_events',
+      events: [
+        {
+          name: 'branch_view',
+          label: '지점 조회',
+          cnt: 100,
+          params: [
+            { key: 'branch_type', type: 'string', cnt: 100 },
+            { key: 'price_deposit_min', type: 'int', cnt: 100 },
+            { key: 'review_count', type: 'int', cnt: 100 },
+          ],
+        },
+      ],
+    },
   },
 };
 
@@ -296,6 +313,53 @@ describe('generateAggregateSql — 알 수 없는 파라미터', () => {
   });
 });
 
+describe('generateAggregateSql — 마트 소스(tableId 있음)', () => {
+  const martSelection = (overrides: Partial<AggregateSelection> = {}): AggregateSelection => ({
+    propertyKey: 'gobang_mart',
+    dateRange: { start: '2026-06-25', end: '2026-07-01' },
+    events: ['branch_view'],
+    dimensions: [{ kind: 'param', key: 'branch_type' }],
+    metrics: ['event_count'],
+    filters: [],
+    ...overrides,
+  });
+
+  it('FROM절이 와일드카드가 아닌 단일 테이블을 참조한다', () => {
+    const sql = generateAggregateSql(fixtureCatalog, martSelection());
+    expect(sql).toContain('FROM `test-project.gobang_mart.Gobang_events`');
+    expect(sql).not.toContain('events_*');
+    expect(sql).not.toContain('_TABLE_SUFFIX');
+  });
+
+  it('날짜 필터가 event_date 파티션 직접 필터 형태다', () => {
+    const sql = generateAggregateSql(fixtureCatalog, martSelection());
+    expect(sql).toContain("event_date BETWEEN DATE('2026-06-25') AND DATE('2026-07-01')");
+  });
+
+  it('파라미터 컬럼이 UNNEST 없이 그대로 참조된다', () => {
+    const sql = generateAggregateSql(fixtureCatalog, martSelection());
+    expect(sql).not.toContain('UNNEST(event_params)');
+    expect(sql).toContain('branch_type');
+  });
+
+  it('유입소스 차원도 raw와 동일한 출력 별칭으로 나온다', () => {
+    const sql = generateAggregateSql(
+      fixtureCatalog,
+      martSelection({ dimensions: [{ kind: 'traffic_source', field: 'medium' }] }),
+    );
+    expect(sql).toContain('traffic_medium AS traffic_source_medium');
+    expect(sql).toContain('GROUP BY traffic_source_medium');
+  });
+
+  it('Assumptions 주석에 소스 표기가 붙는다 (raw엔 없음)', () => {
+    const martSql = generateAggregateSql(fixtureCatalog, martSelection());
+    expect(martSql).toContain('/* 소스: 고방 마트 (event_date 파티션 직접 필터, UNNEST 없음) */');
+
+    const rawSql = generateAggregateSql(fixtureCatalog, baseSelection());
+    expect(rawSql).not.toContain('/* 소스:');
+  });
+});
+
 function baseWideSelection(overrides: Partial<WideSelection> = {}): WideSelection {
   return {
     propertyKey: 'gobang',
@@ -488,6 +552,31 @@ describe('generateWideSql — 알 수 없는 파라미터', () => {
   });
 });
 
+describe('generateWideSql — 마트 소스(tableId 있음)', () => {
+  const martWideSelection = (overrides: Partial<WideSelection> = {}): WideSelection => ({
+    propertyKey: 'gobang_mart',
+    dateRange: { start: '2026-06-25', end: '2026-07-01' },
+    events: ['branch_view'],
+    columns: ['review_count'],
+    filters: [],
+    limit: 1000,
+    ...overrides,
+  });
+
+  it('FROM절이 와일드카드가 아닌 단일 테이블을 참조하고 event_date로 직접 필터한다', () => {
+    const sql = generateWideSql(fixtureCatalog, martWideSelection());
+    expect(sql).toContain('FROM `test-project.gobang_mart.Gobang_events`');
+    expect(sql).not.toContain('events_*');
+    expect(sql).toContain("event_date BETWEEN DATE('2026-06-25') AND DATE('2026-07-01')");
+  });
+
+  it('선택 컬럼이 UNNEST 없이 그대로 참조된다', () => {
+    const sql = generateWideSql(fixtureCatalog, martWideSelection());
+    expect(sql).not.toContain('UNNEST(event_params)');
+    expect(sql).toContain('review_count');
+  });
+});
+
 // ===== v2: 사람 조건(세그먼트) =====
 
 describe('generateAggregateSql — 사람 조건(세그먼트)', () => {
@@ -573,6 +662,7 @@ const ratioCatalog: Catalog = {
       ],
     },
     uceo: { datasetId: 'analytics_222', label: 'U사장님', events: [] },
+    gobang_mart: { datasetId: 'gobang_mart', label: '고방 마트', tableId: 'Gobang_events', events: [] },
   },
 };
 

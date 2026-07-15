@@ -17,9 +17,9 @@ SQL/BigQuery를 모르는 구성원(UX팀 등)이 **BigQuery SQL 텍스트**를 
 - **사람 조건(세그먼트)**: 조회 기간 내에 특정 이벤트를 "했다/안 했다"로 유저를 거른다 → `seg_users` CTE(`HAVING COUNTIF`). "A 한 사람 중 B 안 한 사람" 류를 지원.
 - **파라미터 한계 안내**: 파라미터는 선택 이벤트가 실제 가진 것(union, dataLayer 상속 반영)만 노출. 일부 이벤트에만 있으면 "○○에만 있음 — 나머지 행 NULL" 툴팁. 이벤트 간 값 스티칭(예: ad_banner_view에서 branch_id)은 데이터 구조상 불가하며 시도하지 않음.
 - **원리**: 실측 인벤토리(`data/inventory-*.json`, 사용자가 BQ에서 30일 검증쿼리 실행) + 노션 텍소노미(`data/taxonomy-*.json`)를 빌드 시 병합해 `src/data/catalog.json` 생성 → 규칙 템플릿이 노션 "[지침] SQL 작성" 서식대로 SQL 생성. 대화형 유의어는 `src/nl/dictionary.ts`.
-- **스택**: Vite + vanilla TypeScript (런타임 의존성 0), vitest 93 + Python Playwright E2E 32(프록시는 네트워크 모킹 — 실 Gemini 호출 0)
-- **비용 가드**: 기간 미선택 시 생성 불가(`_TABLE_SUFFIX` 항상 포함), 90일 초과 경고, 상세 모드 기본 LIMIT 1000
-- **대상 데이터**: `gobang-bigquery.analytics_274122040`(고방 raw) / `analytics_279311003`(U사장님 raw)
+- **스택**: Vite + vanilla TypeScript (런타임 의존성 0), vitest 141 + Python Playwright E2E 32(프록시는 네트워크 모킹 — 실 Gemini 호출 0)
+- **비용 가드**: 기간 미선택 시 생성 불가(raw는 `_TABLE_SUFFIX`, 마트는 `event_date` 파티션 필터 항상 포함), 90일 초과 경고, 상세 모드 기본 LIMIT 1000
+- **대상 데이터**: `gobang-bigquery.analytics_274122040`(고방 원본) / `analytics_279311003`(U사장님 원본) / `gobang_mart.Gobang_events`(고방 마트 — 원본을 매일 새벽 스케줄쿼리로 재조합한 파생 테이블, 컬럼이 평평해 `UNNEST` 불필요·스캔량 적음, 전일까지 데이터만 존재). VoC 대응으로 추가(`docs/specs/2026-07-15-mart-source-design.md`).
 - **접근**: 진입 시 비밀번호 게이트 (`src/config.ts`의 `ACCESS_KEY` — 클라이언트 검증이라 완전 보안 아님, 외부인 차단용)
 - **관리자 핸드오프 패널(`#admin`)**: 소유자 전용(비번 `ADMIN_KEY`, 팀 게이트와 별개, 숨은 라우트). 프로퍼티 선택 → 노션 택소노미 URL 확인 → 기간 넣어 BQ 검증쿼리 생성·복사 → BQ 결과 붙여넣기 → **[Claude 핸드오프 텍스트 복사]**. 실제 동기화(노션 MCP로 택소노미 읽기·병합·JSON갱신·빌드·배포)는 Claude 세션이 수행하고, 브라우저는 텍스트 패키징만 한다(런타임 의존성 0 유지). 순수함수: `src/admin/verify-query.ts`·`src/admin/handoff.ts`, UI: `src/ui/admin.ts`.
 

@@ -1,6 +1,6 @@
 // S2: SQL 생성 엔진 — 선택 상태 타입 정의. UI 상태를 그대로 옮겨 담는 순수 데이터 타입.
 
-export type PropertyKey = 'gobang' | 'uceo';
+export type PropertyKey = 'gobang' | 'uceo' | 'gobang_mart';
 
 export interface DateRange {
   start: string; // 'YYYY-MM-DD'

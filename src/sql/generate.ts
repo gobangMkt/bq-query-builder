@@ -93,13 +93,44 @@ function findParamType(property: CatalogProperty, eventNames: string[], key: str
   throw new Error(`카탈로그에서 파라미터를 찾을 수 없습니다: ${key}`);
 }
 
-function paramColumnExpr(key: string, type: ParamType): string {
+// mart는 이미 평평한 컬럼이라 그대로 참조하면 되고(추출 불필요), raw만 UNNEST 서브쿼리가 필요하다.
+function paramColumnExpr(key: string, type: ParamType, isMart: boolean): string {
+  if (isMart) return key;
   const escKey = escapeSql(key);
   const valueExpr =
     type === 'string'
       ? 'value.string_value'
       : 'COALESCE(value.int_value, SAFE_CAST(value.double_value AS INT64))';
   return `(SELECT ${valueExpr} FROM UNNEST(event_params) WHERE key = '${escKey}') AS ${key}`;
+}
+
+// base CTE 고정 컬럼(이벤트 기본 정보 + 유입경로). 출력 별칭은 소스와 무관하게 동일해서
+// 이후 파이프라인(차원·필터·상세모드)이 소스를 몰라도 그대로 동작한다.
+function fixedBaseColumns(isMart: boolean): string[] {
+  if (isMart) {
+    return [
+      'event_date',
+      'event_timestamp',
+      'event_time',
+      'event_name',
+      'user_pseudo_id',
+      'user_id',
+      'traffic_source AS traffic_source_source',
+      'traffic_medium AS traffic_source_medium',
+      'traffic_name AS traffic_source_campaign',
+    ];
+  }
+  return [
+    "PARSE_DATE('%Y%m%d', event_date) AS event_date",
+    'event_timestamp',
+    'TIMESTAMP_MICROS(event_timestamp) AS event_time',
+    'event_name',
+    'user_pseudo_id',
+    'user_id',
+    'traffic_source.source AS traffic_source_source',
+    'traffic_source.medium AS traffic_source_medium',
+    'traffic_source.name AS traffic_source_campaign',
+  ];
 }
 
 function dimensionColumnName(dim: DimensionSelection): string {
@@ -213,7 +244,13 @@ function isNumericFilterForDisplay(filter: FilterCondition): boolean {
   return !FIXED_STRING_FIELDS.has(filter.field) && typeof filter.value !== 'string';
 }
 
-function buildAssumptionsComment(selection: AggregateSelection): string {
+function sourceCommentLine(property: CatalogProperty): string[] {
+  return property.tableId
+    ? [`/* 소스: ${property.label} (event_date 파티션 직접 필터, UNNEST 없음) */`]
+    : [];
+}
+
+function buildAssumptionsComment(selection: AggregateSelection, property: CatalogProperty): string {
   const { start, end } = selection.dateRange as { start: string; end: string };
   const eventSummary = selection.events.length > 0 ? selection.events.join(', ') : '전체';
   const filterSummary =
@@ -231,6 +268,7 @@ function buildAssumptionsComment(selection: AggregateSelection): string {
 
   return [
     '/* ===== Assumptions ===== */',
+    ...sourceCommentLine(property),
     `/* 기간: ${start} ~ ${end} */`,
     `/* 이벤트: ${eventSummary} */`,
     ...ratioLine,
@@ -250,6 +288,7 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
   }
 
   const property = catalog.properties[selection.propertyKey];
+  const isMart = Boolean(property.tableId);
   const { start, end } = selection.dateRange;
 
   const paramKeys = collectParamKeys(selection);
@@ -260,16 +299,8 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
 
   // ----- base CTE -----
   const baseColumns = [
-    "PARSE_DATE('%Y%m%d', event_date) AS event_date",
-    'event_timestamp',
-    'TIMESTAMP_MICROS(event_timestamp) AS event_time',
-    'event_name',
-    'user_pseudo_id',
-    'user_id',
-    'traffic_source.source AS traffic_source_source',
-    'traffic_source.medium AS traffic_source_medium',
-    'traffic_source.name AS traffic_source_campaign',
-    ...paramKeys.map((key) => paramColumnExpr(key, paramTypes.get(key) as ParamType)),
+    ...fixedBaseColumns(isMart),
+    ...paramKeys.map((key) => paramColumnExpr(key, paramTypes.get(key) as ParamType, isMart)),
   ];
 
   const segments = segmentsOf(selection);
@@ -316,7 +347,7 @@ export function generateAggregateSql(catalog: Catalog, selection: AggregateSelec
   }
 
   return [
-    buildAssumptionsComment(selection),
+    buildAssumptionsComment(selection, property),
     '',
     '/* ===== base ===== */',
     cteBlock,
@@ -334,8 +365,13 @@ function buildBaseCteBody(
   dateRange: { start: string; end: string },
   baseColumns: string[],
 ): string {
+  // tableId가 있으면 마트: 단일 물리 테이블 + event_date 파티션 직접 필터(와일드카드 없음).
+  // 없으면 raw: events_* 와일드카드 + _TABLE_SUFFIX.
+  const isMart = Boolean(property.tableId);
   const baseWhereLines = [
-    `_TABLE_SUFFIX BETWEEN '${toTableSuffix(dateRange.start)}' AND '${toTableSuffix(dateRange.end)}'`,
+    isMart
+      ? `event_date BETWEEN DATE('${dateRange.start}') AND DATE('${dateRange.end}')`
+      : `_TABLE_SUFFIX BETWEEN '${toTableSuffix(dateRange.start)}' AND '${toTableSuffix(dateRange.end)}'`,
   ];
   if (events.length > 0) {
     const eventList = events.map((e) => `'${escapeSql(e)}'`).join(', ');
@@ -345,11 +381,15 @@ function buildBaseCteBody(
     .map((line, i) => (i === 0 ? `  WHERE ${line}` : `    AND ${line}`))
     .join('\n');
 
+  const fromTable = isMart
+    ? `\`${catalog.projectId}.${property.datasetId}.${property.tableId}\``
+    : `\`${catalog.projectId}.${property.datasetId}.events_*\``;
+
   return [
     'base AS (',
     '  SELECT',
     baseColumns.map((c) => `    ${c}`).join(',\n'),
-    `  FROM \`${catalog.projectId}.${property.datasetId}.events_*\``,
+    `  FROM ${fromTable}`,
     baseWhereClause,
     ')',
   ].join('\n');
@@ -384,7 +424,7 @@ function collectWideParamKeys(selection: WideSelection): string[] {
   return keys;
 }
 
-function buildWideAssumptionsComment(selection: WideSelection): string {
+function buildWideAssumptionsComment(selection: WideSelection, property: CatalogProperty): string {
   const { start, end } = selection.dateRange as { start: string; end: string };
   const eventSummary = selection.events.length > 0 ? selection.events.join(', ') : '전체';
   const filterSummary =
@@ -397,6 +437,7 @@ function buildWideAssumptionsComment(selection: WideSelection): string {
   return [
     '/* ===== Assumptions ===== */',
     '/* 모드: 상세(Wide) */',
+    ...sourceCommentLine(property),
     `/* 기간: ${start} ~ ${end} */`,
     `/* 이벤트: ${eventSummary} */`,
     `/* 사람 조건: ${segmentsSummary(segmentsOf(selection))} (판정 기간 = 조회 기간) */`,
@@ -412,6 +453,7 @@ export function generateWideSql(catalog: Catalog, selection: WideSelection): str
   }
 
   const property = catalog.properties[selection.propertyKey];
+  const isMart = Boolean(property.tableId);
   const { start, end } = selection.dateRange;
 
   const paramKeys = collectWideParamKeys(selection);
@@ -421,16 +463,8 @@ export function generateWideSql(catalog: Catalog, selection: WideSelection): str
   }
 
   const baseColumns = [
-    "PARSE_DATE('%Y%m%d', event_date) AS event_date",
-    'event_timestamp',
-    'TIMESTAMP_MICROS(event_timestamp) AS event_time',
-    'event_name',
-    'user_pseudo_id',
-    'user_id',
-    'traffic_source.source AS traffic_source_source',
-    'traffic_source.medium AS traffic_source_medium',
-    'traffic_source.name AS traffic_source_campaign',
-    ...paramKeys.map((key) => paramColumnExpr(key, paramTypes.get(key) as ParamType)),
+    ...fixedBaseColumns(isMart),
+    ...paramKeys.map((key) => paramColumnExpr(key, paramTypes.get(key) as ParamType, isMart)),
   ];
 
   const segments = segmentsOf(selection);
@@ -466,7 +500,7 @@ export function generateWideSql(catalog: Catalog, selection: WideSelection): str
   }
 
   return [
-    buildWideAssumptionsComment(selection),
+    buildWideAssumptionsComment(selection, property),
     '',
     '/* ===== base ===== */',
     cteBlock,

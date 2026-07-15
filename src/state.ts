@@ -75,37 +75,46 @@ export const state: AppState = {
   selectedEvents: {
     gobang: new Set(),
     uceo: new Set(),
+    gobang_mart: new Set(),
   },
   dimensions: {
     gobang: [{ kind: 'event_date' }],
     uceo: [{ kind: 'event_date' }],
+    gobang_mart: [{ kind: 'event_date' }],
   },
   metrics: {
     gobang: new Set(['event_count']),
     uceo: new Set(['event_count']),
+    gobang_mart: new Set(['event_count']),
   },
   ratio: {
     gobang: initialRatio(),
     uceo: initialRatio(),
+    gobang_mart: initialRatio(),
   },
   detailColumns: {
     gobang: new Set(),
     uceo: new Set(),
+    gobang_mart: new Set(),
   },
   detailLimitEnabled: {
     gobang: true,
     uceo: true,
+    gobang_mart: true,
   },
   filters: {
     gobang: [],
     uceo: [],
+    gobang_mart: [],
   },
   segments: {
     gobang: [],
     uceo: [],
+    gobang_mart: [],
   },
   sql: {
     gobang: null,
     uceo: null,
+    gobang_mart: null,
   },
 };
