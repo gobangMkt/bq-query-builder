@@ -17,11 +17,14 @@
 
 ## 3. 카탈로그 데이터
 
-- 마트의 "이벤트 목록"은 고방 원본과 동일한 이벤트(같은 GTM 이벤트가 재조합된 것)이므로 **기존 `gobang` 카탈로그의 이벤트 name/label/cnt/description/funnel을 그대로 재사용**한다.
-- 단, 각 이벤트의 `params`는 이벤트별로 다르게 구성하지 않고 **`Gobang_events`의 40개 비즈니스 컬럼 전체를 모든 이벤트에 동일하게 부여**한다(컬럼이 전부 NULLABLE이라 실제로도 이벤트마다 일부만 채워지는 것과 동일한 효과 — raw의 "이벤트별 파라미터 보유 여부"를 흉내낼 필요 없음).
-- 컬럼 타입 매핑: `INT64` → `int`, 그 외(`STRING`/`DATE`/`TIMESTAMP`) → `string` (필터 값 포매팅에서 숫자/문자 구분에만 쓰이며, DATE·TIMESTAMP 비교는 BigQuery가 문자열 리터럴을 암묵적으로 캐스팅하므로 안전).
-- 신규 데이터 파일: `data/mart-schema-gobang-events.json` — `{ table, dateColumn, columns: [{key, type, description}] }`. raw처럼 실측 인벤토리(이벤트×파라미터 사용빈도) 수집 과정 없이, INFORMATION_SCHEMA로 받은 스키마를 그대로 반영(비용 0 메타데이터 쿼리로 이미 확보 완료).
-- `scripts/build-catalog.mjs`에 `buildMartPropertyEvents(gobangRawEvents, martColumns)` 추가, `PROPERTY_META`에 `gobang_mart: { datasetId: 'gobang_mart', label: '고방 마트', tableId: 'Gobang_events' }` 추가.
+> **개정(2026-07-16): 실측 재수집으로 전환.** 최초엔 "원본 이벤트 목록·건수 복사 + 전 이벤트에 40컬럼 동일 부여"로 단순화했으나, 원본과 사전상 구분이 안 되고 건수가 틀린 문제가 확인돼(원본은 GA4 raw, 마트는 별도 flat 테이블) 아래처럼 **마트 테이블 실측 인벤토리 기반**으로 바꿨다.
+
+- 마트의 이벤트 목록·건수는 **마트 테이블(`Gobang_events`) 실측**으로 뽑는다(원본 복사 금지). 인벤토리 쿼리 = `event_name`별 `COUNT(*)` + 40개 컬럼 각각의 `COUNTIF(col IS NOT NULL)` (최근 90일). → 원본에 없는 파생 이벤트(`churn_branchview_7d`·`appstream_new_join`·`feed_subscribe` 등)와 실제 건수가 그대로 반영됨.
+- 각 이벤트의 `params`는 **그 이벤트에서 실제 값이 채워지는(non-null > 0) 컬럼만** 부여한다(예: `page_view`엔 지점/가격 컬럼 없음, `branch_view`엔 있음, `search`엔 `search_query`). param `cnt` = 실측 non-null 개수.
+- label/description/funnel은 이름이 겹치는 원본 이벤트가 있으면 재사용(일관된 한글 표기), 없으면 이벤트명으로 폴백.
+- 컬럼 타입: `data/mart-schema-gobang-events.json`의 `{key, type, description}`를 그대로 사용(`INT64`→`int`, 그 외→`string`).
+- 신규 데이터 파일: `data/mart-schema-gobang-events.json`(스키마) + `data/inventory-mart-gobang-YYYYMMDD.json`(실측 인벤토리, BQ 콘솔 실행 결과 — Claude가 직접 실행하지 않음).
+- `scripts/build-catalog.mjs`: `parseMartInventory` + `buildMartPropertyEvents(inventoryRows, martColumns, rawEvents)`. `PROPERTY_META.gobang_mart`에 `group/variant`(UI 그룹핑) 포함.
 
 ## 4. 타입
 

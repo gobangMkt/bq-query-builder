@@ -113,30 +113,58 @@ export function buildPropertyEvents(inventoryRows, taxonomy) {
 }
 
 /**
- * 마트 컬럼 목록(INFORMATION_SCHEMA에서 확보) → CatalogParam[]. 스키마 순서를 유지하도록
- * cnt를 역순으로 부여한다(마트는 실측 사용빈도가 없어 byCntDesc 정렬이 원래 순서를 지키게 함).
+ * 마트 인벤토리 원문(BQ 결과: 이벤트별 event_cnt + 40개 컬럼 각각의 non-null 개수,
+ * NDJSON 또는 JSON 배열)을 레코드 배열로 파싱한다. 숫자는 문자열로 올 수 있어 빌드에서 Number 변환.
  */
-function toMartParams(martColumns) {
-  return martColumns.map((col, i) => {
-    const param = { key: col.key, type: col.type, cnt: martColumns.length - i };
-    if (col.description) param.description = col.description;
-    return param;
-  });
+export function parseMartInventory(raw) {
+  const text = (raw ?? '').trim();
+  if (!text) return [];
+  try {
+    const rows = JSON.parse(text);
+    return Array.isArray(rows) ? rows : [rows];
+  } catch {
+    return text
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .map((line) => JSON.parse(line));
+  }
 }
 
 /**
- * 마트(예: 고방 마트)의 이벤트 목록을 만든다. 마트는 raw를 재조합한 것이라 같은 이벤트를
- * 그대로 쓰되(name/label/cnt/description/funnel 재사용), 파라미터는 이벤트별 보유 여부 없이
- * 마트 테이블의 전체 컬럼을 모든 이벤트에 동일하게 부여한다(컬럼이 전부 NULLABLE).
+ * 마트(예: 고방 마트)의 이벤트 목록을 실측 인벤토리로 만든다. 원본 복사가 아니라 마트 테이블의
+ * 실제 event_name·건수를 그대로 쓰고, 각 이벤트에는 그 이벤트에서 실제로 값이 채워지는
+ * (non-null > 0) 컬럼만 파라미터로 부여한다. 라벨/설명/퍼널은 이름이 겹치는 원본 이벤트가 있으면
+ * 재사용(일관된 한글 표기), 없으면(마트 전용 파생 이벤트) 이름으로 폴백한다.
  */
-export function buildMartPropertyEvents(rawEvents, martColumns) {
-  const params = toMartParams(martColumns);
-  return rawEvents.map((event) => {
-    const result = { name: event.name, label: event.label, cnt: event.cnt, params };
-    if (event.description) result.description = event.description;
-    if (event.funnel) result.funnel = event.funnel;
-    return result;
-  });
+export function buildMartPropertyEvents(inventoryRows, martColumns, rawEvents = []) {
+  const rawMeta = new Map(rawEvents.map((e) => [e.name, e]));
+
+  return inventoryRows
+    .map((row) => {
+      const params = martColumns
+        .map((col) => {
+          const n = Number(row[col.key]) || 0;
+          if (n <= 0) return null;
+          const param = { key: col.key, type: col.type, cnt: n };
+          if (col.description) param.description = col.description;
+          return param;
+        })
+        .filter(Boolean)
+        .sort(byCntDesc);
+
+      const raw = rawMeta.get(row.event_name);
+      const result = {
+        name: row.event_name,
+        label: raw?.label ?? row.event_name,
+        cnt: Number(row.event_cnt) || 0,
+        params,
+      };
+      if (raw?.description) result.description = raw.description;
+      if (raw?.funnel) result.funnel = raw.funnel;
+      return result;
+    })
+    .sort(byCntDesc);
 }
 
 /**
@@ -149,10 +177,12 @@ export function buildCatalog({
   gobangTaxonomy,
   uceoTaxonomy,
   martColumns = [],
+  martInventoryRaw = '',
 }) {
   const gobangRows = parseInventory(gobangInventoryRaw);
   const uceoRows = parseInventory(uceoInventoryRaw);
   const gobangEvents = buildPropertyEvents(gobangRows, gobangTaxonomy);
+  const martRows = parseMartInventory(martInventoryRaw);
 
   return {
     projectId: PROJECT_ID,
@@ -168,7 +198,7 @@ export function buildCatalog({
       },
       gobang_mart: {
         ...PROPERTY_META.gobang_mart,
-        events: buildMartPropertyEvents(gobangEvents, martColumns),
+        events: buildMartPropertyEvents(martRows, martColumns, gobangEvents),
       },
     },
   };
@@ -183,6 +213,10 @@ function main() {
   const martSchema = JSON.parse(
     readFileSync(path.join(dataDir, 'mart-schema-gobang-events.json'), 'utf-8'),
   );
+  const martInventoryRaw = readFileSync(
+    path.join(dataDir, 'inventory-mart-gobang-20260716.json'),
+    'utf-8',
+  );
 
   const catalog = buildCatalog({
     gobangInventoryRaw,
@@ -190,6 +224,7 @@ function main() {
     gobangTaxonomy,
     uceoTaxonomy,
     martColumns: martSchema.columns,
+    martInventoryRaw,
   });
 
   const outPath = path.join(ROOT, 'src', 'data', 'catalog.json');

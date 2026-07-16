@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildCatalog, buildMartPropertyEvents, determineType, parseInventory } from './build-catalog.mjs';
+import {
+  buildCatalog,
+  buildMartPropertyEvents,
+  determineType,
+  parseInventory,
+  parseMartInventory,
+} from './build-catalog.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -14,6 +20,10 @@ const gobangTaxonomy = JSON.parse(readFileSync(path.join(dataDir, 'taxonomy-goba
 const uceoTaxonomy = JSON.parse(readFileSync(path.join(dataDir, 'taxonomy-uceo.json'), 'utf-8'));
 const martSchema = JSON.parse(
   readFileSync(path.join(dataDir, 'mart-schema-gobang-events.json'), 'utf-8'),
+);
+const martInventoryRaw = readFileSync(
+  path.join(dataDir, 'inventory-mart-gobang-20260716.json'),
+  'utf-8',
 );
 
 describe('parseInventory', () => {
@@ -78,6 +88,7 @@ describe('buildCatalog — 실측 데이터 병합', () => {
     gobangTaxonomy,
     uceoTaxonomy,
     martColumns: martSchema.columns,
+    martInventoryRaw,
   });
 
   it('프로퍼티 메타(datasetId/label)가 정확하다', () => {
@@ -170,20 +181,51 @@ describe('buildCatalog — 실측 데이터 병합', () => {
     }
   });
 
-  it('고방 마트는 고방 원본과 동일한 이벤트 목록(name/label/cnt)을 재사용한다', () => {
-    const rawEvents = catalog.properties.gobang.events;
+  it('고방 마트는 실측 인벤토리의 이벤트 목록(33개)을 쓰며 원본과 다르다', () => {
     const martEvents = catalog.properties.gobang_mart.events;
-    expect(martEvents).toHaveLength(rawEvents.length);
-    expect(martEvents.map((e) => e.name)).toEqual(rawEvents.map((e) => e.name));
-    expect(martEvents.map((e) => e.label)).toEqual(rawEvents.map((e) => e.label));
+    const rawEvents = catalog.properties.gobang.events;
+    const inventoryNames = new Set(
+      parseMartInventory(martInventoryRaw).map((r: { event_name: string }) => r.event_name),
+    );
+    expect(martEvents).toHaveLength(inventoryNames.size);
+    // 마트에만 있는 파생 이벤트가 존재 → 원본과 목록이 다르다.
+    expect(martEvents.map((e) => e.name)).not.toEqual(rawEvents.map((e) => e.name));
+    expect(martEvents.some((e) => e.name === 'churn_branchview_7d')).toBe(true);
+    for (const event of martEvents) {
+      expect(inventoryNames.has(event.name)).toBe(true);
+    }
   });
 
-  it('고방 마트 이벤트마다 마트 스키마의 전체 컬럼(40개)이 파라미터로 부여된다', () => {
+  it('고방 마트 건수는 실측값(원본 복사 아님)이다', () => {
+    const pageView = catalog.properties.gobang_mart.events.find((e) => e.name === 'page_view');
+    // 인벤토리의 실제 event_cnt(2천만대) — 원본 page_view 건수와 다르다.
+    expect(pageView?.cnt).toBe(26807602);
+  });
+
+  it('고방 마트 파라미터는 이벤트별로 실제 값이 있는 컬럼만 부여된다', () => {
+    const events = catalog.properties.gobang_mart.events;
+    // 이벤트마다 param 개수가 다르다(전부 40 동일이 아님).
+    const paramLens = new Set(events.map((e) => e.params.length));
+    expect(paramLens.size).toBeGreaterThan(1);
+
+    // page_view엔 지점 전용 컬럼(branch_id)이 없고, branch_view엔 있다.
+    const pageView = events.find((e) => e.name === 'page_view');
+    const branchView = events.find((e) => e.name === 'branch_view');
+    expect(pageView?.params.some((p) => p.key === 'branch_id')).toBe(false);
+    expect(branchView?.params.some((p) => p.key === 'branch_id')).toBe(true);
+
+    // search엔 search_query가 있다.
+    const search = events.find((e) => e.name === 'search');
+    expect(search?.params.some((p) => p.key === 'search_query')).toBe(true);
+  });
+
+  it('고방 마트 param은 마트 스키마 컬럼만 쓰고 타입이 스키마대로다', () => {
+    const schemaKeys = new Set(martSchema.columns.map((c: { key: string }) => c.key));
+    const typeByKey = new Map(martSchema.columns.map((c: { key: string; type: string }) => [c.key, c.type]));
     for (const event of catalog.properties.gobang_mart.events) {
-      expect(event.params).toHaveLength(martSchema.columns.length);
-      const keys = new Set(event.params.map((p) => p.key));
-      for (const col of martSchema.columns) {
-        expect(keys.has(col.key)).toBe(true);
+      for (const param of event.params) {
+        expect(schemaKeys.has(param.key)).toBe(true);
+        expect(param.type).toBe(typeByKey.get(param.key));
       }
     }
   });
@@ -191,42 +233,51 @@ describe('buildCatalog — 실측 데이터 병합', () => {
 
 describe('buildMartPropertyEvents', () => {
   const rawEvents = [
-    { name: 'inquiry', label: '문의', cnt: 100, description: '문의 이벤트' },
+    { name: 'inquiry', label: '문의', cnt: 100, description: '문의 이벤트', funnel: '전환' },
     { name: 'page_view', label: 'page_view', cnt: 50 },
   ];
   const martColumns = [
     { key: 'branch_id', type: 'int', description: '지점 ID' },
     { key: 'branch_type', type: 'string' },
+    { key: 'search_query', type: 'string' },
+  ];
+  // 실측 인벤토리(wide): 이벤트별 event_cnt + 컬럼별 non-null 개수.
+  const inventory = [
+    { event_name: 'branch_view', event_cnt: '3000', branch_id: '2900', branch_type: '2900', search_query: '0' },
+    { event_name: 'inquiry', event_cnt: '500', branch_id: '480', branch_type: '480', search_query: '0' },
+    { event_name: 'churn_7d', event_cnt: '200', branch_id: '0', branch_type: '0', search_query: '0' },
   ];
 
-  it('raw 이벤트의 name/label/cnt/description을 그대로 재사용한다', () => {
-    const events = buildMartPropertyEvents(rawEvents, martColumns);
-    expect(events).toHaveLength(2);
-    expect(events[0]).toMatchObject({ name: 'inquiry', label: '문의', cnt: 100, description: '문의 이벤트' });
-    expect(events[1]).toMatchObject({ name: 'page_view', label: 'page_view', cnt: 50 });
-    expect(events[1].description).toBeUndefined();
+  it('원본 복사가 아니라 인벤토리의 event_name·건수를 쓴다', () => {
+    const events = buildMartPropertyEvents(inventory, martColumns, rawEvents);
+    expect(events.map((e) => e.name)).toEqual(['branch_view', 'inquiry', 'churn_7d']);
+    expect(events.find((e) => e.name === 'branch_view')?.cnt).toBe(3000);
   });
 
-  it('모든 이벤트가 동일한 전체 컬럼 목록을 params로 갖는다', () => {
-    const events = buildMartPropertyEvents(rawEvents, martColumns);
-    for (const event of events) {
-      expect(event.params.map((p) => p.key)).toEqual(['branch_id', 'branch_type']);
-    }
+  it('이벤트별로 non-null > 0 인 컬럼만 params로 부여한다', () => {
+    const events = buildMartPropertyEvents(inventory, martColumns, rawEvents);
+    const branchView = events.find((e) => e.name === 'branch_view');
+    // search_query는 0 → 제외. branch_id/branch_type만.
+    expect(branchView?.params.map((p) => p.key).sort()).toEqual(['branch_id', 'branch_type']);
+    // 컬럼이 전부 0인 이벤트는 params 없음.
+    const churn = events.find((e) => e.name === 'churn_7d');
+    expect(churn?.params).toHaveLength(0);
   });
 
-  it('타입·설명이 마트 컬럼 정의대로 매핑된다', () => {
-    const events = buildMartPropertyEvents(rawEvents, martColumns);
-    const branchId = events[0].params.find((p) => p.key === 'branch_id');
+  it('이름이 겹치는 원본 이벤트의 label/description/funnel을 재사용하고, 없으면 이름 폴백', () => {
+    const events = buildMartPropertyEvents(inventory, martColumns, rawEvents);
+    const inquiry = events.find((e) => e.name === 'inquiry');
+    expect(inquiry).toMatchObject({ label: '문의', description: '문의 이벤트', funnel: '전환' });
+    const churn = events.find((e) => e.name === 'churn_7d');
+    expect(churn?.label).toBe('churn_7d');
+    expect(churn?.description).toBeUndefined();
+  });
+
+  it('타입·설명이 마트 컬럼 정의대로 매핑되고 param.cnt는 실측 non-null 개수다', () => {
+    const events = buildMartPropertyEvents(inventory, martColumns, rawEvents);
+    const branchId = events.find((e) => e.name === 'branch_view')?.params.find((p) => p.key === 'branch_id');
     expect(branchId?.type).toBe('int');
     expect(branchId?.description).toBe('지점 ID');
-    const branchType = events[0].params.find((p) => p.key === 'branch_type');
-    expect(branchType?.type).toBe('string');
-    expect(branchType?.description).toBeUndefined();
-  });
-
-  it('컬럼 순서를 보존하도록 cnt를 역순으로 부여한다', () => {
-    const events = buildMartPropertyEvents(rawEvents, martColumns);
-    const [first, second] = events[0].params;
-    expect(first.cnt).toBeGreaterThan(second.cnt);
+    expect(branchId?.cnt).toBe(2900);
   });
 });
