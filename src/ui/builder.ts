@@ -689,10 +689,12 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     tabsEl.innerHTML = families
       .map((fam) => {
         const isActive = fam.members.includes(state.property);
+        // data-family는 표시 라벨이 아닌 안정적 키(그룹의 첫 멤버 PropertyKey)로 잡는다 — 라우팅과 표시 분리.
+        const familyId = fam.members[0];
         if (fam.members.length === 1) {
           return `
             <button type="button" class="property-tab${isActive ? ' is-active' : ''}"
-              role="tab" aria-selected="${isActive}" data-family="${escapeHtml(fam.group)}">
+              role="tab" aria-selected="${isActive}" data-family="${familyId}">
               ${escapeHtml(fam.group)}
             </button>
           `;
@@ -713,7 +715,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
         return `
           <div class="property-tab-wrap">
             <button type="button" class="property-tab has-menu${isActive ? ' is-active' : ''}"
-              data-family="${escapeHtml(fam.group)}" aria-haspopup="true" aria-expanded="false">
+              data-family="${familyId}" aria-haspopup="true" aria-expanded="false">
               <span>${escapeHtml(fam.group)}${activeVariant ? ` · ${escapeHtml(activeVariant)}` : ''}</span>${chevronDownIcon}
             </button>
             <div class="property-menu is-hidden" role="menu">${menuItems}</div>
@@ -773,8 +775,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
       }
       return;
     }
-    // 단순 탭(U사장님): 그룹의 단일 멤버로 전환.
-    const fam = families.find((f) => f.group === tab.dataset.family);
+    // 단순 탭(U사장님): 그룹의 단일 멤버로 전환. data-family = 그룹 첫 멤버 키.
+    const fam = families.find((f) => f.members[0] === tab.dataset.family);
     if (fam) switchProperty(fam.members[0]);
   });
 
