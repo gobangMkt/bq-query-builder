@@ -72,6 +72,8 @@ export const userXIcon = base(
 
 export const arrowRightIcon = base('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>');
 
+export const chevronDownIcon = base('<path d="m6 9 6 6 6-6"/>');
+
 export const infoIcon = base(
   '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
 );

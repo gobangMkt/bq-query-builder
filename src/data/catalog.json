@@ -1,10 +1,12 @@
 {
   "projectId": "gobang-bigquery",
-  "generatedAt": "2026-07-15T08:22:13.069Z",
+  "generatedAt": "2026-07-16T03:05:49.776Z",
   "properties": {
     "gobang": {
       "datasetId": "analytics_274122040",
       "label": "고방 원본",
+      "group": "고방",
+      "variant": "원본",
       "events": [
         {
           "name": "page_view",
@@ -4057,6 +4059,7 @@
     "uceo": {
       "datasetId": "analytics_279311003",
       "label": "U사장님",
+      "group": "U사장님",
       "events": [
         {
           "name": "page_view",
@@ -5146,6 +5149,8 @@
       "datasetId": "gobang_mart",
       "label": "고방 마트",
       "tableId": "Gobang_events",
+      "group": "고방",
+      "variant": "마트",
       "events": [
         {
           "name": "page_view",

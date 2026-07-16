@@ -10,10 +10,11 @@ const ROOT = path.resolve(__dirname, '..');
 
 export const PROJECT_ID = 'gobang-bigquery';
 
+// group = 상위 탭 라벨(같은 group끼리 한 탭으로 묶임), variant = 2차 세그먼트 라벨(group에 2개 이상일 때만 노출).
 export const PROPERTY_META = {
-  gobang: { datasetId: 'analytics_274122040', label: '고방 원본' },
-  uceo: { datasetId: 'analytics_279311003', label: 'U사장님' },
-  gobang_mart: { datasetId: 'gobang_mart', label: '고방 마트', tableId: 'Gobang_events' },
+  gobang: { datasetId: 'analytics_274122040', label: '고방 원본', group: '고방', variant: '원본' },
+  uceo: { datasetId: 'analytics_279311003', label: 'U사장님', group: 'U사장님' },
+  gobang_mart: { datasetId: 'gobang_mart', label: '고방 마트', tableId: 'Gobang_events', group: '고방', variant: '마트' },
 };
 
 /**

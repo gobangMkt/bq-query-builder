@@ -26,7 +26,7 @@ import {
   validateFilters,
 } from './filters';
 import type { FilterFieldOption } from './filters';
-import { alertCircleIcon, bookIcon, checkIcon, messageIcon, plusIcon, settingsIcon, slidersIcon } from './icons';
+import { alertCircleIcon, bookIcon, checkIcon, chevronDownIcon, messageIcon, plusIcon, settingsIcon, slidersIcon } from './icons';
 import { renderMetricsHtml, renderRatioHtml, type RatioEventOption } from './metrics';
 import { renderAiPreviewHtml, renderPreviewHtml, renderWidePreviewHtml } from './preview';
 import { defaultSegmentFor, renderSegmentsHtml } from './segments';
@@ -119,6 +119,8 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   function currentProperty() {
     return catalog.properties[state.property];
   }
+
+  const families = buildFamilies(catalog);
 
   function currentEventNames(): string[] {
     return [...state.selectedEvents[state.property]];
@@ -681,18 +683,55 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     `;
   }
 
-  function syncTabs(): void {
-    tabsEl.querySelectorAll<HTMLButtonElement>('.property-tab').forEach((tab) => {
-      const isActive = tab.dataset.property === state.property;
-      tab.classList.toggle('is-active', isActive);
-      tab.setAttribute('aria-selected', String(isActive));
-    });
+  // 상위 탭 렌더. 변이가 없는 그룹(U사장님)은 단순 버튼, 여러 변이가 있는 그룹(고방)은
+  // 클릭 시 원본/마트 드롭다운이 열리는 트리거 버튼. 별도 행을 늘리지 않고 한 줄로 유지한다.
+  function renderTabs(): void {
+    tabsEl.innerHTML = families
+      .map((fam) => {
+        const isActive = fam.members.includes(state.property);
+        if (fam.members.length === 1) {
+          return `
+            <button type="button" class="property-tab${isActive ? ' is-active' : ''}"
+              role="tab" aria-selected="${isActive}" data-family="${escapeHtml(fam.group)}">
+              ${escapeHtml(fam.group)}
+            </button>
+          `;
+        }
+        const activeVariant = isActive ? catalog.properties[state.property].variant : '';
+        const menuItems = fam.members
+          .map((key) => {
+            const prop = catalog.properties[key];
+            const sel = key === state.property;
+            return `
+              <button type="button" class="property-menu-item${sel ? ' is-active' : ''}"
+                role="menuitem" data-property="${key}">
+                <span>${escapeHtml(prop.variant ?? prop.label)}</span>${sel ? checkIcon : ''}
+              </button>
+            `;
+          })
+          .join('');
+        return `
+          <div class="property-tab-wrap">
+            <button type="button" class="property-tab has-menu${isActive ? ' is-active' : ''}"
+              data-family="${escapeHtml(fam.group)}" aria-haspopup="true" aria-expanded="false">
+              <span>${escapeHtml(fam.group)}${activeVariant ? ` · ${escapeHtml(activeVariant)}` : ''}</span>${chevronDownIcon}
+            </button>
+            <div class="property-menu is-hidden" role="menu">${menuItems}</div>
+          </div>
+        `;
+      })
+      .join('');
   }
 
-  tabsEl.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.property-tab');
-    if (!btn) return;
-    const key = btn.dataset.property as PropertyKey;
+  function closeMenus(): void {
+    tabsEl.querySelectorAll<HTMLElement>('.property-menu').forEach((m) => m.classList.add('is-hidden'));
+    tabsEl
+      .querySelectorAll<HTMLElement>('.property-tab.has-menu')
+      .forEach((t) => t.setAttribute('aria-expanded', 'false'));
+  }
+
+  // 소스 전환 공통 처리(단순 탭·드롭다운 항목이 모두 호출). 대상 키의 독립 상태 슬롯으로 재렌더한다.
+  function switchProperty(key: PropertyKey): void {
     if (key === state.property) return;
     state.property = key;
     state.searchQuery = '';
@@ -701,7 +740,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     chatHistory.length = 0;
     dataFromLabelEl.textContent = currentProperty().label;
     modalPropLabelEl.textContent = currentProperty().label;
-    syncTabs();
+    renderTabs();
     renderSearch();
     renderList();
     renderSelectedEvents();
@@ -711,6 +750,37 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
     renderChatShell();
     refreshAfterSelectionChange();
     renderSql();
+  }
+
+  tabsEl.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const item = target.closest<HTMLButtonElement>('.property-menu-item');
+    if (item) {
+      switchProperty(item.dataset.property as PropertyKey);
+      closeMenus();
+      return;
+    }
+    const tab = target.closest<HTMLButtonElement>('.property-tab');
+    if (!tab) return;
+    // 드롭다운 트리거: 메뉴 토글(레이아웃 안 밀리는 팝오버).
+    if (tab.classList.contains('has-menu')) {
+      const menu = tab.nextElementSibling as HTMLElement | null;
+      const willOpen = menu?.classList.contains('is-hidden') ?? false;
+      closeMenus();
+      if (menu && willOpen) {
+        menu.classList.remove('is-hidden');
+        tab.setAttribute('aria-expanded', 'true');
+      }
+      return;
+    }
+    // 단순 탭(U사장님): 그룹의 단일 멤버로 전환.
+    const fam = families.find((f) => f.group === tab.dataset.family);
+    if (fam) switchProperty(fam.members[0]);
+  });
+
+  // 바깥 클릭 시 드롭다운 닫기.
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('.property-tab-wrap')) closeMenus();
   });
 
   inputModeEl.addEventListener('click', (e) => {
@@ -1284,6 +1354,7 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   restoreComposeWidth();
 
   renderDateRange();
+  renderTabs();
   renderSearch();
   renderList();
   renderSelectedEvents();
@@ -1309,9 +1380,26 @@ export function renderBuilder(root: HTMLElement, catalog: Catalog): void {
   });
 }
 
+// 상위 탭(그룹) 모델: 같은 group 라벨끼리 한 탭으로 묶는다(properties 삽입 순서 보존).
+// group에 멤버가 2개 이상이면 그 안에서 variant(원본/마트)를 2차 세그먼트로 고른다.
+interface PropertyFamily {
+  group: string;
+  members: PropertyKey[];
+}
+function buildFamilies(catalog: Catalog): PropertyFamily[] {
+  const families: PropertyFamily[] = [];
+  (Object.keys(catalog.properties) as PropertyKey[]).forEach((key) => {
+    const prop = catalog.properties[key];
+    const group = prop.group ?? prop.label;
+    const fam = families.find((f) => f.group === group);
+    if (fam) fam.members.push(key);
+    else families.push({ group, members: [key] });
+  });
+  return families;
+}
+
 function shellHtml(catalog: Catalog): string {
   const properties = catalog.properties;
-  const propertyKeys = Object.keys(properties) as PropertyKey[];
 
   return `
     <div class="workbench">
@@ -1334,18 +1422,7 @@ function shellHtml(catalog: Catalog): string {
 
           <div class="property-group">
             <span class="data-label">찾을 데이터</span>
-            <nav class="property-tabs" role="tablist" aria-label="찾을 데이터">
-              ${propertyKeys
-                .map(
-                  (key) => `
-                    <button type="button" class="property-tab${key === state.property ? ' is-active' : ''}"
-                      role="tab" aria-selected="${key === state.property}" data-property="${key}">
-                      ${escapeHtml(properties[key].label)}
-                    </button>
-                  `,
-                )
-                .join('')}
-            </nav>
+            <nav class="property-tabs" role="tablist" aria-label="찾을 데이터"></nav>
           </div>
 
           <div class="input-panel-chat is-hidden">

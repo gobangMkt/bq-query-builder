@@ -91,6 +91,15 @@ describe('buildCatalog — 실측 데이터 병합', () => {
     expect(catalog.properties.gobang_mart.tableId).toBe('Gobang_events');
   });
 
+  it('UI 그룹 메타: 고방 원본·마트는 group "고방"으로 묶이고 variant가, U사장님은 variant 없이 단독이다', () => {
+    expect(catalog.properties.gobang.group).toBe('고방');
+    expect(catalog.properties.gobang.variant).toBe('원본');
+    expect(catalog.properties.gobang_mart.group).toBe('고방');
+    expect(catalog.properties.gobang_mart.variant).toBe('마트');
+    expect(catalog.properties.uceo.group).toBe('U사장님');
+    expect(catalog.properties.uceo.variant).toBeUndefined();
+  });
+
   it('고방 31개, U사장님 13개 이벤트가 정확히 포함된다 (인벤토리 밖 이벤트 없음)', () => {
     expect(catalog.properties.gobang.events).toHaveLength(31);
     expect(catalog.properties.uceo.events).toHaveLength(13);
